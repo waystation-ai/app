@@ -156,7 +156,7 @@ export default function Home() {
         {/* Integration Partners */}
         <div className="bg-white/40 backdrop-blur-md py-6 px-4">
           <p className="text-center text-gray-800 text-lg mb-8 sm:mb-10">Seamlessly integrate with your favorite tools</p>
-          <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-10 gap-8 sm:gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-8 gap-8 sm:gap-6 max-w-5xl mx-auto">
             <img 
               src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" 
               alt="Google Docs" 
@@ -168,11 +168,6 @@ export default function Home() {
               className="h-8 w-8 mx-auto opacity-60 hover:opacity-100 transition-opacity duration-300" 
             />
             <img 
-              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftoffice/microsoftoffice-plain.svg" 
-              alt="Microsoft Office" 
-              className="h-8 w-8 mx-auto opacity-60 hover:opacity-100 transition-opacity duration-300" 
-            />
-            <img 
               src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jira/jira-original.svg" 
               alt="Jira" 
               className="h-8 w-8 mx-auto opacity-60 hover:opacity-100 transition-opacity duration-300" 
@@ -180,16 +175,6 @@ export default function Home() {
             <img 
               src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/chrome/chrome-original.svg" 
               alt="Browser" 
-              className="h-8 w-8 mx-auto opacity-60 hover:opacity-100 transition-opacity duration-300" 
-            />
-            <img 
-              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows8/windows8-original.svg" 
-              alt="Microsoft Teams" 
-              className="h-8 w-8 mx-auto opacity-60 hover:opacity-100 transition-opacity duration-300" 
-            />
-            <img 
-              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" 
-              alt="Local Files" 
               className="h-8 w-8 mx-auto opacity-60 hover:opacity-100 transition-opacity duration-300" 
             />
             <img 
