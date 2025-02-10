@@ -65,7 +65,7 @@ const fragmentShader = `
 
 export default function AuroraBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationFrameRef = useRef<number>();
+  const animationFrameRef = useRef<number>(0);
   
   useEffect((): (() => void) | undefined => {
     const canvas = canvasRef.current;
