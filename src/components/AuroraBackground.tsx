@@ -127,7 +127,7 @@ export default function AuroraBackground() {
       const resolutionLocation = gl.getUniformLocation(program, 'resolution');
 
       // Animation loop
-      let startTime = Date.now();
+      const startTime = Date.now();
       const animate = () => {
         gl.clear(gl.COLOR_BUFFER_BIT);  // Clear to white before drawing
         const time = (Date.now() - startTime) * 0.001;
