@@ -40,7 +40,7 @@
 }
 
 .aurora-btn {
-  background-color: var(--deep-blue);
+  background: linear-gradient(120deg, var(--aurora-green), var(--aurora-blue));
   color: white;
   transition: all 0.3s ease;
 }
@@ -48,6 +48,12 @@
 .aurora-btn:hover {
   background-color: #0d3580;
   transform: translateY(-1px);
+}
+
+.chat-msg {
+  background-color: var(--deep-blue);
+  color: white;
+  transition: all 0.3s ease;
 }
 
 @keyframes blink {
@@ -74,4 +80,21 @@ body {
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 2px 12px rgba(38, 217, 193, 0.1);
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% auto;
+  animation: gradient 5s ease infinite;
 }

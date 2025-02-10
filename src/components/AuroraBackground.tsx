@@ -12,44 +12,54 @@ const fragmentShader = `
   uniform float time;
   uniform vec2 resolution;
 
-  vec3 aurora(vec2 uv) {
+  vec3 aurora_color(vec2 pos) {
+    // Keep original vibrant colors but reduce final intensity
+    vec3 blue = vec3(0.0, 0.4, 1.0);
+    vec3 green = vec3(0.0, 1.0, 0.4);
+    
+    float t = sin(pos.x * 2.0 + time * 0.1) * 0.5 + 0.5;
+    return mix(blue, green, t) * 0.7;    // Reduce intensity while keeping color vibrancy
+  }
+
+  float aurora_shape(vec2 pos) {
     float v = 0.0;
     
-    // Create multiple layers of waves with smoother movement
+    // Create multiple layers of waves
     for(float i = 0.0; i < 5.0; i++) {
-      // Slower, more subtle movement
       vec2 offset = vec2(
         sin(time * 0.05 + i) * 0.15, 
         cos(time * 0.08 + i) * 0.15
       );
       
-      // Smoother wave effect
-      float wave = sin(uv.x * 1.5 + time * 0.3 + i) * 0.5 + 0.5;
-      wave *= sin(uv.y * 1.5 + time * 0.2 + i) * 0.5 + 0.5;
+      float wave = sin(pos.x * 1.5 + time * 0.3 + i) * 0.5 + 0.5;
+      wave *= sin(pos.y * 1.5 + time * 0.2 + i) * 0.5 + 0.5;
       
-      // Softer blend
-      v += wave * (0.4 / (length(uv - offset) + 0.8));
+      v += wave * (0.3 / (length(pos - offset) + 0.8));  // Slightly reduced intensity
     }
     
-    // Enhanced color gradient with more natural transition
-    vec3 col = mix(
-      vec3(0.0, 0.35, 0.5),   // Deeper blue
-      vec3(0.1, 0.5, 0.3),    // Richer green
-      smoothstep(0.2, 0.8, v)  // Smoother transition
-    );
-    
-    return col * v;
+    return smoothstep(0.1, 0.2, v) * 0.4;  // Reduce opacity while keeping sharp edges
   }
 
   void main() {
-    vec2 uv = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
-    vec3 color = aurora(uv);
+    // Normalize coordinates
+    vec2 uv = gl_FragCoord.xy/resolution.xy;
+    vec2 pos = (2.0 * uv - 1.0);
+    pos.x *= resolution.x/resolution.y;
     
-    // Softer glow
-    color += aurora(uv * 1.05) * 0.3;
-    color += aurora(uv * 1.1) * 0.2;
+    // Set pure white background
+    vec3 backgroundColor = vec3(1.0);
     
-    gl_FragColor = vec4(color, 0.6);
+    // Calculate aurora effect
+    vec3 auroraCol = aurora_color(pos);
+    float aurora = aurora_shape(pos);
+    
+    // Blend aurora with white background
+    vec3 finalColor = mix(backgroundColor, auroraCol, aurora);
+    
+    // Apply gamma correction
+    finalColor = pow(finalColor, vec3(1.0/2.2));
+    
+    gl_FragColor = vec4(finalColor, 1.0);
   }
 `;
 
@@ -69,6 +79,10 @@ export default function AuroraBackground() {
     let fs: WebGLShader | null = null;
 
     try {
+      gl.clearColor(1.0, 1.0, 1.0, 1.0);
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
       // Create and compile vertex shader
       vs = gl.createShader(gl.VERTEX_SHADER);
       if (!vs) throw new Error('Failed to create vertex shader');
@@ -115,6 +129,7 @@ export default function AuroraBackground() {
       // Animation loop
       let startTime = Date.now();
       const animate = () => {
+        gl.clear(gl.COLOR_BUFFER_BIT);  // Clear to white before drawing
         const time = (Date.now() - startTime) * 0.001;
         gl.uniform1f(timeLocation, time);
         gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
@@ -164,7 +179,6 @@ export default function AuroraBackground() {
         width: '100%',
         height: '100%',
         zIndex: -1,
-        opacity: 0.8,
       }}
     />
   );

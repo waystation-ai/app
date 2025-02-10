@@ -23,7 +23,7 @@ function ChatMessage({ isAI, content, isTyping, showCursor }: ChatMessageProps) 
   return (
     <div className={`flex ${isAI ? 'justify-start' : 'justify-end'} mb-4`}>
       <div className={`max-w-[85%] p-3 sm:p-4 rounded-2xl ${
-        isAI ? 'bg-gray-100' : 'aurora-btn'
+        isAI ? 'bg-gray-100' : 'chat-msg'
       }`}>
         {isTyping ? (
           <TypingIndicator />
