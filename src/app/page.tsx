@@ -1,69 +1,213 @@
-export default function Home() {
+"use client"
+import { useEffect, useState } from "react";
+
+interface ChatMessageProps {
+  isAI: boolean;
+  content: string;
+  isTyping?: boolean;
+  showCursor?: boolean;
+}
+
+function TypingIndicator() {
   return (
-    <div className="min-h-screen text-center">
-      <header className="bg-white border-b border-gray-100 p-5">
-        <h1 className="text-3xl font-bold aurora-text">WayStation.AI</h1>
-      </header>
-
-      <section className="py-20 px-4 bg-gradient-to-b from-white to-blue-50">
-        <h1 className="text-5xl font-bold mb-6 aurora-text">
-          Empowering LLMs to Take Real-World Actions
-        </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-          WayStation is a no-code, secure hub that connects large language models 
-          with the tools professionals use daily.
-        </p>
-        <a 
-          href="#" 
-          className="mt-8 inline-block aurora-btn px-8 py-4 text-lg font-medium rounded-lg 
-                   hover:scale-105 transition-transform duration-300"
-        >
-          Get Early Access
-        </a>
-      </section>
-
-      <section className="py-20 px-4 bg-white">
-        <h2 className="text-3xl font-semibold mb-12 aurora-text">What We Offer</h2>
-        <div className="flex flex-wrap justify-center gap-8 max-w-6xl mx-auto">
-          <Feature 
-            title="Seamless Integrations" 
-            description="Connect AI to Google Drive, Slack, Microsoft 365, Salesforce, and more." 
-          />
-          <Feature 
-            title="No-Code Simplicity" 
-            description="Set up AI-powered automation without technical expertise." 
-          />
-          <Feature 
-            title="Enterprise-Ready" 
-            description="Built with security, compliance, and enterprise-grade scalability." 
-          />
-        </div>
-      </section>
-
-      <section className="py-20 px-4 bg-gradient-to-b from-blue-50 to-white">
-        <h2 className="text-3xl font-semibold aurora-text">
-          Join the Future of AI-Driven Productivity
-        </h2>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto mt-4 leading-relaxed">
-          Sign up today and be among the first to experience AI automation at its best.
-        </p>
-        <a 
-          href="#" 
-          className="mt-8 inline-block aurora-btn px-8 py-4 text-lg font-medium rounded-lg 
-                   hover:scale-105 transition-transform duration-300"
-        >
-          Request Access
-        </a>
-      </section>
+    <div className="flex space-x-2 p-2">
+      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
     </div>
   );
 }
 
-function Feature({ title, description }: { title: string; description: string }) {
+function ChatMessage({ isAI, content, isTyping, showCursor }: ChatMessageProps) {
   return (
-    <div className="glass-card p-8 rounded-xl w-[350px] transform hover:scale-105 transition-transform duration-300">
-      <h3 className="text-xl font-semibold mb-4 aurora-text">{title}</h3>
-      <p className="text-gray-600 leading-relaxed">{description}</p>
+    <div className={`flex ${isAI ? 'justify-start' : 'justify-end'} mb-4`}>
+      <div className={`max-w-[90%] p-4 rounded-2xl ${
+        isAI ? 'bg-gray-100' : 'aurora-btn'
+      }`}>
+        {isTyping ? (
+          <TypingIndicator />
+        ) : (
+          <p className={`text-base ${isAI ? 'text-gray-800' : 'text-white'} ${
+            showCursor ? 'typing-cursor' : ''
+          }`}>
+            {content}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function Home() {
+  const messages = [
+    { isAI: true, content: "I need to schedule a team meeting for next week and share the presentation from our last client call." },
+    { isAI: false, content: "I'll help you with that. I'll check everyone's calendar availability in Google Calendar and upload the presentation from the shared Drive folder." },
+    { isAI: true, content: "Perfect! Can you also send a Slack message to the team once it's done?" },
+    { isAI: false, content: "Done! I've scheduled the meeting for Tuesday at 2 PM, uploaded the presentation to the shared folder, and notified the team via Slack. Everyone should have received the calendar invite and meeting details." }
+  ];
+
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  const [showTyping, setShowTyping] = useState(false);
+  const [showCursor, setShowCursor] = useState(false);
+
+  useEffect(() => {
+    const cycleMessages = () => {
+      if (currentMessageIndex >= messages.length) {
+        setTimeout(() => {
+          setCurrentMessageIndex(0);
+          setShowTyping(false);
+          setShowCursor(false);
+        }, 2000);
+        return;
+      }
+
+      const isAIMessage = messages[currentMessageIndex].isAI;
+      
+      // Show typing indicator
+      setShowTyping(true);
+      setShowCursor(false);
+
+      const typingDuration = isAIMessage ? 2000 : 1500;
+      const displayDuration = 3000;
+
+      // Simulate typing delay
+      setTimeout(() => {
+        setShowTyping(false);
+        if (!isAIMessage) {
+          setShowCursor(true);
+        }
+        
+        // Move to next message after showing current one
+        setTimeout(() => {
+          setCurrentMessageIndex(prev => prev + 1);
+        }, displayDuration);
+      }, typingDuration);
+    };
+
+    const timer = setTimeout(cycleMessages, 500);
+    
+    // Cleanup
+    return () => {
+      clearTimeout(timer);
+      setShowTyping(false);
+      setShowCursor(false);
+    };
+  }, [currentMessageIndex, messages.length]);
+
+  return (
+    <div className="min-h-screen">
+      {/* Header */}
+      <header className="bg-white border-b border-gray-100 px-6 py-4 flex justify-between items-center fixed w-full top-0 z-50">
+        <h1 className="text-2xl font-bold aurora-text">WayStation.AI</h1>
+        <a 
+          href="#" 
+          className="aurora-btn px-6 py-2 text-sm font-medium rounded-lg 
+                   hover:scale-105 transition-transform duration-300"
+        >
+          Get Early Access
+        </a>
+      </header>
+
+      {/* Hero Section */}
+      <main className="pt-20">
+        <div className="h-[calc(100vh-200px)] grid grid-cols-1 lg:grid-cols-2 gap-12 px-8 py-8 max-w-7xl mx-auto overflow-hidden">
+          {/* Left Column - Branding */}
+          <div className="flex flex-col justify-center text-left space-y-6 overflow-hidden">
+            <p className="text-4xl text-gray-800 font-semibold mb-8">
+              Empowering LLMs to Take Real-World Actions
+            </p>
+            <p className="text-xl text-gray-600 leading-relaxed mb-8">
+              Connect your AI assistants with the tools professionals use daily through our 
+              no-code, secure integration hub.
+            </p>
+          </div>
+
+          {/* Right Column - Chat Demo */}
+          <div className="flex items-center justify-center">
+            <div className="glass-card w-full max-w-2xl mx-auto p-6 rounded-2xl shadow-xl h-[760px] flex flex-col">
+              <div className="flex-1 overflow-y-auto space-y-4 mb-4">
+                {messages.slice(0, currentMessageIndex + 1).map((msg, idx) => (
+                  <ChatMessage 
+                    key={idx}
+                    isAI={msg.isAI}
+                    content={msg.content}
+                    isTyping={idx === currentMessageIndex && showTyping}
+                    showCursor={idx === currentMessageIndex && showCursor}
+                  />
+                ))}
+              </div>
+              <div className="flex gap-2 border-t pt-4">
+                <div className="w-8 h-8 rounded bg-gray-100 flex items-center justify-center">
+                  <img src="/file.svg" alt="File" className="w-4 h-4 opacity-60" />
+                </div>
+                <div className="w-8 h-8 rounded bg-gray-100 flex items-center justify-center">
+                  <img src="/globe.svg" alt="Web" className="w-4 h-4 opacity-60" />
+                </div>
+                <div className="w-8 h-8 rounded bg-gray-100 flex items-center justify-center">
+                  <img src="/window.svg" alt="Apps" className="w-4 h-4 opacity-60" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Integration Partners */}
+        <div className="bg-gray-50 py-6 px-4">
+          <p className="text-center text-gray-600 text-lg mb-4">Seamlessly integrate with your favorite tools</p>
+          <div className="grid grid-cols-5 md:grid-cols-10 gap-4 max-w-5xl mx-auto px-4">
+            <img 
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" 
+              alt="Google Docs" 
+              className="h-8 w-8 mx-auto opacity-60 hover:opacity-100 transition-opacity duration-300" 
+            />
+            <img 
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/slack/slack-original.svg" 
+              alt="Slack" 
+              className="h-8 w-8 mx-auto opacity-60 hover:opacity-100 transition-opacity duration-300" 
+            />
+            <img 
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftoffice/microsoftoffice-plain.svg" 
+              alt="Microsoft Office" 
+              className="h-8 w-8 mx-auto opacity-60 hover:opacity-100 transition-opacity duration-300" 
+            />
+            <img 
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jira/jira-original.svg" 
+              alt="Jira" 
+              className="h-8 w-8 mx-auto opacity-60 hover:opacity-100 transition-opacity duration-300" 
+            />
+            <img 
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/chrome/chrome-original.svg" 
+              alt="Browser" 
+              className="h-8 w-8 mx-auto opacity-60 hover:opacity-100 transition-opacity duration-300" 
+            />
+            <img 
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows8/windows8-original.svg" 
+              alt="Microsoft Teams" 
+              className="h-8 w-8 mx-auto opacity-60 hover:opacity-100 transition-opacity duration-300" 
+            />
+            <img 
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" 
+              alt="Local Files" 
+              className="h-8 w-8 mx-auto opacity-60 hover:opacity-100 transition-opacity duration-300" 
+            />
+            <img 
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/trello/trello-plain.svg" 
+              alt="Asana" 
+              className="h-8 w-8 mx-auto opacity-60 hover:opacity-100 transition-opacity duration-300" 
+            />
+            <img 
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/confluence/confluence-original.svg" 
+              alt="Monday.com" 
+              className="h-8 w-8 mx-auto opacity-60 hover:opacity-100 transition-opacity duration-300" 
+            />
+            <img 
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg" 
+              alt="Zendesk" 
+              className="h-8 w-8 mx-auto opacity-60 hover:opacity-100 transition-opacity duration-300" 
+            />
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
