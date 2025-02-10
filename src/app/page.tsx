@@ -21,7 +21,7 @@ function TypingIndicator() {
 function ChatMessage({ isAI, content, isTyping, showCursor }: ChatMessageProps) {
   return (
     <div className={`flex ${isAI ? 'justify-start' : 'justify-end'} mb-4`}>
-      <div className={`max-w-[90%] p-4 rounded-2xl ${
+      <div className={`max-w-[85%] p-3 sm:p-4 rounded-2xl ${
         isAI ? 'bg-gray-100' : 'aurora-btn'
       }`}>
         {isTyping ? (
@@ -97,35 +97,35 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="bg-white border-b border-gray-100 px-6 py-4 flex justify-between items-center fixed w-full top-0 z-50">
+      <header className="bg-white border-b border-gray-100 px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between items-center sticky top-0 z-50 gap-4 sm:gap-0">
         <h1 className="text-2xl font-bold aurora-text">WayStation.AI</h1>
         <a 
-          href="#" 
-          className="aurora-btn px-6 py-2 text-sm font-medium rounded-lg 
-                   hover:scale-105 transition-transform duration-300"
+          href="https://forms.gle/ksX4AVNCJbPFr66F6" 
+          className="aurora-btn px-4 sm:px-6 py-2 text-sm font-medium rounded-lg 
+                   hover:scale-105 transition-transform duration-300 w-full sm:w-auto text-center"
         >
           Get Early Access
         </a>
       </header>
 
       {/* Hero Section */}
-      <main className="pt-20">
-        <div className="h-[calc(100vh-200px)] grid grid-cols-1 lg:grid-cols-2 gap-12 px-8 py-8 max-w-7xl mx-auto overflow-hidden">
+      <main className="flex flex-col min-h-screen">
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 px-4 sm:px-8 py-8 max-w-7xl mx-auto">
           {/* Left Column - Branding */}
-          <div className="flex flex-col justify-center text-left space-y-6 overflow-hidden">
-            <p className="text-4xl text-gray-800 font-semibold mb-8">
+          <div className="flex flex-col justify-center text-left space-y-4 lg:space-y-6">
+            <p className="text-3xl lg:text-4xl text-gray-800 font-semibold">
               Empowering LLMs to Take Real-World Actions
             </p>
-            <p className="text-xl text-gray-600 leading-relaxed mb-8">
+            <p className="text-lg lg:text-xl text-gray-600 leading-relaxed">
               Connect your AI assistants with the tools professionals use daily through our 
               no-code, secure integration hub.
             </p>
           </div>
 
           {/* Right Column - Chat Demo */}
-          <div className="flex items-center justify-center">
-            <div className="glass-card w-full max-w-2xl mx-auto p-6 rounded-2xl shadow-xl h-[760px] flex flex-col">
-              <div className="flex-1 overflow-y-auto space-y-4 mb-4">
+          <div className="flex items-center justify-center mt-8 lg:mt-0">
+            <div className="glass-card w-full max-w-2xl mx-auto p-4 sm:p-6 rounded-2xl shadow-xl flex flex-col min-h-[480px] lg:min-h-[480px]">
+              <div className="flex-1 overflow-y-auto space-y-3 sm:space-y-4 mb-4 px-1 sm:px-2">
                 {messages.slice(0, currentMessageIndex + 1).map((msg, idx) => (
                   <ChatMessage 
                     key={idx}
@@ -136,7 +136,7 @@ export default function Home() {
                   />
                 ))}
               </div>
-              <div className="flex gap-2 border-t pt-4">
+              <div className="flex gap-3 border-t pt-4 justify-center sm:justify-start">
                 <div className="w-8 h-8 rounded bg-gray-100 flex items-center justify-center">
                   <img src="/file.svg" alt="File" className="w-4 h-4 opacity-60" />
                 </div>
@@ -153,8 +153,8 @@ export default function Home() {
 
         {/* Integration Partners */}
         <div className="bg-gray-50 py-6 px-4">
-          <p className="text-center text-gray-600 text-lg mb-4">Seamlessly integrate with your favorite tools</p>
-          <div className="grid grid-cols-5 md:grid-cols-10 gap-4 max-w-5xl mx-auto px-4">
+          <p className="text-center text-gray-600 text-lg mb-8 sm:mb-10">Seamlessly integrate with your favorite tools</p>
+          <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-10 gap-8 sm:gap-6 max-w-5xl mx-auto">
             <img 
               src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" 
               alt="Google Docs" 

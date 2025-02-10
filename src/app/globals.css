@@ -21,6 +21,13 @@
   backdrop-filter: blur(8px);
   border: 1px solid rgba(33, 139, 245, 0.1);
   box-shadow: 0 4px 16px rgba(38, 217, 193, 0.08);
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 640px) {
+  .glass-card {
+    backdrop-filter: blur(4px);
+  }
 }
 
 .aurora-btn {
