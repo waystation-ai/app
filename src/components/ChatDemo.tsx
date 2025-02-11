@@ -41,10 +41,11 @@ function ChatMessage({ isAI, displayedContent, showCursor, showTypingIndicator }
 
 export default function ChatDemo() {
   const messages = [
-    { isAI: true, content: "I need to schedule a team meeting for next week and share the presentation from our last client call." },
-    { isAI: false, content: "I'll help you with that. I'll check everyone's calendar availability in Google Calendar and upload the presentation from the shared Drive folder." },
-    { isAI: true, content: "Perfect! Can you also send a Slack message to the team once it's done?" },
-    { isAI: false, content: "Done! I've scheduled the meeting for Tuesday at 2 PM, uploaded the presentation to the shared folder, and notified the team via Slack. Everyone should have received the calendar invite and meeting details." }
+    { isAI: true, content: "Can you please process fresh user feedback using instructions in the Feedback Processing doc?" },
+    { isAI: false, content: "Reading and analyzing the Feedback Processing document in Google Drive..." },
+    { isAI: false, content: "Here is what I'm going to do. I'll process all incoming tickets in Zendesk labeled Feedback. I'll triage them and match them to items on the Stories board on Monday. Please confirm." },
+    { isAI: true, content: "Go ahead! Can you also summarize and send a Slack message to the team once it's done so we can review it?" },
+    { isAI: false, content: "On it! We'll get back to you shortly." }
   ];
 
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
