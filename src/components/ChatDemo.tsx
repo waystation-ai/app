@@ -59,8 +59,6 @@ export default function ChatDemo() {
       const container = messagesContainerRef.current;
       setTimeout(() => {
         container.scrollTop = container.scrollHeight;
-        // Force a reflow to ensure scroll takes effect
-        container.scrollTop = container.scrollHeight;
       }, 100);
     }
   };
@@ -70,64 +68,61 @@ export default function ChatDemo() {
   }, [currentMessageIndex, displayedContent]);
 
   useEffect(() => {
+    // Reset if we've shown all messages
     if (currentMessageIndex >= messages.length) {
-      const timer = setTimeout(() => {
+      const resetTimer = setTimeout(() => {
         setCurrentMessageIndex(0);
         setDisplayedContent("");
         setShowCursor(false);
         setShowTypingIndicator(false);
       }, 2000);
-      return () => clearTimeout(timer);
+      return () => clearTimeout(resetTimer);
     }
 
     const currentMessage = messages[currentMessageIndex];
-    const messageContent = currentMessage.content;
     const isAIMessage = currentMessage.isAI;
-    
-    let currentIndex = 0;
-    setShowCursor(!isAIMessage);
+    let typingTimer: NodeJS.Timeout | null = null;
+    let nextMessageTimer: NodeJS.Timeout | null = null;
 
-    // Initialize state
+    // Set initial states
+    setShowCursor(!isAIMessage);
     setShowTypingIndicator(!isAIMessage);
     setDisplayedContent("");
-    
-    // Create a sequence of timers
-    const timers: NodeJS.Timeout[] = [];
-    
-    // For user messages, start with typing indicator
+
+    // Show typing indicator for user messages
     if (!isAIMessage) {
-      const indicatorTimer = setTimeout(() => {
+      typingTimer = setTimeout(() => {
         setShowTypingIndicator(false);
+        startTyping();
       }, 1000);
-      timers.push(indicatorTimer);
+    } else {
+      startTyping();
     }
 
-    // Start typing animation after indicator (for AI) or immediately (for user)
-    const typingDelay = isAIMessage ? 1000 : 0;
-    const startTypingTimer = setTimeout(() => {
-      const typingInterval = setInterval(() => {
+    function startTyping() {
+      let currentIndex = 0;
+      const messageContent = currentMessage.content;
+      
+      function typeNextChar() {
         if (currentIndex < messageContent.length) {
           setDisplayedContent(messageContent.slice(0, currentIndex + 1));
           currentIndex++;
+          typingTimer = setTimeout(typeNextChar, isAIMessage ? 50 : 30);
         } else {
-          clearInterval(typingInterval);
-          const nextMessageTimer = setTimeout(() => {
+          // Message complete, schedule next message
+          nextMessageTimer = setTimeout(() => {
             setCurrentMessageIndex(prev => prev + 1);
           }, 2000);
-          timers.push(nextMessageTimer);
         }
-      }, isAIMessage ? 50 : 30);
-      
-      timers.push(setTimeout(() => clearInterval(typingInterval), messageContent.length * (isAIMessage ? 50 : 30) + 100));
-    }, typingDelay);
-    
-    timers.push(startTypingTimer);
+      }
 
-    // Cleanup function
+      typeNextChar();
+    }
+
+    // Cleanup
     return () => {
-      timers.forEach(timer => clearTimeout(timer));
-      setShowTypingIndicator(false);
-      setDisplayedContent(messageContent);
+      if (typingTimer) clearTimeout(typingTimer);
+      if (nextMessageTimer) clearTimeout(nextMessageTimer);
     };
   }, [currentMessageIndex, messages.length]);
 
