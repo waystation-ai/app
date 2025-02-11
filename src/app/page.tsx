@@ -1,7 +1,7 @@
 "use client"
 import AuroraBackground from "@/components/AuroraBackground";
 import ChatDemo from "@/components/ChatDemo";
-import PartnersRow from "@/components/Partners";
+import Partners from "@/components/Partners";
 
 export default function Home() {
 
@@ -35,6 +35,7 @@ export default function Home() {
               Connect your AI assistants with the tools professionals use daily through our 
               no-code, secure integration hub.
             </p>
+            <Partners />
           </div>
 
           {/* Right Column - Chat Demo */}
@@ -42,8 +43,6 @@ export default function Home() {
             <ChatDemo />
           </div>
         </div>
-
-        <PartnersRow />
       </main>
     </div>
   );
