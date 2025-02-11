@@ -5,7 +5,7 @@ import ChatDemo from "@/components/ChatDemo";
 export default function Home() {
 
   return (
-    <div className="min-h-screen relative">
+    <div className="h-screen flex flex-col relative">
       <AuroraBackground />
       {/* Header */}
       <header className="bg-white/30 backdrop-blur-md border-b border-white/20 px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between items-center sticky top-0 z-50 gap-4 sm:gap-0">
@@ -20,8 +20,8 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <main className="flex flex-col min-h-screen">
-        <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 px-4 sm:px-8 py-8 max-w-7xl mx-auto">
+      <main className="flex-1 flex flex-col">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 px-4 sm:px-8 py-8 max-w-7xl mx-auto">
           {/* Left Column - Branding */}
           <div className="flex flex-col justify-center text-left space-y-4 lg:space-y-6">
             <p className="text-3xl lg:text-4xl text-gray-900 font-bold">
@@ -40,7 +40,7 @@ export default function Home() {
         </div>
 
         {/* Integration Partners */}
-        <div className="bg-white/40 backdrop-blur-md py-6 px-4">
+        <div className="mt-auto bg-white/40 backdrop-blur-md py-6 px-4">
           <p className="text-center text-gray-800 text-lg mb-8 sm:mb-10">Seamlessly integrate with your favorite tools</p>
           <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-8 gap-8 sm:gap-6 max-w-5xl mx-auto">
             <img 
