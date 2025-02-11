@@ -71,14 +71,14 @@ export default function ChatDemo() {
     setShowCursor(!isAIMessage);
 
     // Initialize state
-    setShowTypingIndicator(isAIMessage);
+    setShowTypingIndicator(!isAIMessage);
     setDisplayedContent("");
     
     // Create a sequence of timers
     const timers: NodeJS.Timeout[] = [];
     
-    // For AI messages, start with typing indicator
-    if (isAIMessage) {
+    // For user messages, start with typing indicator
+    if (!isAIMessage) {
       const indicatorTimer = setTimeout(() => {
         setShowTypingIndicator(false);
       }, 1000);
