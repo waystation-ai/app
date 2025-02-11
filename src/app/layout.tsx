@@ -13,8 +13,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "WayStation.AI",
+  title: "WayStation",
   description: "Empowering LLMs to take real-world actions",
+  icons: {
+    icon: '/aurora-circles.svg'
+  }
 };
 
 export default function RootLayout({

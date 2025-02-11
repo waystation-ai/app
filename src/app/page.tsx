@@ -9,7 +9,10 @@ export default function Home() {
       <AuroraBackground />
       {/* Header */}
       <header className="bg-white/30 backdrop-blur-md border-b border-white/20 px-4 sm:px-6 py-4 flex flex-row justify-between items-center sticky top-0 z-50 gap-4 sm:gap-0">
-        <h1 className="text-2xl font-bold aurora-text">WayStation</h1>
+        <div className="flex items-center gap-2">
+          <img src="/aurora-circles.svg" alt="WayStation" className="h-8 w-8" />
+          <h1 className="text-2xl font-bold aurora-text">WayStation</h1>
+        </div>
         <a 
           href="https://forms.gle/ksX4AVNCJbPFr66F6" 
           className="aurora-btn px-4 py-2 text-sm font-medium rounded-lg 
