@@ -57,7 +57,11 @@ export default function ChatDemo() {
   const scrollToBottom = () => {
     if (messagesContainerRef.current) {
       const container = messagesContainerRef.current;
-      container.scrollTop = container.scrollHeight;
+      setTimeout(() => {
+        container.scrollTop = container.scrollHeight;
+        // Force a reflow to ensure scroll takes effect
+        container.scrollTop = container.scrollHeight;
+      }, 100);
     }
   };
 
@@ -129,7 +133,7 @@ export default function ChatDemo() {
 
   return (
     <div className="glass-card w-full max-w-2xl mx-auto mt-0 sm:mt-12 p-4 sm:p-6 rounded-2xl shadow-xl flex flex-col h-[60vh] sm:h-[50vh]">
-      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto space-y-3 sm:space-y-4 mb-4 px-1 sm:px-2 scroll-smooth scrollbar-hide">
+      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto space-y-3 sm:space-y-4 mb-4 px-1 sm:px-2 -webkit-overflow-scrolling-touch">
         {messages.slice(0, currentMessageIndex + 1).map((msg, idx) => (
           <ChatMessage 
             key={idx}
