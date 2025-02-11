@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface ChatMessageProps {
   isAI: boolean;
@@ -52,6 +52,18 @@ export default function ChatDemo() {
   const [displayedContent, setDisplayedContent] = useState("");
   const [showCursor, setShowCursor] = useState(false);
   const [showTypingIndicator, setShowTypingIndicator] = useState(false);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    if (messagesContainerRef.current) {
+      const container = messagesContainerRef.current;
+      container.scrollTop = container.scrollHeight;
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [currentMessageIndex, displayedContent]);
 
   useEffect(() => {
     if (currentMessageIndex >= messages.length) {
@@ -116,8 +128,8 @@ export default function ChatDemo() {
   }, [currentMessageIndex, messages.length]);
 
   return (
-    <div className="glass-card w-full max-w-2xl mx-auto p-4 sm:p-6 rounded-2xl shadow-xl flex flex-col min-h-[480px] lg:min-h-[480px]">
-      <div className="flex-1 overflow-y-auto space-y-3 sm:space-y-4 mb-4 px-1 sm:px-2">
+    <div className="glass-card w-full max-w-2xl mx-auto mt-0 sm:mt-12 p-4 sm:p-6 rounded-2xl shadow-xl flex flex-col h-[60vh] sm:h-[50vh]">
+      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto space-y-3 sm:space-y-4 mb-4 px-1 sm:px-2 scroll-smooth scrollbar-hide">
         {messages.slice(0, currentMessageIndex + 1).map((msg, idx) => (
           <ChatMessage 
             key={idx}

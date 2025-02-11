@@ -34,7 +34,7 @@ export default function Home() {
           </div>
 
           {/* Right Column - Chat Demo */}
-          <div className="flex items-center justify-center mt-8 lg:mt-0">
+          <div className="flex items-center justify-center mt-4 lg:mt-0">
             <ChatDemo />
           </div>
         </div>
