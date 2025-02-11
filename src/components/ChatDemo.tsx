@@ -19,7 +19,7 @@ function TypingIndicator() {
   );
 }
 
-function ChatMessage({ isAI, content, displayedContent, showCursor, showTypingIndicator }: ChatMessageProps) {
+function ChatMessage({ isAI, displayedContent, showCursor, showTypingIndicator }: ChatMessageProps) {
   return (
     <div className={`flex ${isAI ? 'justify-start' : 'justify-end'} mb-4`}>
       <div className={`max-w-[85%] p-3 sm:p-4 rounded-2xl ${
