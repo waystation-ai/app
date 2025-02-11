@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 interface ChatMessageProps {
   isAI: boolean;
   content: string;
-  isTyping?: boolean;
+  displayedContent: string;
   showCursor?: boolean;
+  showTypingIndicator?: boolean;
 }
 
 function TypingIndicator() {
@@ -18,19 +19,19 @@ function TypingIndicator() {
   );
 }
 
-function ChatMessage({ isAI, content, isTyping, showCursor }: ChatMessageProps) {
+function ChatMessage({ isAI, content, displayedContent, showCursor, showTypingIndicator }: ChatMessageProps) {
   return (
     <div className={`flex ${isAI ? 'justify-start' : 'justify-end'} mb-4`}>
       <div className={`max-w-[85%] p-3 sm:p-4 rounded-2xl ${
         isAI ? 'bg-gray-100' : 'chat-msg'
       }`}>
-        {isTyping ? (
+        {showTypingIndicator ? (
           <TypingIndicator />
         ) : (
           <p className={`text-base ${isAI ? 'text-gray-800' : 'text-white'} ${
             showCursor ? 'typing-cursor' : ''
           }`}>
-            {content}
+            {displayedContent}
           </p>
         )}
       </div>
@@ -47,50 +48,69 @@ export default function ChatDemo() {
   ];
 
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
-  const [showTyping, setShowTyping] = useState(false);
+  const [displayedContent, setDisplayedContent] = useState("");
   const [showCursor, setShowCursor] = useState(false);
+  const [showTypingIndicator, setShowTypingIndicator] = useState(false);
 
   useEffect(() => {
-    const cycleMessages = () => {
-      if (currentMessageIndex >= messages.length) {
-        setTimeout(() => {
-          setCurrentMessageIndex(0);
-          setShowTyping(false);
-          setShowCursor(false);
-        }, 2000);
-        return;
-      }
+    if (currentMessageIndex >= messages.length) {
+      const timer = setTimeout(() => {
+        setCurrentMessageIndex(0);
+        setDisplayedContent("");
+        setShowCursor(false);
+        setShowTypingIndicator(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
 
-      const isAIMessage = messages[currentMessageIndex].isAI;
-      
-      // Show typing indicator
-      setShowTyping(true);
-      setShowCursor(false);
-
-      const typingDuration = isAIMessage ? 2000 : 1500;
-      const displayDuration = 3000;
-
-      // Simulate typing delay
-      setTimeout(() => {
-        setShowTyping(false);
-        if (!isAIMessage) {
-          setShowCursor(true);
-        }
-        
-        // Move to next message after showing current one
-        setTimeout(() => {
-          setCurrentMessageIndex(prev => prev + 1);
-        }, displayDuration);
-      }, typingDuration);
-    };
-
-    const timer = setTimeout(cycleMessages, 500);
+    const currentMessage = messages[currentMessageIndex];
+    const messageContent = currentMessage.content;
+    const isAIMessage = currentMessage.isAI;
     
-    // Cleanup
+    let currentIndex = 0;
+    setShowCursor(!isAIMessage);
+
+    // Initialize state
+    setShowTypingIndicator(isAIMessage);
+    setDisplayedContent("");
+    
+    // Create a sequence of timers
+    const timers: NodeJS.Timeout[] = [];
+    
+    // For AI messages, start with typing indicator
+    if (isAIMessage) {
+      const indicatorTimer = setTimeout(() => {
+        setShowTypingIndicator(false);
+      }, 1000);
+      timers.push(indicatorTimer);
+    }
+
+    // Start typing animation after indicator (for AI) or immediately (for user)
+    const typingDelay = isAIMessage ? 1000 : 0;
+    const startTypingTimer = setTimeout(() => {
+      const typingInterval = setInterval(() => {
+        if (currentIndex < messageContent.length) {
+          setDisplayedContent(messageContent.slice(0, currentIndex + 1));
+          currentIndex++;
+        } else {
+          clearInterval(typingInterval);
+          const nextMessageTimer = setTimeout(() => {
+            setCurrentMessageIndex(prev => prev + 1);
+          }, 2000);
+          timers.push(nextMessageTimer);
+        }
+      }, isAIMessage ? 50 : 30);
+      
+      timers.push(setTimeout(() => clearInterval(typingInterval), messageContent.length * (isAIMessage ? 50 : 30) + 100));
+    }, typingDelay);
+    
+    timers.push(startTypingTimer);
+
+    // Cleanup function
     return () => {
-      clearTimeout(timer);
-      setShowTyping(false);
-      setShowCursor(false);
+      timers.forEach(timer => clearTimeout(timer));
+      setShowTypingIndicator(false);
+      setDisplayedContent(messageContent);
     };
   }, [currentMessageIndex, messages.length]);
 
@@ -102,8 +122,9 @@ export default function ChatDemo() {
             key={idx}
             isAI={msg.isAI}
             content={msg.content}
-            isTyping={idx === currentMessageIndex && showTyping}
+            displayedContent={idx === currentMessageIndex ? displayedContent : msg.content}
             showCursor={idx === currentMessageIndex && showCursor}
+            showTypingIndicator={idx === currentMessageIndex && showTypingIndicator}
           />
         ))}
       </div>
