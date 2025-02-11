@@ -1,7 +1,7 @@
 "use client"
 import AuroraBackground from "@/components/AuroraBackground";
 import ChatDemo from "@/components/ChatDemo";
-import PartnersRow from "@/components/PartnersRow";
+import PartnersRow from "@/components/Partners";
 
 export default function Home() {
 
