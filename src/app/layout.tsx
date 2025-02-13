@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ClerkProvider} from '@clerk/nextjs';
+import { ClerkProvider, SignedIn, SignedOut, SignOutButton} from '@clerk/nextjs';
 import { Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import AuroraBackground from "@/components/AuroraBackground";
@@ -33,10 +33,18 @@ export default function RootLayout({
             <img src="/aurora-circles.svg" alt="WayStation" className="h-8 w-8" />
             <h1 className="text-2xl font-bold aurora-text">WayStation</h1>
           </Link>
-          
-          <Link href="/waitlist" className="aurora-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
-            Get Early Access
-          </Link>
+          <SignedOut>
+            <Link href="/waitlist" className="aurora-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
+              Get Early Access
+            </Link>
+          </SignedOut>
+          <SignedIn>
+            <SignOutButton>
+            <Link href="" className="aurora-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
+              Sign Out
+            </Link>
+            </SignOutButton>
+          </SignedIn>
 
         </header>
         {children}
