@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import {
   ClerkProvider,
   SignInButton,
+  SignOutButton,
   SignUpButton,
   SignedIn,
   SignedOut,
@@ -9,6 +10,8 @@ import {
 } from '@clerk/nextjs';
 import { Source_Sans_3 } from "next/font/google";
 import "./globals.css";
+import AuroraBackground from "@/components/AuroraBackground";
+import Link from 'next/link';
 
 const sourceSans = Source_Sans_3({
   variable: "--font-source-sans",
@@ -29,18 +32,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider waitlistUrl="/waitlist">
     <html lang="en">
       <body className={`${sourceSans.variable} antialiased`}>
+      <AuroraBackground />
         <header className="bg-white/30 backdrop-blur-md border-b border-white/20 px-4 sm:px-6 py-4 flex flex-row justify-between items-center sticky top-0 z-50 gap-4 sm:gap-0">
-          <div className="flex items-center gap-2">
+          <a className="flex items-center gap-2" href="/">
             <img src="/aurora-circles.svg" alt="WayStation" className="h-8 w-8" />
             <h1 className="text-2xl font-bold aurora-text">WayStation</h1>
-          </div>
-          <a href="https://forms.gle/ksX4AVNCJbPFr66F6" 
-            className="aurora-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
-            Get Early Access
           </a>
+          
+          <Link href="/waitlist" className="aurora-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
+            Get Early Access
+          </Link>
 
         </header>
         {children}

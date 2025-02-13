@@ -1,5 +1,4 @@
 "use client"
-import AuroraBackground from "@/components/AuroraBackground";
 import ChatDemo from "@/components/ChatDemo";
 import Partners from "@/components/Partners";
 
@@ -7,10 +6,6 @@ export default function Home() {
 
   return (
     <div className="h-screen flex flex-col relative">
-      <AuroraBackground />
-      {/* Header */}
-      
-
       {/* Hero Section */}
       <main className="flex-1 flex flex-col">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 px-4 sm:px-8 py-8 max-w-7xl mx-auto">
