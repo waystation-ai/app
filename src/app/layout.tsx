@@ -1,13 +1,5 @@
 import type { Metadata } from "next";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignOutButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from '@clerk/nextjs';
+import { ClerkProvider} from '@clerk/nextjs';
 import { Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import AuroraBackground from "@/components/AuroraBackground";
@@ -37,10 +29,10 @@ export default function RootLayout({
       <body className={`${sourceSans.variable} antialiased`}>
       <AuroraBackground />
         <header className="bg-white/30 backdrop-blur-md border-b border-white/20 px-4 sm:px-6 py-4 flex flex-row justify-between items-center sticky top-0 z-50 gap-4 sm:gap-0">
-          <a className="flex items-center gap-2" href="/">
+          <Link className="flex items-center gap-2" href="/">
             <img src="/aurora-circles.svg" alt="WayStation" className="h-8 w-8" />
             <h1 className="text-2xl font-bold aurora-text">WayStation</h1>
-          </a>
+          </Link>
           
           <Link href="/waitlist" className="aurora-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
             Get Early Access
