@@ -127,8 +127,8 @@ export default function ChatDemo() {
   }, [currentMessageIndex, messages.length]);
 
   return (
-    <div className="glass-card w-full max-w-2xl mx-auto mt-0 sm:mt-12 p-4 sm:p-6 rounded-2xl shadow-xl flex flex-col h-[60vh] sm:h-[70vh]">
-      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto space-y-3 sm:space-y-4 mb-4 px-1 sm:px-2 -webkit-overflow-scrolling-touch">
+    <div className="h-[60vh] sm:h-[70vh] bg-white/80 w-full max-w-2xl mx-auto mt-0 sm:mt-12 p-4 sm:p-6 rounded-2xl shadow-[0px_2px_16px_0px_rgba(0,0,0,0.08)] flex flex-col ">
+      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto scrollbar-hide space-y-3 sm:space-y-4 mb-4 px-1 sm:px-2 -webkit-overflow-scrolling-touch">
         {messages.slice(0, currentMessageIndex + 1).map((msg, idx) => (
           <ChatMessage 
             key={idx}
@@ -142,13 +142,13 @@ export default function ChatDemo() {
       </div>
       <div className="flex gap-3 border-t pt-4 justify-center sm:justify-start">
         <div className="w-8 h-8 rounded bg-gray-100 flex items-center justify-center">
-          <img src="/file.svg" alt="File" className="w-4 h-4 opacity-60" />
+          <img src="/images/chat/file.svg" alt="File" className="w-4 h-4 opacity-80" />
         </div>
         <div className="w-8 h-8 rounded bg-gray-100 flex items-center justify-center">
-          <img src="/globe.svg" alt="Web" className="w-4 h-4 opacity-60" />
+          <img src="/images/chat/globe.svg" alt="Web" className="w-4 h-4 opacity-80" />
         </div>
         <div className="w-8 h-8 rounded bg-gray-100 flex items-center justify-center">
-          <img src="/window.svg" alt="Apps" className="w-4 h-4 opacity-60" />
+          <img src="/images/chat/window.svg" alt="Apps" className="w-4 h-4 opacity-80" />
         </div>
       </div>
     </div>

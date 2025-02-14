@@ -51,7 +51,7 @@
 }
 
 .chat-msg {
-  background-color: var(--deep-blue);
+  background-color: #5f9aff;
   color: white;
   transition: all 0.3s ease;
 }
