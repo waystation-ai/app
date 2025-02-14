@@ -14,12 +14,11 @@ const fragmentShader = `
   uniform vec2 resolution;
 
   vec3 aurora_color(vec2 pos) {
-    // Keep original vibrant colors but reduce final intensity
     vec3 blue = vec3(0.0, 0.4, 1.0);
     vec3 green = vec3(0.0, 1.0, 0.4);
     
     float t = sin(pos.x * 2.0 + time * 0.1) * 0.5 + 0.5;
-    return mix(blue, green, t) * 0.7;    // Reduce intensity while keeping color vibrancy
+    return mix(blue, green, t);  // Full intensity colors
   }
 
   float aurora_shape(vec2 pos) {
@@ -35,10 +34,13 @@ const fragmentShader = `
       float wave = sin(pos.x * 1.5 + time * 0.3 + i) * 0.5 + 0.5;
       wave *= sin(pos.y * 1.5 + time * 0.2 + i) * 0.5 + 0.5;
       
-      v += wave * (0.3 / (length(pos - offset) + 0.8));  // Slightly reduced intensity
+      v += wave * (0.3 / (length(pos - offset) + 0.8));
     }
     
-    return smoothstep(0.1, 0.2, v) * 0.4;  // Reduce opacity while keeping sharp edges
+    // Calculate alpha for 70/30 blend ratio
+    float baseAlpha = 0.1;  // 30% minimum visibility
+    float smoothValue = smoothstep(0.1, 0.4, v);
+    return min(baseAlpha + (smoothValue * 0.4), 0.7);  // Cap at 70% opacity
   }
 
   void main() {
@@ -47,20 +49,15 @@ const fragmentShader = `
     vec2 pos = (2.0 * uv - 1.0);
     pos.x *= resolution.x/resolution.y;
     
-    // Set pure white background
-    vec3 backgroundColor = vec3(1.0);
-    
-    // Calculate aurora effect
+    // Calculate aurora effect with smoother blending
     vec3 auroraCol = aurora_color(pos);
-    float aurora = aurora_shape(pos);
+    float alpha = aurora_shape(pos);
     
-    // Blend aurora with white background
-    vec3 finalColor = mix(backgroundColor, auroraCol, aurora);
+    // Apply gamma correction only to color, not alpha
+    vec3 finalColor = pow(auroraCol, vec3(1.0/2.2));
     
-    // Apply gamma correction
-    finalColor = pow(finalColor, vec3(1.0/2.2));
-    
-    gl_FragColor = vec4(finalColor, 1.0);
+    // Use smooth alpha channel
+    gl_FragColor = vec4(finalColor, alpha);
   }
 `;
 
@@ -80,9 +77,9 @@ export default function AuroraBackground() {
     let fs: WebGLShader | null = null;
 
     try {
-      gl.clearColor(1.0, 1.0, 1.0, 1.0);
+      gl.clearColor(0.0, 0.0, 0.0, 0.0);
       gl.enable(gl.BLEND);
-      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);  // Standard alpha blending for proper transparency
 
       // Create and compile vertex shader
       vs = gl.createShader(gl.VERTEX_SHADER);

@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --aurora-green: #26D9C1;
-  --aurora-blue: #218BF5;
-  --deep-blue: #0B2C66;
+  --aurora-green: #00e6a9;
+  --aurora-blue: #609aff;
+  --deep-blue: #0030a0;
   --background: #ffffff;
   --foreground: #1a1a1a;
 }
@@ -69,8 +69,11 @@
 
 body {
   color: var(--foreground);
-  background: var(--background);
-  font-family: var(--font-source-sans), system-ui, -apple-system, sans-serif;
+  background-image: url('/images/background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: var(--font-sora), system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
 }
 

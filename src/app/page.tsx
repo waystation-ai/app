@@ -12,10 +12,10 @@ export default function Home() {
           {/* Left Column - Branding */}
           <div className="flex flex-col justify-center text-left space-y-4 lg:space-y-6">
             <p className="text-3xl lg:text-4xl text-gray-900 font-bold">
-            Empowering LLMs to take real-world actions
+            Empowering LLMs<br/>to take real-world actions
             </p>
             <p className="text-lg lg:text-xl text-gray-800 leading-relaxed">
-              Connect your AI assistants with the tools professionals use daily through our 
+              <span className="bg-yellow-100">Connect your AI assistants with the tools</span><br/>professionals use daily through our 
               no-code, secure integration hub.
             </p>
             <Partners />
