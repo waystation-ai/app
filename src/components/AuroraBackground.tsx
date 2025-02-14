@@ -37,10 +37,10 @@ const fragmentShader = `
       v += wave * (0.3 / (length(pos - offset) + 0.8));
     }
     
-    // Calculate alpha for 70/30 blend ratio
-    float baseAlpha = 0.1;  // 30% minimum visibility
+    // Calculate alpha for more subtle effect
+    float baseAlpha = 0.05;  // Reduced minimum visibility
     float smoothValue = smoothstep(0.1, 0.4, v);
-    return min(baseAlpha + (smoothValue * 0.4), 0.7);  // Cap at 70% opacity
+    return min(baseAlpha + (smoothValue * 0.3), 0.5);  // Cap at 50% opacity
   }
 
   void main() {
