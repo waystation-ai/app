@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: "WayStation",
   description: "Empowering LLMs to take real-world actions",
   icons: {
-    icon: '/aurora-circles.svg'
+    icon: '/images/logo.svg'
   }
 };
 
