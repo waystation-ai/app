@@ -3,8 +3,7 @@ import { NextResponse } from 'next/server';
 import { oauthService } from '@/services/oauth-service';
 import { getProviderConfig } from '@/config/oauth-providers';
 
-// Store state in memory for now. In production, use Redis or similar
-const stateStore = new Map<string, { state: string; provider: string }>();
+import { stateStore, cleanupOldStates } from '@/services/state-store';
 
 export async function GET(
   request: Request,
@@ -17,7 +16,7 @@ export async function GET(
     }
 
     // Validate provider
-    const {provider} = await params;
+    const { provider } = params;
     try {
       getProviderConfig(provider);
     } catch {
@@ -30,13 +29,8 @@ export async function GET(
     // Store state for validation in callback
     stateStore.set(state, { state, provider });
 
-    // Clean up old states (those older than 5 minutes)
-    const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
-    stateStore.forEach((value, key) => {
-      if (parseInt(key.split('_')[1]) < fiveMinutesAgo) {
-        stateStore.delete(key);
-      }
-    });
+    // Clean up old states
+    cleanupOldStates();
 
     return NextResponse.redirect(url);
   } catch (error) {

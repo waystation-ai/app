@@ -3,9 +3,7 @@ import { NextResponse } from 'next/server';
 import { oauthService } from '@/services/oauth-service';
 import { storeOAuthTokens } from '@/db';
 
-// This should match the state store in the connect route
-// In production, use Redis or similar for cross-request state
-declare const stateStore: Map<string, { state: string; provider: string }>;
+import { stateStore } from '@/services/state-store';
 
 export async function GET(
   request: Request,
