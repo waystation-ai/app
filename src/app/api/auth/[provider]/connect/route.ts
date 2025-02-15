@@ -17,7 +17,7 @@ export async function GET(
     }
 
     // Validate provider
-    const provider = params.provider;
+    const {provider} = await params;
     try {
       getProviderConfig(provider);
     } catch {
