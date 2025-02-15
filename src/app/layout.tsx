@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ClerkProvider, SignedIn, SignedOut, SignOutButton} from '@clerk/nextjs';
+import { ClerkProvider, SignedIn, SignedOut, SignOutButton, UserButton} from '@clerk/nextjs';
 import { Sora } from "next/font/google";
 import "./globals.css";
 import AuroraBackground from "@/components/AuroraBackground";
@@ -39,11 +39,12 @@ export default function RootLayout({
             </Link>
           </SignedOut>
           <SignedIn>
-            <SignOutButton>
-            <Link href="" className="aurora-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
-              Sign Out
-            </Link>
-            </SignOutButton>
+            <div className="flex items-center gap-4">
+              <Link href="/dashboard" className="aurora-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
+                Dashboard
+              </Link>
+              <UserButton/>
+            </div>
           </SignedIn>
 
         </header>
