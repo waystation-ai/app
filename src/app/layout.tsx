@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ClerkProvider, SignedIn, SignedOut, SignOutButton, UserButton} from '@clerk/nextjs';
+import { ClerkProvider, SignedIn, SignedOut, UserButton} from '@clerk/nextjs';
 import { Sora } from "next/font/google";
 import "./globals.css";
 import AuroraBackground from "@/components/AuroraBackground";
