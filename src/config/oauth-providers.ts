@@ -44,23 +44,25 @@ export const providers: Record<string, OAuthProvider> = {
     ],
     redirectUri: `${baseRedirectUri}/monday/callback`
   },
-  googleDrive: {
+  gdrive: {
     name: 'Google Drive',
-    clientId: process.env.GOOGLE_DRIVE_CLIENT_ID || '',
-    clientSecret: process.env.GOOGLE_DRIVE_CLIENT_SECRET || '',
+    clientId: process.env.GOOGLE_CLIENT_ID || '',
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
     tokenUrl: 'https://oauth2.googleapis.com/token',
     scopes: [
-      'https://www.googleapis.com/auth/drive.readonly',
+      'https://www.googleapis.com/auth/userinfo.email',
+      'https://www.googleapis.com/auth/userinfo.profile'/*,
+       'https://www.googleapis.com/auth/drive.readonly',
       'https://www.googleapis.com/auth/drive.file',
       'https://www.googleapis.com/auth/drive.metadata.readonly'
-    ],
-    redirectUri: `${baseRedirectUri}/google-drive/callback`
+ */    ],
+    redirectUri: `${baseRedirectUri}/gdrive/callback`
   },
   gmail: {
     name: 'Gmail',
-    clientId: process.env.GMAIL_CLIENT_ID || '',
-    clientSecret: process.env.GMAIL_CLIENT_SECRET || '',
+    clientId: process.env.GOOGLE_CLIENT_ID || '',
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
     tokenUrl: 'https://oauth2.googleapis.com/token',
     scopes: [

@@ -2,7 +2,7 @@ import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import { oauthService } from '@/services/oauth-service';
 import { storeOAuthTokens } from '@/db';
-
+import { getRequestOrigin } from '@/utils/get-request-origin';
 import { stateStore } from '@/services/state-store';
 
 export async function GET(
@@ -23,7 +23,7 @@ export async function GET(
     if (error) {
       console.error('OAuth error:', error);
       // Redirect to error page
-      return NextResponse.redirect(new URL('/settings/connections?error=oauth_denied', url.origin));
+      return NextResponse.redirect(new URL('/settings/connections?error=oauth_denied', getRequestOrigin(request)));
     }
 
     if (!code || !state) {
@@ -46,10 +46,10 @@ export async function GET(
     await storeOAuthTokens(session.userId, params.provider, tokens);
 
     // Redirect to success page
-    return NextResponse.redirect(new URL('/settings/connections?success=true', url.origin));
+    return NextResponse.redirect(new URL('/dashboard', getRequestOrigin(request)));
   } catch (error) {
     console.error('Error in OAuth callback:', error);
     const url = new URL(request.url);
-    return NextResponse.redirect(new URL('/settings/connections?error=exchange_failed', url.origin));
+    return NextResponse.redirect(new URL('/settings/connections?error=exchange_failed', getRequestOrigin(request)));
   }
 }
