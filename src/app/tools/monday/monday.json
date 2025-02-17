@@ -50,24 +50,5 @@
         }
       }
     }
-  },
-  "components": {
-    "securitySchemes": {
-      "apiKeyAuth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "x-vercel-protection-bypass"
-      }
-    },
-    "schemas": {
-      "foo": {
-        "type": "object",
-        "properties": {
-          "bar": {
-            "type": "string"
-          }
-        }
-      }
-    }
   }
 }
