@@ -7,7 +7,7 @@ import { stateStore, cleanupOldStates } from '@/services/state-store';
 
 export async function GET(
   request: Request,
-  { params }: { params: { provider: string } }
+  { params }: { params: Promise<{ provider: string }> }
 ) {
   try {
     const session = await auth();
@@ -16,7 +16,7 @@ export async function GET(
     }
 
     // Validate provider
-    const { provider } = params;
+    const { provider } = await params;
     try {
       getProviderConfig(provider);
     } catch {
