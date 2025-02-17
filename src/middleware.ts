@@ -6,10 +6,6 @@ const isApiToolsRoute = createRouteMatcher(['/api(.*)', '/tools(.*)'])
 
 
 export default clerkMiddleware(async (auth, request) => {
-  const authorization = request.headers.get('Authorization');
-  if (authorization)
-    console.log(authorization);
-  
   // Check if this is an API or tools route
   if (!isPublicRoute(request)) {
     try {
