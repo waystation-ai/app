@@ -1,36 +1,29 @@
 import { NextResponse } from 'next/server';
+import { oauthService } from '@/services/oauth-service';
 
 export async function GET() {
-  const mockResponse = [
-    {
-      "id": "8369731021",
-      "name": "Subitems of Single Project"
-    },
-    {
-      "id": "8369730972",
-      "name": "Single Project"
-    },
-    {
-      "id": "7851649481",
-      "name": "Subitems of Campaign Planning & Status"
-    },
-    {
-      "id": "7851649418",
-      "name": "Subitems of Marketing Launch Plan"
-    },
-    {
-      "id": "7851649282",
-      "name": "Marketing Launch Plan"
-    },
-    {
-      "id": "7851649278",
-      "name": "Campaign Planning & Status"
-    },
-    {
-      "id": "7851649272",
-      "name": "Marketing product launch plan"
-    }
-  ];
+  try {
+    const accessToken = await oauthService.getValidAccessToken('monday');
+    
+    const response = await fetch('https://api.monday.com/v2', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': accessToken
+      },
+      body: JSON.stringify({
+        query: `query { boards { id name } }`
+      })
+    });
 
-  return NextResponse.json(mockResponse);
+    if (!response.ok) {
+      return NextResponse.json([]);
+    }
+
+    const data = await response.json();
+    return NextResponse.json(data.data.boards || []);
+  } catch (error) {
+    // Return empty list if no valid token or other errors
+    return NextResponse.json([]);
+  }
 }
