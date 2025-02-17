@@ -26,7 +26,7 @@ export default clerkMiddleware(async (auth, request) => {
       throw error
     }
   }
-})
+}, {debug: true})
 
 export const config = {
   matcher: [
