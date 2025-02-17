@@ -1,6 +1,6 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 
-const isPublicRoute = createRouteMatcher(['/sign-in(.*)', '/', '/waitlist', '/tools(.*)', '/api(.*)'])
+const isPublicRoute = createRouteMatcher(['/sign-in(.*)', '/', '/waitlist', 'api/gpt'])
 
 export default clerkMiddleware(async (auth, request) => {
   if (!isPublicRoute(request)) {
