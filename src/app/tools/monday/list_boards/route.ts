@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { oauthService } from '@/services/oauth-service';
 import { auth } from '@clerk/nextjs/server';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const session = await auth();
     if (!session.userId) {
