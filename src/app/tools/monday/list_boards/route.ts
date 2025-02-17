@@ -4,8 +4,6 @@ import { auth } from '@clerk/nextjs/server';
 
 export async function GET(request: NextRequest) {
   try {
-    console.log(request.headers.get('authorization'));
-
     const session = await auth();
     if (!session.userId) {
       return new NextResponse('Unauthorized', { status: 401 });
