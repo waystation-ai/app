@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { oauthService } from '@/services/oauth-service';
 import { auth } from '@clerk/nextjs/server';
 
