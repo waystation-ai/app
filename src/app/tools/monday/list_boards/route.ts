@@ -24,6 +24,6 @@ export async function GET() {
     return NextResponse.json(data.data.boards || []);
   } catch (error) {
     // Return empty list if no valid token or other errors
-    return NextResponse.json([]);
+    return NextResponse.json(error);
   }
 }

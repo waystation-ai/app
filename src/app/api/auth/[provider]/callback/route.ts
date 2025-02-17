@@ -49,7 +49,6 @@ export async function GET(
     return NextResponse.redirect(new URL('/dashboard', getRequestOrigin(request)));
   } catch (error) {
     console.error('Error in OAuth callback:', error);
-    const url = new URL(request.url);
     return NextResponse.redirect(new URL('/settings/connections?error=exchange_failed', getRequestOrigin(request)));
   }
 }
