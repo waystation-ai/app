@@ -1,8 +1,14 @@
 import { NextResponse } from 'next/server';
 import { oauthService } from '@/services/oauth-service';
+import { auth } from '@clerk/nextjs/server';
 
 export async function GET() {
   try {
+    const session = await auth();
+    if (!session.userId) {
+      return new NextResponse('Unauthorized', { status: 401 });
+    }
+
     const accessToken = await oauthService.getValidAccessToken('monday');
     
     const response = await fetch('https://api.monday.com/v2', {

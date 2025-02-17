@@ -1,10 +1,26 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import { NextResponse } from 'next/server'
 
 const isPublicRoute = createRouteMatcher(['/sign-in(.*)', '/', '/waitlist', 'api/gpt'])
+const isApiToolsRoute = createRouteMatcher(['/api(.*)', '/tools(.*)'])
+
 
 export default clerkMiddleware(async (auth, request) => {
+  // Check if this is an API or tools route
   if (!isPublicRoute(request)) {
-    await auth.protect()
+    try {
+      await auth.protect()
+    } catch (error) {
+      // Return 401 for API and tools routes
+      if (isApiToolsRoute(request)) {
+        return NextResponse.json(
+          { error: 'Unauthorized' },
+          { status: 401 }
+        )
+      }
+      // For other routes, let Clerk handle the redirect
+      throw error
+    }
   }
 })
 
