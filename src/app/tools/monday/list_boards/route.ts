@@ -45,12 +45,13 @@ export async function GET(request: NextRequest) {
         'Authorization': accessToken
       },
       body: JSON.stringify({
-        query: `query { boards { id name item_terminology items_count url workspace} }`
+        query: `query { boards { id name item_terminology items_count url} }`
       })
     });
 
     if (!response.ok) {
-      return NextResponse.json([]);
+      const {errors} = await response.json();
+      return NextResponse.json(errors);
     }
 
     const data = await response.json();
