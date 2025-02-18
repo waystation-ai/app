@@ -1,14 +1,14 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Waystation Monday Boards API",
-    "description": "API to retrieve a list of a user's boards from Monday.",
+    "title": "Waystation API",
+    "description": "A set of tools that connect ChatGPT to productivity apps",
     "version": "1.0.0"
   },
   "servers": [
     {
       "url": "https://waystation.ai",
-      "description": "Waystation Beta Server"
+      "description": "Waystation Server"
     }
   ],
   "paths": {

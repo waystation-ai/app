@@ -26,6 +26,8 @@ export async function GET(request: NextRequest) {
           console.log(data);
 
           userId = data.user_id;
+
+          console.log(`Authenticated as ${userId}`);
         }
       };
     }
@@ -54,7 +56,7 @@ export async function GET(request: NextRequest) {
     const data = await response.json();
     return NextResponse.json(data.data.boards || []);
   } catch (error) {
-    // Return empty list if no valid token or other errors
+    console.log(error);
     return NextResponse.json(error);
   }
 }
