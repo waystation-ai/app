@@ -6,22 +6,10 @@ const isApiToolsRoute = createRouteMatcher(['/api(.*)', '/tools(.*)'])
 
 
 export default clerkMiddleware(async (auth, request) => {
-  // Check if this is an API or tools route
-  if (!isPublicRoute(request)) {
-    try {
-      await auth.protect()
-    } catch (error) {
-      // Return 401 for API and tools routes
-      if (isApiToolsRoute(request)) {
-        return NextResponse.json(
-          { error: 'Unauthorized' },
-          { status: 401 }
-        )
-      }
-      // For other routes, let Clerk handle the redirect
-      throw error
-    }
-  }
+  if (isPublicRoute(request) || isApiToolsRoute(request))
+    return;
+  
+  await auth.protect();
 }, {debug: true})
 
 export const config = {
