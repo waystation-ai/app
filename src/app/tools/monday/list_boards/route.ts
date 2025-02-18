@@ -12,9 +12,7 @@ export async function GET(request: NextRequest) {
       const accessToken = request.headers.get('Authorization');
 
       if (accessToken) {
-        const debug = await session.debug();
-        console.log(debug);
-        const response = await fetch(`https://${debug.frontendApi}/oauth/userinfo`, {
+        const response = await fetch(`https://clerk.waystation.ai/oauth/userinfo`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
