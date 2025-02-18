@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
         'Authorization': accessToken
       },
       body: JSON.stringify({
-        query: `query { boards { id name } }`
+        query: `query { boards { id name item_terminology items_count url workspace} }`
       })
     });
 
@@ -55,7 +55,13 @@ export async function GET(request: NextRequest) {
 
     const data = await response.json();
     return NextResponse.json(data.data.boards || []);
-  } catch (error) {
+  } 
+  catch (error) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      return NextResponse.json(error.message);
+    }
+
     console.log(error);
     return NextResponse.json(error);
   }

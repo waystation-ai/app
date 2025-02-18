@@ -144,15 +144,11 @@ export class OAuthService {
 
     const connection = await getValidConnection(userId, provider);
     if (!connection) {
-      throw new Error(`No valid connection found for provider: ${provider}`);
+      throw new Error(`No valid connection found for provider: ${provider}. Ask user to set up a connection with ${provider}`);
     }
 
     // If token is expired and we have a refresh token, try to refresh it
-    if (
-      connection.expiresAt &&
-      new Date(connection.expiresAt) < new Date() &&
-      connection.refreshToken
-    ) {
+    if (connection.expiresAt && new Date(connection.expiresAt) < new Date() && connection.refreshToken) {
       const tokens = await this.refreshAccessToken(
         provider,
         connection.refreshToken
