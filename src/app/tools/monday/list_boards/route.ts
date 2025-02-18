@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { oauthService } from '@/services/oauth-service';
-import { auth } from '@clerk/nextjs/server';
+import { auth, verifyToken } from '@clerk/nextjs/server';
 
 export async function GET(request: NextRequest) {
   try {
@@ -12,7 +12,8 @@ export async function GET(request: NextRequest) {
       const accessToken = request.headers.get('Authorization');
 
       if (accessToken) {
-        const response = await fetch('https://clerk.waystation.ai/oauth/userinfo', {
+        const frontendApi = await session.debug();
+        const response = await fetch(`https://${frontendApi}/oauth/userinfo`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
