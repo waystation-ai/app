@@ -132,9 +132,12 @@ export class OAuthService {
     };
   }
 
-  async getValidAccessToken(provider: string): Promise<string> {
-    const session = await auth();
-    const userId = session.userId;
+  async getValidAccessToken(provider: string, userId: string | null): Promise<string> {
+    if (!userId) {
+      const session = await auth();
+      userId = session.userId;
+    }
+    
     if (!userId) {
       throw new Error('User not authenticated');
     }
