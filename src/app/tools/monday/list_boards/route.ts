@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { oauthService } from '@/services/oauth-service';
-import { auth, verifyToken } from '@clerk/nextjs/server';
+import { auth } from '@clerk/nextjs/server';
 
 export async function GET(request: NextRequest) {
   try {
