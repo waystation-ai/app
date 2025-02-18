@@ -12,8 +12,9 @@ export async function GET(request: NextRequest) {
       const accessToken = request.headers.get('Authorization');
 
       if (accessToken) {
-        const { frontendApi } = await session.debug();
-        const response = await fetch(`https://${frontendApi}/oauth/userinfo`, {
+        const debug = await session.debug();
+        console.log(debug);
+        const response = await fetch(`https://${debug.frontendApi}/oauth/userinfo`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
