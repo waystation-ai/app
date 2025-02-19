@@ -4,6 +4,7 @@ import { Sora } from "next/font/google";
 import "./globals.css";
 import AuroraBackground from "@/components/AuroraBackground";
 import Link from 'next/link';
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const sora = Sora({
   variable: "--font-sora",
@@ -49,6 +50,7 @@ export default function RootLayout({
 
         </header>
         {children}
+        <SpeedInsights />
       </body>
     </html>
     </ClerkProvider>
