@@ -34,7 +34,7 @@ export async function authenticateRequest(request: NextRequest): Promise<string 
 export async function queryMondayApi(
   userId: string, 
   query: string, 
-  variables?: Record<string, any>
+  variables?: Record<string, unknown> 
 ): Promise<NextResponse> { 
   try {
     const accessToken = await oauthService.getValidAccessToken('monday', userId);
