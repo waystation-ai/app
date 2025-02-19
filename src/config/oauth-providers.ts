@@ -42,10 +42,10 @@ export const providers: Record<string, OAuthProvider> = {
     scopes: [
       'me:read',
       'boards:read',
-      'boards:write',
+      'boards:write',/*
       'workspaces:read',
       'updates:read',
-      'updates:write'
+      'updates:write'*/
     ],
     redirectUri: `${baseRedirectUri}/monday/callback`
   },

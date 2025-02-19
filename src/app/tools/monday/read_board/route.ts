@@ -1,68 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { oauthService } from '@/services/oauth-service';
-import { auth } from '@clerk/nextjs/server';
+import { authenticateRequest, queryMondayApi } from '../utils';
 
 export async function GET(request: NextRequest) {
-  try {
-    const boardId = request.nextUrl.searchParams.get('boardId');
-
-    if (!boardId)
-      return new NextResponse('Missing board id', { status: 400 });
-    
-    const session = await auth();
-
-    let userId = session.userId;
-    if (!userId) {
-      console.log('Session userId is missing');
-      const accessToken = request.headers.get('Authorization');
-
-      if (accessToken) {
-        const response = await fetch(`https://clerk.waystation.ai/oauth/userinfo`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': accessToken as string
-          }
-        });
-        console.log(response);
-        
-        if (response.ok) {
-          const data = await response.json();
-          console.log(data);
-
-          userId = data.user_id;
-        }
-      };
-    }
-
-    if (!userId) {
-      return new NextResponse('Unauthorized', { status: 401 });
-    }
-
-    const accessToken = await oauthService.getValidAccessToken('monday', userId);
-
-    const query = `query { boards (ids: ${boardId}) { name items_page { items { id name column_values {id text value} group {id title}}}}}`;
-    
-    const response = await fetch('https://api.monday.com/v2', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': accessToken
-      },
-      body: JSON.stringify({
-        query: query
-      })
-    });
-
-    if (!response.ok) {
-      const {errors} = await response.json();
-      return NextResponse.json(errors);
-    }
-
-    const data = await response.json();
-    return NextResponse.json(data.data.boards || []);
-  } catch (error) {
-    // Return empty list if no valid token or other errors
-    return NextResponse.json(error);
+  const boardId = request.nextUrl.searchParams.get('boardId');
+  if (!boardId) {
+    return new NextResponse('Missing board id', { status: 400 });
   }
+
+  const userId = await authenticateRequest(request);
+  if (!userId) {
+    return new NextResponse('Unauthorized', { status: 401 });
+  }
+
+  const query = `query { boards (ids: ${boardId}) { name items_page { items { id name column_values {id text value} group {id title}}}}}`;
+  return await queryMondayApi(userId, query, (data) => data.boards);
 }
