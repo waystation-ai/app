@@ -225,6 +225,73 @@
           }
         }
       }
+    },
+    "/tools/monday/create_update": {
+      "post": {
+        "operationId": "createMondayUpdate",
+        "summary": "Create a new update on a Monday.com item",
+        "description": "Creates a new update (comment) on the specified Monday.com item with optional parent_id for threaded replies.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["item_id", "body"],
+                "properties": {
+                  "item_id": {
+                    "type": "string",
+                    "description": "The unique identifier of the item to add the update to"
+                  },
+                  "body": {
+                    "type": "string",
+                    "description": "The text content of the update"
+                  },
+                  "parent_id": {
+                    "type": "string",
+                    "description": "Optional ID of the parent update for threaded replies"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created update",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Unique identifier of the created update"
+                    },
+                    "body": {
+                      "type": "string",
+                      "description": "Text content of the update"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "description": "Timestamp when the update was created"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid parameters"
+          },
+          "401": {
+            "description": "Unauthorized - Authentication is required"
+          },
+          "500": {
+            "description": "Internal Server Error - Something went wrong on the server"
+          }
+        }
+      }
     }
   }
 }

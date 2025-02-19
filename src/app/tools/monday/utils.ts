@@ -31,12 +31,19 @@ export async function authenticateRequest(request: NextRequest): Promise<string 
   return userId;
 }
 
-export async function queryMondayApi(userId: string, query: string): Promise<NextResponse> { 
+export async function queryMondayApi(
+  userId: string, 
+  query: string, 
+  variables?: Record<string, any>
+): Promise<NextResponse> { 
   try {
     const accessToken = await oauthService.getValidAccessToken('monday', userId);
 
     console.log(`Access token: ${accessToken}`);
     console.log(`Query: ${query}`);
+    if (variables) {
+      console.log(`Variables: ${JSON.stringify(variables)}`);
+    }
       
     const response = await fetch('https://api.monday.com/v2', {
         method: 'POST',
@@ -44,7 +51,10 @@ export async function queryMondayApi(userId: string, query: string): Promise<Nex
         'Content-Type': 'application/json',
         'Authorization': accessToken
         },
-        body: JSON.stringify({ query })
+        body: JSON.stringify({ 
+          query,
+          variables 
+        })
     });
     console.log(response);
 
