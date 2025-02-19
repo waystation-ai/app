@@ -28,7 +28,6 @@ export const providers: Record<string, OAuthProvider> = {
     scopes: [
       'channels:read',
       'chat:write',
-      'chat:write.public',
       'files:read',
       'users:read'
     ],
