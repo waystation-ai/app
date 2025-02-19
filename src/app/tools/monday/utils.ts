@@ -15,16 +15,15 @@ export async function authenticateRequest(request: NextRequest): Promise<string 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': accessToken as string
+          'Authorization': accessToken
         }
       });
       console.log(response);
       
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
         userId = data.user_id;
-
-        console.log(`Authenticated as ${userId}`);
       }
     }
   }
@@ -32,7 +31,7 @@ export async function authenticateRequest(request: NextRequest): Promise<string 
   return userId;
 }
 
-export async function queryMondayApi(userId: string, query: string, selector: (data: any) => any): Promise<NextResponse> {
+export async function queryMondayApi(userId: string, query: string, selector: (data: unknown) => unknown): Promise<NextResponse> {
   try {
     const accessToken = await oauthService.getValidAccessToken('monday', userId);
       
