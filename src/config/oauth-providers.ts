@@ -41,7 +41,11 @@ export const providers: Record<string, OAuthProvider> = {
     tokenUrl: 'https://auth.monday.com/oauth2/token',
     scopes: [
       'me:read',
-      'boards:read'
+      'boards:read',
+      'boards:write',
+      'workspaces:read',
+      'updates:read',
+      'updates:write'
     ],
     redirectUri: `${baseRedirectUri}/monday/callback`
   },

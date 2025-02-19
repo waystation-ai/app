@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
         'Authorization': accessToken
       },
       body: JSON.stringify({
-        query: `query { boards { id name item_terminology items_count url} }`
+        query: `query { boards { id name item_terminology items_count url groups {id title}} }`
       })
     });
 

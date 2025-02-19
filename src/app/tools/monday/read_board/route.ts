@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
 
     const accessToken = await oauthService.getValidAccessToken('monday', userId);
 
-    const query = `query { boards (ids: ${boardId}) { name items_page { items { id name column_values {id text value} }}}}`;
+    const query = `query { boards (ids: ${boardId}) { name items_page { items { id name column_values {id text value} group {id title}}}}}`;
     
     const response = await fetch('https://api.monday.com/v2', {
       method: 'POST',
