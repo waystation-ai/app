@@ -7,7 +7,11 @@ const TokenResponseSchema = z.object({
   access_token: z.string(),
   refresh_token: z.string().optional(),
   expires_in: z.number().optional(),
-  scope: z.string().optional()
+  scope: z.string().optional(),
+  authed_user: z.object({
+    access_token: z.string(),
+    scope: z.string().optional()
+  }).optional()
 });
 
 export class OAuthService {
@@ -81,6 +85,16 @@ export class OAuthService {
 
     const data = await response.json();
     const tokens = TokenResponseSchema.parse(data);
+
+    // For Slack, use the user token from authed_user if available
+    if (provider === 'slack' && data.authed_user?.access_token) {
+      return {
+        accessToken: data.authed_user.access_token,
+        refreshToken: tokens.refresh_token,
+        expiresAt: this.getExpiryDate(tokens.expires_in),
+        scopes: this.getScopesArray(data.authed_user.scope)
+      };
+    }
 
     return {
       accessToken: tokens.access_token,
