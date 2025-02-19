@@ -170,9 +170,12 @@ export class OAuthService {
 
       // Store the new tokens
       await storeOAuthTokens(userId, provider, tokens);
+      console.log(`Access token of user "${userId}" for provider "${provider}" saved`)
 
       return tokens.accessToken;
     }
+
+    console.log(`Get access token for user "${userId}" for provider "${provider}"`)
 
     return connection.accessToken;
   }
