@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     `;
 
     // Execute mutation and return new item id
-    return await queryMondayApi(userId, mutation, (data) => ({ id: data.create_item.id }));
+    return await queryMondayApi(userId, mutation);
   } catch (error) {
     console.error('Error creating Monday item:', error);
     return new NextResponse('Internal server error', { status: 500 });

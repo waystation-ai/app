@@ -8,5 +8,5 @@ export async function GET(request: NextRequest) {
   }
 
   const query = `query { boards { id name item_terminology items_count url groups {id title}} }`;
-  return await queryMondayApi(userId, query, (data) => data.boards);
+  return await queryMondayApi(userId, query);
 }

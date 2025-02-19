@@ -31,9 +31,12 @@ export async function authenticateRequest(request: NextRequest): Promise<string 
   return userId;
 }
 
-export async function queryMondayApi(userId: string, query: string, selector: (data: any) => any): Promise<NextResponse> {  // eslint-disable-line @typescript-eslint/no-explicit-any
+export async function queryMondayApi(userId: string, query: string): Promise<NextResponse> { 
   try {
     const accessToken = await oauthService.getValidAccessToken('monday', userId);
+
+    console.log(`Access token: ${accessToken}`);
+    console.log(`Query: ${query}`);
       
     const response = await fetch('https://api.monday.com/v2', {
         method: 'POST',
@@ -53,7 +56,7 @@ export async function queryMondayApi(userId: string, query: string, selector: (d
     const data = await response.json();
     console.log(data);
 
-    return NextResponse.json(selector(data.data));
+    return NextResponse.json(data.data);
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message);

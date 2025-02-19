@@ -13,5 +13,5 @@ export async function GET(request: NextRequest) {
   }
 
   const query = `query { boards (ids: ${boardId}) { name items_page { items { id name column_values {id text value} group {id title}}}}}`;
-  return await queryMondayApi(userId, query, (data) => data.boards);
+  return await queryMondayApi(userId, query);
 }
