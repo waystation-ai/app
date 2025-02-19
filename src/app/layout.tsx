@@ -16,6 +16,15 @@ export const metadata: Metadata = {
   description: "Empowering LLMs to take real-world actions",
   icons: {
     icon: '/images/logo.svg'
+  },
+  openGraph: {
+    title: "WayStation",
+    description: "Empowering LLMs to take real-world actions",
+    siteName: "WayStation",
+    images : {
+      url: '/images/logo.svg'
+    },
+    url: "https://waystation.ai"
   }
 };
 
