@@ -43,6 +43,7 @@ export async function queryMondayApi(userId: string, query: string, selector: (d
         },
         body: JSON.stringify({ query })
     });
+    console.log(response);
 
     if (!response.ok) {
         const {errors} = await response.json();
@@ -50,6 +51,8 @@ export async function queryMondayApi(userId: string, query: string, selector: (d
     }
 
     const data = await response.json();
+    console.log(data);
+
     return NextResponse.json(selector(data.data));
   } catch (error) {
     if (error instanceof Error) {
