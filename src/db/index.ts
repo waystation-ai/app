@@ -51,6 +51,8 @@ export async function storeOAuthTokens(
     ));
 
   if (existing.length) {
+    console.log(`Updating tokens for user "${userId}" for provider "${provider}" saved`)
+
     // Update existing connection
     return db.update(schema.oauthConnections)
       .set({
@@ -65,6 +67,8 @@ export async function storeOAuthTokens(
         eq(schema.oauthConnections.provider, provider)
       ));
   }
+
+  console.log(`Saving tokens for user "${userId}" for provider "${provider}" saved`)
 
   // Create new connection
   return db.insert(schema.oauthConnections).values({

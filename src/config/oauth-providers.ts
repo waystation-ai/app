@@ -60,11 +60,10 @@ export const providers: Record<string, OAuthProvider> = {
     tokenUrl: 'https://oauth2.googleapis.com/token',
     scopes: [
       'https://www.googleapis.com/auth/userinfo.email',
-      'https://www.googleapis.com/auth/userinfo.profile'/*,
-       'https://www.googleapis.com/auth/drive.readonly',
-      'https://www.googleapis.com/auth/drive.file',
+      'https://www.googleapis.com/auth/userinfo.profile',
+      'https://www.googleapis.com/auth/drive.readonly',
       'https://www.googleapis.com/auth/drive.metadata.readonly'
- */    ],
+    ],
     redirectUri: `${baseRedirectUri}/gdrive/callback`
   },
   gmail: {

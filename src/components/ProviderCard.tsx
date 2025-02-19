@@ -22,6 +22,7 @@ export default function ProviderCard({ name, description, isConnected, provider 
       <p className="flex-grow leading-relaxed">{description}</p>
       <Link
         href={`/api/auth/${provider}/${isConnected ? 'disconnect' : 'connect'}`}
+        prefetch={false}
         className={`connect-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 w-2/3 text-center ${
           isConnected ? 'bg-red-500 hover:bg-red-600 text-white' : ''
         }`}
