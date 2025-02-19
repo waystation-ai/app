@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
           board_id: ${board_id},
           group_id: "${group_id}",
           item_name: "${item_name}"
-          ${column_values ? `, column_values: ${JSON.stringify(column_values)}` : ''}
+          ${column_values ? `, column_values: ${JSON.stringify(JSON.stringify(column_values))}` : ''}
         ) {
           id
         }
