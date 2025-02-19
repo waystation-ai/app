@@ -93,7 +93,70 @@
           }
         }
       }
+    },
+    "/tools/monday/new_item": {
+      "post": {
+        "operationId": "createMondayItem",
+        "summary": "Create a new item in a Monday board",
+        "description": "Creates a new item in the specified Monday board and group with optional column values.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["board_id", "group_id", "item_name"],
+                "properties": {
+                  "board_id": {
+                    "type": "string",
+                    "description": "The unique identifier of the Monday board"
+                  },
+                  "group_id": {
+                    "type": "string",
+                    "description": "The unique identifier of the group within the board"
+                  },
+                  "item_name": {
+                    "type": "string",
+                    "description": "Name of the new item to create"
+                  },
+                  "column_values": {
+                    "type": "object",
+                    "description": "Optional object containing column values for the new item",
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Unique identifier of the created item"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid parameters"
+          },
+          "401": {
+            "description": "Unauthorized - Authentication is required"
+          },
+          "500": {
+            "description": "Internal Server Error - Something went wrong on the server"
+          }
+        }
+      }
     }
-
   }
 }

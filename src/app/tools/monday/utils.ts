@@ -31,7 +31,7 @@ export async function authenticateRequest(request: NextRequest): Promise<string 
   return userId;
 }
 
-export async function queryMondayApi(userId: string, query: string, selector: (data: unknown) => unknown): Promise<NextResponse> {
+export async function queryMondayApi(userId: string, query: string, selector: (data: any) => any): Promise<NextResponse> {  // eslint-disable-line @typescript-eslint/no-explicit-any
   try {
     const accessToken = await oauthService.getValidAccessToken('monday', userId);
       
