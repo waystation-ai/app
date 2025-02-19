@@ -93,6 +93,11 @@
                       "name": {
                         "type": "string",
                         "description": "Name of the channel"
+                      },
+                      "type": {
+                        "type": "string",
+                        "description": "Type of channel (public or private)",
+                        "enum": ["public", "private"]
                       }
                     }
                   }

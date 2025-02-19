@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   try {
     const accessToken = await oauthService.getValidAccessToken('slack', userId);
 
-    const response = await fetch('https://slack.com/api/conversations.list', {
+    const response = await fetch('https://slack.com/api/conversations.list?types=public_channel,private_channel&exclude_archived=true', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`
@@ -32,7 +32,8 @@ export async function GET(request: NextRequest) {
 
     const channels = data.channels.map((channel: any) => ({ // eslint-disable-line @typescript-eslint/no-explicit-any
       id: channel.id,
-      name: channel.name
+      name: channel.name,
+      type: channel.is_private ? 'private' : 'public'
     }));
 
     return NextResponse.json(channels);

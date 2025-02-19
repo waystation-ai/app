@@ -27,6 +27,9 @@ export const providers: Record<string, OAuthProvider> = {
     tokenUrl: 'https://slack.com/api/oauth.v2.access',
     scopes: [
       'channels:read',
+      'channels:history',
+      'groups:read',
+      'groups:history',
       'chat:write',
       'files:read',
       'users:read'
