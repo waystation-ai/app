@@ -3,7 +3,6 @@ import { db } from '@/db';
 import { oauthConnections } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import ProviderCard from '@/components/ProviderCard';
-import Image from 'next/image';
 import Link from 'next/link';
 
 
