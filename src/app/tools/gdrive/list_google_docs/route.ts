@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     const data = await response.json();
     if (data.files) {
       return NextResponse.json({
-        documents: data.files.map((doc: any) => ({
+        documents: data.files.map((doc: any) => ({  // eslint-disable-line @typescript-eslint/no-explicit-any
           id: doc.id,
           name: doc.name,
           lastModified: doc.modifiedTime,

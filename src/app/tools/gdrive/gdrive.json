@@ -1,28 +1,110 @@
 {
-  "name": "Google Drive",
-  "description": "Access and read Google Docs from your Google Drive",
-  "icon": "/images/tools/gdrive.svg",
-  "tools": [
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Waystation API",
+    "description": "A set of tools that connect ChatGPT to productivity apps",
+    "version": "1.0.0"
+  },
+  "servers": [
     {
-      "name": "listGoogleDocs",
-      "description": "List all Google Docs in your Drive",
-      "endpoint": "/api/tools/gdrive/list_google_docs",
-      "method": "GET",
-      "parameters": []
-    },
-    {
-      "name": "readGoogleDoc",
-      "description": "Read the content of a specific Google Doc",
-      "endpoint": "/api/tools/gdrive/read_google_doc",
-      "method": "GET",
-      "parameters": [
-        {
-          "name": "docId",
-          "type": "string",
-          "description": "The ID of the Google Doc to read",
-          "required": true
-        }
-      ]
+      "url": "https://waystation.ai",
+      "description": "Waystation Server"
     }
-  ]
+  ],
+  "paths": {
+    "/tools/gdrive/list_google_docs": {
+      "get": {
+        "operationId": "listGoogleDocs",
+        "summary": "List all Google Docs in your Drive",
+        "description": "Retrieves a list of Google Docs associated with the authenticated user's Drive.",
+        "responses": {
+          "200": {
+            "description": "A JSON array of Google Docs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "Unique identifier for the Google Doc"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the Google Doc"
+                      },
+                      "url": {
+                        "type": "string",
+                        "description": "URL to access the Google Doc"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Authentication is required."
+          },
+          "500": {
+            "description": "Internal Server Error - Something went wrong on the server."
+          }
+        }
+      }
+    },
+    "/tools/gdrive/read_google_doc": {
+      "get": {
+        "operationId": "readGoogleDoc",
+        "summary": "Read the content of a specific Google Doc",
+        "description": "Retrieves the content of a specified Google Doc that the authenticated user has access to.",
+        "parameters": [
+          {
+            "name": "docId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The unique identifier of the Google Doc to read"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved Google Doc content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "content": {
+                      "type": "string",
+                      "description": "The text content of the Google Doc"
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "The title of the Google Doc"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid or missing document ID"
+          },
+          "401": {
+            "description": "Unauthorized - Authentication is required"
+          },
+          "404": {
+            "description": "Not Found - Document not found or inaccessible"
+          },
+          "500": {
+            "description": "Internal Server Error - Something went wrong on the server"
+          }
+        }
+      }
+    }
+  }
 }
