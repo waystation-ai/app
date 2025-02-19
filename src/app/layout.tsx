@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     description: "Empowering LLMs to take real-world actions",
     siteName: "WayStation",
     images : {
-      url: '/images/logo.svg'
+      url: '/images/named-logo-2x.png'
     },
     url: "https://waystation.ai"
   }
