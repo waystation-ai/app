@@ -1,0 +1,28 @@
+{
+  "name": "Google Drive",
+  "description": "Access and read Google Docs from your Google Drive",
+  "icon": "/images/tools/gdrive.svg",
+  "tools": [
+    {
+      "name": "listGoogleDocs",
+      "description": "List all Google Docs in your Drive",
+      "endpoint": "/api/tools/gdrive/list_google_docs",
+      "method": "GET",
+      "parameters": []
+    },
+    {
+      "name": "readGoogleDoc",
+      "description": "Read the content of a specific Google Doc",
+      "endpoint": "/api/tools/gdrive/read_google_doc",
+      "method": "GET",
+      "parameters": [
+        {
+          "name": "docId",
+          "type": "string",
+          "description": "The ID of the Google Doc to read",
+          "required": true
+        }
+      ]
+    }
+  ]
+}
