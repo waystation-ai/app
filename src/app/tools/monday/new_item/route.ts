@@ -5,7 +5,7 @@ export async function POST(request: NextRequest) {
   // Authenticate request
   const userId = await authenticateRequest(request);
   if (!userId) {
-    return new NextResponse('Unauthorized', { status: 401 });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
@@ -15,7 +15,10 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!board_id || !group_id || !item_name) {
-      return new NextResponse('Missing required fields', { status: 400 });
+      return NextResponse.json(
+        { error: 'Missing required fields: board_id, group_id, and item_name are required' },
+        { status: 400 }
+      );
     }
 
     // Create GraphQL mutation
@@ -28,14 +31,18 @@ export async function POST(request: NextRequest) {
           ${column_values ? `, column_values: ${JSON.stringify(JSON.stringify(column_values))}` : ''}
         ) {
           id
+          url
         }
       }
     `;
 
-    // Execute mutation and return new item id
+    // Execute mutation and return new item id and url
     return await queryMondayApi(userId, mutation);
   } catch (error) {
     console.error('Error creating Monday item:', error);
-    return new NextResponse('Internal server error', { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to create item' },
+      { status: 500 }
+    );
   }
 }

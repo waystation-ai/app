@@ -140,6 +140,74 @@
                     "id": {
                       "type": "string",
                       "description": "Unique identifier of the created item"
+                    },
+                    "url": {
+                      "type": "string",
+                      "description": "URL to access the item in Monday.com"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid parameters"
+          },
+          "401": {
+            "description": "Unauthorized - Authentication is required"
+          },
+          "500": {
+            "description": "Internal Server Error - Something went wrong on the server"
+          }
+        }
+      }
+    },
+    "/tools/monday/update_item": {
+      "post": {
+        "operationId": "updateMondayItem",
+        "summary": "Update an existing item in a Monday board",
+        "description": "Updates an existing item in the specified Monday board with new column values.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["board_id", "item_id"],
+                "properties": {
+                  "board_id": {
+                    "type": "string",
+                    "description": "The unique identifier of the Monday board"
+                  },
+                  "item_id": {
+                    "type": "string",
+                    "description": "The unique identifier of the item to update"
+                  },
+                  "column_values": {
+                    "type": "object",
+                    "description": "Object containing column values to update for the item",
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Unique identifier of the updated item"
+                    },
+                    "url": {
+                      "type": "string",
+                      "description": "URL to access the item in Monday.com"
                     }
                   }
                 }
