@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { authenticateRequest, queryMondayApi } from '../utils';
+import { queryMondayApi } from '../utils';
+import { authenticateRequest } from '../../shared/utils';
 
 export async function POST(request: NextRequest) {
   const userId = await authenticateRequest(request);

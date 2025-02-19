@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { authenticateRequest, queryMondayApi } from '../utils';
+import { queryMondayApi } from '../utils';
+import { authenticateRequest } from '../../shared/utils';
 
 export async function GET(request: NextRequest) {
   const boardId = request.nextUrl.searchParams.get('boardId');
