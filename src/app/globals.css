@@ -50,6 +50,13 @@
   transform: translateY(-1px);
 }
 
+.connect-btn {
+  background: var(--deep-blue);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+
 .chat-msg {
   background-color: #5f9aff;
   color: white;
@@ -73,6 +80,8 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
   font-family: var(--font-sora), system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
 }

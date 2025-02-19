@@ -1,6 +1,8 @@
-import type { Metadata } from "next";
+'use client';
+
 import { ClerkProvider, SignedIn, SignedOut, UserButton} from '@clerk/nextjs';
 import { Sora } from "next/font/google";
+import { usePathname } from 'next/navigation';
 import "./globals.css";
 import AuroraBackground from "@/components/AuroraBackground";
 import Link from 'next/link';
@@ -11,28 +13,12 @@ const sora = Sora({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "WayStation",
-  description: "Empowering LLMs to take real-world actions",
-  icons: {
-    icon: '/images/logo.svg'
-  },
-  openGraph: {
-    title: "WayStation",
-    description: "Empowering LLMs to take real-world actions",
-    siteName: "WayStation",
-    images : {
-      url: '/images/named-logo-w512.png'
-    },
-    url: "https://waystation.ai"
-  }
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
   return (
     <ClerkProvider waitlistUrl="/waitlist">
     <html lang="en">
@@ -50,9 +36,11 @@ export default function RootLayout({
           </SignedOut>
           <SignedIn>
             <div className="flex items-center gap-4">
-              <Link href="/dashboard" className="aurora-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
-                Dashboard
-              </Link>
+              {pathname !== '/dashboard' && (
+                <Link href="/dashboard" className="aurora-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
+                  Dashboard
+                </Link>
+              )}
               <UserButton/>
             </div>
           </SignedIn>
