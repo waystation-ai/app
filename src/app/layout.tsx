@@ -1,12 +1,13 @@
 import { ClerkProvider} from '@clerk/nextjs';
 import { Sora } from "next/font/google";
-import "./globals.css";
-import AuroraBackground from "@/components/AuroraBackground";
+import "./ui/globals.css";
+import AuroraBackground from "@/app/ui/components/AuroraBackground";
 import Link from 'next/link';
+import Image from 'next/image';
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import Navigation from '@/components/Navigation';
-import { metadata } from './metadata';
+import Navigation from '@/app/ui/components/Navigation';
 
+import { metadata } from './metadata';
 export { metadata };
 
 const sora = Sora({
@@ -22,7 +23,7 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
         <AuroraBackground/>
         <header className="bg-white/80 rounded-bl-2xl rounded-br-2xl shadow-[0px_2px_16px_0px_rgba(0,0,0,0.08)] border-b border-white backdrop-blur-xl px-4 sm:px-6 py-4 flex flex-row justify-between items-center sticky top-0 z-50 gap-4 sm:gap-0">
           <Link className="flex items-center gap-2" href="/">
-            <img src="/images/logo.svg" alt="WayStation" className="h-8 w-8" />
+            <Image src="/images/logo.svg" width={32} height={32} alt="WayStation" className="h-8 w-8" />
             <h1 className="text-2xl font-bold aurora-text">WayStation</h1>
           </Link>
           <Navigation/>

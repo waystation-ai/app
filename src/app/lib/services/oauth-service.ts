@@ -1,6 +1,6 @@
 import { auth } from '@clerk/nextjs/server';
-import { getProviderConfig } from '@/config/oauth-providers';
-import { getValidConnection, storeOAuthTokens } from '@/db';
+import { getProviderConfig } from '@/app/lib/config/oauth-providers';
+import { getValidConnection, storeOAuthTokens } from '@/app/lib/db';
 import { z } from 'zod';
 
 const TokenResponseSchema = z.object({

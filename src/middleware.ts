@@ -8,7 +8,7 @@ export default clerkMiddleware(async (auth, request) => {
     return;
   
   await auth.protect();
-}, {debug: true})
+}/*, {debug: true}*/)
 
 export const config = {
   matcher: [

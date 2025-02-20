@@ -1,8 +1,8 @@
 import { auth } from '@clerk/nextjs/server';
-import { db } from '@/db';
-import { oauthConnections } from '@/db/schema';
+import { db } from '@/app/lib/db';
+import { oauthConnections } from '@/app/lib/db/schema';
 import { eq } from 'drizzle-orm';
-import ProviderCard from '@/components/ProviderCard';
+import ProviderCard from '@/app/ui/components/ProviderCard';
 import Link from 'next/link';
 
 

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { oauthService } from '@/services/oauth-service';
+import { oauthService } from '@/app/lib/services/oauth-service';
 import { authenticateRequest } from '../../shared/utils';
 
 export async function GET(request: NextRequest) {

@@ -1,6 +1,6 @@
 "use client"
-import ChatDemo from "@/components/ChatDemo";
-import Partners from "@/components/Partners";
+import ChatDemo from "@/app/ui/components/ChatDemo";
+import Partners from "@/app/ui/components/Partners";
 import { SignedIn } from "@clerk/nextjs";
 import Link from "next/link"; 
 

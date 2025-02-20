@@ -1,8 +1,8 @@
 import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
-import { db } from '@/db';
-import { oauthConnections } from '@/db/schema';
-import { removeOAuthConnection } from '@/db';
+import { db } from '@/app/lib/db';
+import { oauthConnections } from '@/app/lib/db/schema';
+import { removeOAuthConnection } from '@/app/lib/db';
 import { eq } from 'drizzle-orm';
 
 export async function GET() {
