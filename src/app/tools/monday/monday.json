@@ -126,7 +126,7 @@
                     "additionalProperties": true,
                     "example" : {
                       "status": "Planning",
-                      "person": 1324234
+                      "person": "1324234"
                     }
                   }
                 }
@@ -195,7 +195,7 @@
                     "additionalProperties": true,
                     "example" : {
                       "status": "Planning",
-                      "person": 1324234
+                      "person": "1324234"
                     }
                   }
                 }
