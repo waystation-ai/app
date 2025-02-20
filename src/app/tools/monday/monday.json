@@ -122,7 +122,12 @@
                   "column_values": {
                     "type": "object",
                     "description": "Optional object containing column values for the new item",
-                    "additionalProperties": true
+                    "properties": {},
+                    "additionalProperties": true,
+                    "example" : {
+                      "status": "Planning",
+                      "person": 1324234
+                    }
                   }
                 }
               }
