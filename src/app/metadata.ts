@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "WayStation",
+  title: {
+    template: '%s - WayStation',
+    default: 'Home',
+  },  
   description: "Empowering LLMs to take real-world actions",
   icons: {
     icon: '/images/logo.svg'

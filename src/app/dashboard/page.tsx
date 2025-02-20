@@ -6,6 +6,12 @@ import ProviderCard from '@/app/ui/components/ProviderCard';
 import Link from 'next/link';
 import { providers } from '@/app/lib/config/oauth-providers';
 
+import { Metadata } from 'next';
+ 
+export const metadata: Metadata = {
+  title: 'Dashboard',
+};
+
 export default async function Page() {
   let connectedProviders: Record<string, boolean> = {};
   

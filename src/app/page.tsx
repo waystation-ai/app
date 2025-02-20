@@ -1,11 +1,15 @@
-"use client"
 import ChatDemo from "@/app/ui/components/ChatDemo";
 import Partners from "@/app/ui/components/Partners";
 import { SignedIn } from "@clerk/nextjs";
 import Link from "next/link"; 
 
-export default function Home() {
+import { Metadata } from 'next';
+ 
+export const metadata: Metadata = {
+  title: 'WayStation - Empowering LLMs to take real-world actions',
+};
 
+export default function Home() {
   return (
     <div className="h-screen flex flex-col relative">
       {/* Hero Section */}
