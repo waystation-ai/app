@@ -3,7 +3,7 @@
   "info": {
     "title": "Waystation API",
     "description": "A set of tools that connect ChatGPT to productivity apps",
-    "version": "1.0.0"
+    "version": "0.1.0"
   },
   "servers": [
     {
@@ -171,14 +171,14 @@
       "post": {
         "operationId": "updateMondayItem",
         "summary": "Update an existing item in a Monday board",
-        "description": "Updates an existing item in the specified Monday board with new column values.",
+        "description": "Updates an existing item in the specified Monday board with new column values. The `column_values` parameter is **required** and should always include the updated field(s) in `{ \"column_id\": \"new_value\" }` format.",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["board_id", "item_id"],
+                "required": ["board_id", "item_id", "column_values"], 
                 "properties": {
                   "board_id": {
                     "type": "string",
@@ -191,7 +191,12 @@
                   "column_values": {
                     "type": "object",
                     "description": "Object containing column values to update for the item",
-                    "additionalProperties": true
+                    "properties": {},
+                    "additionalProperties": true,
+                    "example" : {
+                      "status": "Planning",
+                      "person": 1324234
+                    }
                   }
                 }
               }
