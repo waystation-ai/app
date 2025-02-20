@@ -28,7 +28,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       change_multiple_column_values(
         board_id: ${board_id},
         item_id: ${item_id},
-        column_values: "${JSON.stringify(columnValuesJson)}"
+        column_values: ${JSON.stringify(columnValuesJson)}
       ) {
         id
         url
