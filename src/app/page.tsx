@@ -1,6 +1,8 @@
 "use client"
 import ChatDemo from "@/components/ChatDemo";
 import Partners from "@/components/Partners";
+import { SignedIn } from "@clerk/nextjs";
+import Link from "next/link"; 
 
 export default function Home() {
 
@@ -19,6 +21,12 @@ export default function Home() {
               no-code, secure integration hub.
             </p>
             <Partners />
+            <SignedIn>
+              <Link href="/dashboard" className="aurora-btn hidden lg:block px-4 py-2 text-sm font-bold rounded hover:scale-105 transition-transform duration-300 w-1/2 text-center">
+                Get Started
+              </Link>
+            </SignedIn>
+
           </div>
 
           {/* Right Column - Chat Demo */}

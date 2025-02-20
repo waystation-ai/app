@@ -1,24 +1,20 @@
-'use client';
-
-import { ClerkProvider, SignedIn, SignedOut, UserButton} from '@clerk/nextjs';
+import { ClerkProvider} from '@clerk/nextjs';
 import { Sora } from "next/font/google";
-import { usePathname } from 'next/navigation';
 import "./globals.css";
 import AuroraBackground from "@/components/AuroraBackground";
 import Link from 'next/link';
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import Navigation from '@/components/Navigation';
+import { metadata } from './metadata';
+
+export { metadata };
 
 const sora = Sora({
   variable: "--font-sora",
   subsets: ["latin"],
 });
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const pathname = usePathname();
+export default function RootLayout({children}: Readonly<{children: React.ReactNode;}>) {
   return (
     <ClerkProvider waitlistUrl="/waitlist">
     <html lang="en">
@@ -29,22 +25,7 @@ export default function RootLayout({
             <img src="/images/logo.svg" alt="WayStation" className="h-8 w-8" />
             <h1 className="text-2xl font-bold aurora-text">WayStation</h1>
           </Link>
-          <SignedOut>
-            <Link href="/waitlist" className="aurora-btn px-4 py-2 text-sm font-bold rounded hover:scale-105 transition-transform duration-300 w-auto text-center">
-              Get Early Access
-            </Link>
-          </SignedOut>
-          <SignedIn>
-            <div className="flex items-center gap-4">
-              {pathname !== '/dashboard' && (
-                <Link href="/dashboard" className="aurora-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
-                  Dashboard
-                </Link>
-              )}
-              <UserButton/>
-            </div>
-          </SignedIn>
-
+          <Navigation/>
         </header>
         {children}
         <SpeedInsights />
