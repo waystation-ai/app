@@ -4,14 +4,7 @@ import { oauthConnections } from '@/app/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import ProviderCard from '@/app/ui/components/ProviderCard';
 import Link from 'next/link';
-
-
-const providerDescriptions = {
-  monday: "Access and manage your Monday.com boards, items, and updates seamlessly.",
-  slack: "Send messages, access channels, and manage files in your Slack workspace.",
-  gdrive: "Browse, search, and manage your Google Drive files and folders.",
-  gmail: "Read emails, send messages, and manage labels in your Gmail account."
-};
+import { providers } from '@/app/lib/config/oauth-providers';
 
 export default async function Page() {
   let connectedProviders: Record<string, boolean> = {};
@@ -35,26 +28,28 @@ export default async function Page() {
 
   return (
     <div className="flex flex-col mt-4 sm:mt-8 justify-center items-center px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <p className="text-3xl lg:text-4xl text-gray-900 font-bold">
+      <p className="mt-8 text-3xl lg:text-4xl text-gray-900 font-bold">
             Connect your apps...
       </p>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full my-9">
-        {Object.entries(providerDescriptions).map(([provider, description]) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 sm:gap-6 w-full sm:my-9">
+        {Object.entries(providers).map(([provider, config]) => (
           <ProviderCard
             key={provider}
             provider={provider}
-            name={provider.charAt(0).toUpperCase() + provider.slice(1)}
-            description={description}
+            name={config.name}
+            description={config.description}
             isConnected={!!connectedProviders[provider]}
           />
         ))}
       </div>
-      <p className="text-3xl lg:text-4xl text-gray-900 font-bold">
+      <p className="text-3xl lg:text-4xl text-gray-900 font-bold px-6 w-full md:text-center">
             ...and launch!
       </p>
-      <Link href="https://chatgpt.com/g/g-67b343ef52b48191ae76ca4738fa5a93-waystation" className="aurora-btn px-4 py-2 my-9 text-lg font-bold rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
-        Launch WayStation GPT
-      </Link>
+      <div className="flex my-9 px-6 w-full md:justify-center">
+        <Link href="https://chatgpt.com/g/g-67b343ef52b48191ae76ca4738fa5a93-waystation" className="aurora-btn px-4 py-2 text-lg font-bold rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
+          Launch WayStation GPT
+        </Link>
+      </div>
     </div>
   );
 }

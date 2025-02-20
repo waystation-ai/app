@@ -1,5 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import clsx from 'clsx';
+
 
 interface ProviderCardProps {
   name: string;
@@ -23,10 +25,11 @@ export default function ProviderCard({ name, description, isConnected, provider 
       <Link
         href={`/api/auth/${provider}/${isConnected ? 'disconnect' : 'connect'}`}
         prefetch={false}
-        className={`connect-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 w-2/3 text-center ${
-          isConnected ? 'bg-red-500 hover:bg-red-600 text-white' : ''
-        }`}
-      >
+        className={clsx('connect-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 w-2/3 text-center',
+          {
+            'bg-red-500 hover:bg-red-600 text-white' : isConnected
+          }
+        )}>
         {isConnected ? 'Disconnect' : 'Connect'}
       </Link>
     </div>

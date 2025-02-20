@@ -1,5 +1,4 @@
 import { ClerkProvider} from '@clerk/nextjs';
-import { Sora } from "next/font/google";
 import "./ui/globals.css";
 import AuroraBackground from "@/app/ui/components/AuroraBackground";
 import Link from 'next/link';
@@ -10,16 +9,13 @@ import Navigation from '@/app/ui/components/Navigation';
 import { metadata } from './metadata';
 export { metadata };
 
-const sora = Sora({
-  variable: "--font-sora",
-  subsets: ["latin"],
-});
+import { sora } from './ui/fonts';
 
 export default function RootLayout({children}: Readonly<{children: React.ReactNode;}>) {
   return (
     <ClerkProvider waitlistUrl="/waitlist">
     <html lang="en">
-      <body className={`${sora.variable} antialiased`}>
+      <body className={`${sora.className} antialiased`}>
         <AuroraBackground/>
         <header className="bg-white/80 rounded-bl-2xl rounded-br-2xl shadow-[0px_2px_16px_0px_rgba(0,0,0,0.08)] border-b border-white backdrop-blur-xl px-4 sm:px-6 py-4 flex flex-row justify-between items-center sticky top-0 z-50 gap-4 sm:gap-0">
           <Link className="flex items-center gap-2" href="/">

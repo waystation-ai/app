@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export const OAuthProviderSchema = z.object({
   name: z.string(),
+  description: z.string(),
   clientId: z.string(),
   clientSecret: z.string(),
   authorizationUrl: z.string().url(),
@@ -19,8 +20,26 @@ if (!process.env.NEXT_PUBLIC_APP_URL) {
 const baseRedirectUri = `${process.env.NEXT_PUBLIC_APP_URL}/api/auth`;
 
 export const providers: Record<string, OAuthProvider> = {
+  monday: {
+    name: 'Monday',
+    description: 'Access and manage your Monday.com boards, items, and updates seamlessly.',
+    clientId: process.env.MONDAY_CLIENT_ID || '',
+    clientSecret: process.env.MONDAY_CLIENT_SECRET || '',
+    authorizationUrl: 'https://auth.monday.com/oauth2/authorize',
+    tokenUrl: 'https://auth.monday.com/oauth2/token',
+    scopes: [
+      'me:read',
+      'boards:read',
+      'boards:write',
+      'workspaces:read',
+      'updates:read',
+      'updates:write'
+    ],
+    redirectUri: `${baseRedirectUri}/monday/callback`
+  },
   slack: {
     name: 'Slack',
+    description: 'Send messages, access channels, and manage files in your Slack workspace.',
     clientId: process.env.SLACK_CLIENT_ID || '',
     clientSecret: process.env.SLACK_CLIENT_SECRET || '',
     authorizationUrl: 'https://slack.com/oauth/v2/authorize',
@@ -36,24 +55,9 @@ export const providers: Record<string, OAuthProvider> = {
     ],
     redirectUri: `${baseRedirectUri}/slack/callback`
   },
-  monday: {
-    name: 'Monday',
-    clientId: process.env.MONDAY_CLIENT_ID || '',
-    clientSecret: process.env.MONDAY_CLIENT_SECRET || '',
-    authorizationUrl: 'https://auth.monday.com/oauth2/authorize',
-    tokenUrl: 'https://auth.monday.com/oauth2/token',
-    scopes: [
-      'me:read',
-      'boards:read',
-      'boards:write',
-      'workspaces:read',
-      'updates:read',
-      'updates:write'
-    ],
-    redirectUri: `${baseRedirectUri}/monday/callback`
-  },
   gdrive: {
     name: 'Google Drive',
+    description: 'Browse, search, and manage your Google Drive files and folders.',
     clientId: process.env.GOOGLE_CLIENT_ID || '',
     clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
@@ -68,6 +72,7 @@ export const providers: Record<string, OAuthProvider> = {
   },
   gmail: {
     name: 'Gmail',
+    description: 'Read emails, send messages, and manage labels in your Gmail account.',
     clientId: process.env.GOOGLE_CLIENT_ID || '',
     clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
