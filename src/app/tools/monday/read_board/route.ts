@@ -13,6 +13,6 @@ export async function GET(request: NextRequest) {
     return new NextResponse('Unauthorized', { status: 401 });
   }
 
-  const query = `query { boards (ids: ${boardId}) { name items_page { items { id name column_values {id text value} group {id title}}}}}`;
+  const query = `query { boards (ids: ${boardId}) { name columns { id title type} items_page { items { id name column_values {id text value} group {id title}}}}}`;
   return await queryMondayApi(userId, query);
 }
