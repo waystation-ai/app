@@ -12,7 +12,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const reqJson = await request.json();
     console.log(reqJson);
     
-    const { board_id, item_id, column_values } = reqJson;
+    const { board_id, item_id, ...column_values } = reqJson;
 
     if (!board_id || !item_id || !column_values) {
       return NextResponse.json(
@@ -22,13 +22,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     // Convert column_values object to JSON string for the GraphQL mutation
-    const columnValuesJson = JSON.stringify(column_values || {});
+    const columnValuesJson = JSON.stringify(column_values);
 
     const query = `mutation {
       change_multiple_column_values(
         board_id: ${board_id},
         item_id: ${item_id},
-        column_values: ${JSON.stringify(columnValuesJson)}
+        column_values: "${columnValuesJson}"
       ) {
         id
         url
