@@ -14,9 +14,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     
     const { board_id, item_id, column_values } = reqJson;
 
-    if (!board_id || !item_id) {
+    if (!board_id || !item_id || !column_values) {
       return NextResponse.json(
-        { error: 'Missing required parameters: board_id and item_id are required' },
+        { error: 'Missing required parameters: board_id, item_id and column_values are required' },
         { status: 400 }
       );
     }
