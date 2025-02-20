@@ -9,7 +9,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   }
 
   try {
-    const { board_id, item_id, column_values } = await request.json();
+    const reqJson = await request.json();
+    console.log(reqJson);
+    
+    const { board_id, item_id, column_values } = reqJson;
 
     if (!board_id || !item_id) {
       return NextResponse.json(
