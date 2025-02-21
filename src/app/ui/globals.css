@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
 :root {
   --aurora-green: #00e6a9;
   --aurora-blue: #609aff;
@@ -10,33 +12,48 @@
   --foreground: #1a1a1a;
 }
 
+@theme {
+  --color-aurora-green: #00e6a9;
+  --color-aurora-blue: #609aff;
+}
+
+body {
+  color: var(--foreground);
+  background-image: url('/images/background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  font-family: var(--font-sora), system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+article {
+  h1 {
+    @apply text-3xl lg:text-4xl text-gray-900 font-bold mb-2;
+  }
+
+  h2 {
+    @apply text-xl lg:text-2xl text-gray-800 font-semibold mt-8 mb-4;
+  }
+
+  p {
+    @apply text-gray-700 mb-4;
+  }
+
+  ul {
+    @apply list-disc pl-5 mb-4;
+  }
+
+  li {
+    @apply text-gray-700 mb-2;
+  }
+}
+
 .aurora-text {
   color: var(--deep-blue);
   font-weight: 700;
-}
-
-.glass-card {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 
-    0 4px 24px rgba(38, 217, 193, 0.15),
-    0 1px 2px rgba(38, 217, 193, 0.1);
-  transition: all 0.3s ease;
-}
-
-.glass-card:hover {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 
-    0 4px 30px rgba(38, 217, 193, 0.2),
-    0 1px 3px rgba(38, 217, 193, 0.15);
-}
-
-@media (max-width: 640px) {
-  .glass-card {
-    backdrop-filter: blur(8px);
-  }
 }
 
 .aurora-btn {
@@ -72,18 +89,6 @@
   content: '|';
   margin-left: 2px;
   animation: blink 1s step-end infinite;
-}
-
-body {
-  color: var(--foreground);
-  background-image: url('/images/background.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  min-height: 100vh;
-  font-family: var(--font-sora), system-ui, -apple-system, sans-serif;
-  overflow-x: hidden;
 }
 
 /* Aurora message styles */
