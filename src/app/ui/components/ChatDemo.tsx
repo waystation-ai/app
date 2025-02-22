@@ -23,7 +23,7 @@ function ChatMessage({ isAI, displayedContent, showCursor, showTypingIndicator }
   return (
     <div className={`flex ${isAI ? 'justify-start' : 'justify-end'} mb-4`}>
       <div className={`max-w-[85%] p-3 sm:p-4 rounded-2xl ${
-        isAI ? 'bg-gray-100' : 'chat-msg'
+        isAI ? 'bg-[#e2ecff]' : 'chat-msg'
       }`}>
         {showTypingIndicator ? (
           <TypingIndicator />
@@ -141,13 +141,13 @@ export default function ChatDemo() {
         ))}
       </div>
       <div className="flex gap-3 border-t pt-4 justify-center sm:justify-start">
-        <div className="w-8 h-8 rounded bg-gray-100 flex items-center justify-center">
+        <div className="w-8 h-8 rounded bg-[#E2ECFF] flex items-center justify-center">
           <img src="/images/chat/file.svg" alt="File" className="w-4 h-4 opacity-80" />
         </div>
-        <div className="w-8 h-8 rounded bg-gray-100 flex items-center justify-center">
+        <div className="w-8 h-8 rounded bg-[#E2ECFF] flex items-center justify-center">
           <img src="/images/chat/globe.svg" alt="Web" className="w-4 h-4 opacity-80" />
         </div>
-        <div className="w-8 h-8 rounded bg-gray-100 flex items-center justify-center">
+        <div className="w-8 h-8 rounded bg-[#E2ECFF] flex items-center justify-center">
           <img src="/images/chat/window.svg" alt="Apps" className="w-4 h-4 opacity-80" />
         </div>
       </div>
