@@ -84,7 +84,29 @@ export default function ChatDemo() {
     let typingTimer: NodeJS.Timeout | null = null;
     let nextMessageTimer: NodeJS.Timeout | null = null;
 
-    // Set initial states
+    // Add initial delay for first message
+    if (currentMessageIndex === 0) {
+      const initialDelay = setTimeout(() => {
+        // Set initial states
+        setShowCursor(!isAIMessage);
+        setShowTypingIndicator(!isAIMessage);
+        setDisplayedContent("");
+
+        // Start message animation after delay
+        if (!isAIMessage) {
+          typingTimer = setTimeout(() => {
+            setShowTypingIndicator(false);
+            startTyping();
+          }, 1000);
+        } else {
+          startTyping();
+        }
+      }, 2000); // 2 second delay for first message
+
+      return () => clearTimeout(initialDelay);
+    }
+
+    // For subsequent messages, proceed normally
     setShowCursor(!isAIMessage);
     setShowTypingIndicator(!isAIMessage);
     setDisplayedContent("");
