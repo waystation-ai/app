@@ -52,7 +52,7 @@ export default async function Page() {
             ...and launch!
       </p>
       <div className="flex my-9 px-6 w-full md:justify-center">
-        <Link href="https://chatgpt.com/g/g-67b343ef52b48191ae76ca4738fa5a93-waystation" target='_blank' className="aurora-btn px-4 py-2 text-lg font-bold rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
+        <Link href={`https://chatgpt.com/g/${process.env.GPT_ID}-waystation`} target='_blank' className="aurora-btn px-4 py-2 text-lg font-bold rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
           Launch WayStation GPT
         </Link>
       </div>
