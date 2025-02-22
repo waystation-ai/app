@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const vertexShader = `
   attribute vec2 position;
@@ -64,19 +64,24 @@ const fragmentShader = `
 export default function AuroraBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameRef = useRef<number>(0);
+  const [opacity, setOpacity] = useState(0);
   
   useEffect((): (() => void) | undefined => {
-    const canvas = canvasRef.current;
-    if (!canvas) return undefined;
+    const initTimeout = setTimeout(() => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
 
-    const gl = canvas.getContext('webgl');
-    if (!gl) return undefined;
+      const gl = canvas.getContext('webgl');
+      if (!gl) return;
+      
+      // Fade in the aurora
+      setOpacity(1);
 
-    let program: WebGLProgram | null = null;
-    let vs: WebGLShader | null = null;
-    let fs: WebGLShader | null = null;
+      let program: WebGLProgram | null = null;
+      let vs: WebGLShader | null = null;
+      let fs: WebGLShader | null = null;
 
-    try {
+      try {
       gl.clearColor(0.0, 0.0, 0.0, 0.0);
       gl.enable(gl.BLEND);
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);  // Standard alpha blending for proper transparency
@@ -146,25 +151,33 @@ export default function AuroraBackground() {
       window.addEventListener('resize', handleResize);
       animate();
 
-      return () => {
-        if (animationFrameRef.current) {
-          cancelAnimationFrame(animationFrameRef.current);
-        }
-        window.removeEventListener('resize', handleResize);
-        
-        // Cleanup WebGL resources
+        return () => {
+          if (animationFrameRef.current) {
+            cancelAnimationFrame(animationFrameRef.current);
+          }
+          window.removeEventListener('resize', handleResize);
+          
+          // Cleanup WebGL resources
+          if (program) gl.deleteProgram(program);
+          if (vs) gl.deleteShader(vs);
+          if (fs) gl.deleteShader(fs);
+        };
+      } catch (error) {
+        console.error('WebGL error:', error);
+        // Cleanup on error
         if (program) gl.deleteProgram(program);
         if (vs) gl.deleteShader(vs);
         if (fs) gl.deleteShader(fs);
-      };
-    } catch (error) {
-      console.error('WebGL error:', error);
-      // Cleanup on error
-      if (program) gl.deleteProgram(program);
-      if (vs) gl.deleteShader(vs);
-      if (fs) gl.deleteShader(fs);
-      return undefined;
-    }
+      }
+    }, 1000); // Delay WebGL initialization by 1 second
+
+    // Cleanup timeout on unmount
+    return () => {
+      clearTimeout(initTimeout);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
   }, []);
 
   return (
@@ -177,6 +190,8 @@ export default function AuroraBackground() {
         width: '100%',
         height: '100%',
         zIndex: -1,
+        opacity,
+        transition: 'opacity 1s ease-in',
       }}
     />
   );
