@@ -10,7 +10,7 @@ export async function authenticateRequest(request: NextRequest): Promise<string 
     const accessToken = request.headers.get('Authorization');
 
     if (accessToken) {
-      const response = await fetch(`https://clerk.waystation.ai/oauth/userinfo`, {
+      const response = await fetch(`https://clerk.${process.env.APP_DOMAIN}/oauth/userinfo`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

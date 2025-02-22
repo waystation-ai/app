@@ -158,7 +158,7 @@ export class OAuthService {
 
     const connection = await getValidConnection(userId, provider);
     if (!connection) {
-      throw new Error(`No valid connection found for provider: ${provider}. Ask user to set up a connection with ${provider} by visiting https://waystation.ai/dashboard`);
+      throw new Error(`No valid connection found for provider: ${provider}. Ask user to set up a connection with ${provider} by visiting https://${process.env.APP_DOMAIN}/dashboard`);
     }
 
     // If token is expired and we have a refresh token, try to refresh it
