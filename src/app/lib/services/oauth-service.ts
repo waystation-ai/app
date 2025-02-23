@@ -30,6 +30,20 @@ export class OAuthService {
 
   buildAuthorizationUrl(provider: string): { url: string; state: string } {
     const config = getProviderConfig(provider);
+    
+    if (!config.clientId) {
+      throw new Error(`Client ID not configured for provider: ${provider}`);
+    }
+    if (!config.redirectUri) {
+      throw new Error(`Redirect URI not configured for provider: ${provider}`);
+    }
+    if (!config.authorizationUrl) {
+      throw new Error(`Authorization URL not configured for provider: ${provider}`);
+    }
+    if (!config.scopes) {
+      throw new Error(`Scopes not configured for provider: ${provider}`);
+    }
+
     const state = this.generateState();
 
     const params = new URLSearchParams({
@@ -61,6 +75,20 @@ export class OAuthService {
     scopes?: string[];
   }> {
     const config = getProviderConfig(provider);
+    
+    if (!config.clientId) {
+      throw new Error(`Client ID not configured for provider: ${provider}`);
+    }
+    if (!config.clientSecret) {
+      throw new Error(`Client secret not configured for provider: ${provider}`);
+    }
+    if (!config.redirectUri) {
+      throw new Error(`Redirect URI not configured for provider: ${provider}`);
+    }
+    if (!config.tokenUrl) {
+      throw new Error(`Token URL not configured for provider: ${provider}`);
+    }
+
     const params = new URLSearchParams({
       client_id: config.clientId,
       client_secret: config.clientSecret,
@@ -114,6 +142,17 @@ export class OAuthService {
     scopes?: string[];
   }> {
     const config = getProviderConfig(provider);
+    
+    if (!config.clientId) {
+      throw new Error(`Client ID not configured for provider: ${provider}`);
+    }
+    if (!config.clientSecret) {
+      throw new Error(`Client secret not configured for provider: ${provider}`);
+    }
+    if (!config.tokenUrl) {
+      throw new Error(`Token URL not configured for provider: ${provider}`);
+    }
+
     const params = new URLSearchParams({
       client_id: config.clientId,
       client_secret: config.clientSecret,
