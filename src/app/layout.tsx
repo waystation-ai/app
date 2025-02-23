@@ -1,6 +1,5 @@
 import { ClerkProvider} from '@clerk/nextjs';
 import "./ui/globals.css";
-import AuroraBackground from "@/app/ui/components/AuroraBackground";
 import Link from 'next/link';
 import Image from 'next/image';
 import { SpeedInsights } from "@vercel/speed-insights/next";
