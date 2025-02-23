@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { providers } from '@/app/lib/config/oauth-providers';
 
 import { Metadata } from 'next';
+import { ProviderIcon } from '../ui/components/ProviderIcon';
  
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -38,7 +39,9 @@ export default async function Page() {
             Connect your apps...
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 sm:gap-6 w-full sm:my-9">
-        {Object.entries(providers).map(([provider, config]) => (
+        {Object.entries(providers)
+          .filter(([, config]) => config.authorizationUrl)
+          .map(([provider, config]) => (
           <ProviderCard
             key={provider}
             provider={provider}
@@ -48,6 +51,7 @@ export default async function Page() {
           />
         ))}
       </div>
+
       <p className="text-3xl lg:text-4xl text-gray-900 font-bold px-6 w-full md:text-center">
             ...and launch!
       </p>
@@ -56,6 +60,21 @@ export default async function Page() {
           Launch WayStation GPT
         </Link>
       </div>
+
+      <p className="mt-12 text-xl lg:text-2xl text-gray-900 font-bold">
+        Coming Soon
+      </p>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-6 w-full my-6">
+        {Object.entries(providers)
+          .filter(([, config]) => !config.authorizationUrl)
+          .map(([provider, config]) => (
+            <Link key={provider} href={`/connect/chatgpt/${provider}`} className="provider-card flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+              <ProviderIcon provider={provider} />
+              <p className="mt-2 text-sm text-gray-600 text-center">{config.name}</p>
+            </Link>
+          ))}
+      </div>
+
     </div>
   );
 }

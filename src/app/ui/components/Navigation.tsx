@@ -9,7 +9,7 @@ export default function Partners() {
   return (
     <div>
       <SignedOut>
-        <Link href="/waitlist" className="aurora-btn px-4 py-2 text-sm font-bold rounded hover:scale-105 transition-transform duration-300 w-auto text-center">
+        <Link href="/sign-in" className="aurora-btn px-4 py-2 text-sm font-bold rounded hover:scale-105 transition-transform duration-300 w-auto text-center">
           Get Early Access
         </Link>
       </SignedOut>

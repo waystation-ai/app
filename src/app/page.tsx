@@ -1,6 +1,6 @@
 import ChatDemo from "@/app/ui/components/ChatDemo";
-import Partners from "@/app/ui/components/Partners";
-import { SignedIn } from "@clerk/nextjs";
+import Providers from "@/app/ui/components/Providers";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link"; 
 
 import { Metadata } from 'next';
@@ -10,6 +10,14 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
+  const messages = [
+    { isAI: true, content: "Can you please process fresh user feedback using instructions in the Feedback Processing doc?" },
+    { isAI: false, content: "Reading and analyzing the Feedback Processing document in Google Drive..." },
+    { isAI: false, content: "Here is what I'm going to do. I'll process all incoming tickets in Zendesk labeled Feedback. I'll triage them and match them to items on the Stories board on Monday. Please confirm." },
+    { isAI: true, content: "Go ahead! Can you also summarize and send a Slack message to the team once it's done so we can review it?" },
+    { isAI: false, content: "On it! We'll get back to you shortly." }
+  ];
+
   return (
     <div className="flex flex-col relative">
       {/* Hero Section */}
@@ -24,18 +32,25 @@ export default function Home() {
               <span className="bg-yellow-100">Connect your AI assistants with the tools</span><br/>professionals use daily through our 
               no-code, secure integration hub.
             </p>
-            <Partners />
+            <div className="mt-6">
+              <Providers className="grid grid-cols-6 lg:grid-cols-8 gap-4 lg:gap-3" />
+            </div>
             <SignedIn>
               <Link href="/dashboard" className="aurora-btn hidden lg:block px-4 py-2 text-sm font-bold rounded hover:scale-105 transition-transform duration-300 w-1/2 text-center">
                 Get Started
               </Link>
             </SignedIn>
+            <SignedOut>
+              <Link href="/sign-in" className="aurora-btn hidden lg:block px-4 py-2 text-sm font-bold rounded hover:scale-105 transition-transform duration-300 w-1/2 text-center">
+                Get Started
+              </Link>
+            </SignedOut>
 
           </div>
 
           {/* Right Column - Chat Demo */}
           <div className="flex items-center justify-center mt-4 lg:mt-0">
-            <ChatDemo />
+            <ChatDemo messages={messages}/>
           </div>
         </div>
       </main>

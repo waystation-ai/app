@@ -10,7 +10,9 @@ export default async function Page() {
             Connect your apps...
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full my-9">
-        {Object.entries(providers).map(([provider, config]) => (
+        {Object.entries(providers)
+          .filter(([, config]) => config.authorizationUrl)
+          .map(([provider, config]) => (
           <ProviderCard
             key={provider}
             provider={provider}
