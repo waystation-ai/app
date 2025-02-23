@@ -19,11 +19,7 @@
 
 body {
   color: var(--foreground);
-  background-image: url('/images/background.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+
   min-height: 100vh;
   font-family: var(--font-sora), system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
@@ -82,6 +78,12 @@ li {
 .provider-icon:hover, .provider-card:hover>.provider-icon {
   @apply opacity-100 scale-125 duration-500
 }
+.provider-card:hover {
+  @apply opacity-100 scale-110 duration-500
+
+}
+
+
 
 .chat-msg {
   background-color: #5f9aff;
