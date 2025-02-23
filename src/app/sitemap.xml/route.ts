@@ -17,6 +17,9 @@ export async function GET() {
   // Add static routes
   const staticRoutes = [
     '',                    // Homepage
+    '/connect/chatgpt',
+    '/connect/claude',
+    '/connect/mcp-server',
     '/legal/privacy-policy', // Privacy Policy
     '/legal/terms',        // Terms
   ];
@@ -32,16 +35,20 @@ export async function GET() {
   </url>`;
   }
 
-  // Add provider-specific routes
+  // Define supported apps
+  const apps = ['chatgpt', 'claude', 'mcp-server'];
+
+  // Add provider-specific routes for each app
   for (const [providerKey] of Object.entries(providers)) {
-    // Add connect route
-    xml += `
+    for (const app of apps) {
+      xml += `
   <url>
-    <loc>${domain}/connect/chatgpt/${providerKey}</loc>
+    <loc>${domain}/connect/${app}/${providerKey}</loc>
     <lastmod>${currentDate}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>`;
+    }
   }
 
   // Close XML
