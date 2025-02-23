@@ -2,17 +2,27 @@
 
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from 'next/navigation';
 
 export default function Partners() {
   const pathname = usePathname();
   return (
     <div className="flex items-center justify-between flex-grow">
-      <nav className="flex items-center gap-3">
-        <span className="ml-12 text-sm font-medium text-gray-500">Works with</span>
-        <Link href='/connect/chatgpt' className="text-sm font-medium hover:text-blue-600 transition-colors">ChatGPT</Link>
-        <Link href='/connect/claude' className="text-sm font-medium hover:text-blue-600 transition-colors">Claude</Link>
-        <Link href='/connect/mcp-server' className="text-sm font-medium hover:text-blue-600 transition-colors">Any MCP Host</Link>
+      <nav className="flex items-center gap-4">
+        <span className="ml-20 text-sm font-medium text-gray-500">Works with</span>
+        <Link href='/connect/chatgpt' className="flex items-center gap-2 text-sm font-medium hover:text-blue-600 transition-colors">
+          <Image src='/images/apps/chatgpt.svg' width={20} height={20} alt="ChatGPT"/>
+          <span>ChatGPT</span>
+        </Link>
+        <Link href='/connect/claude' className="flex items-center gap-2 text-sm font-medium hover:text-blue-600 transition-colors">
+          <Image src='/images/apps/claude.svg' width={20} height={20} alt="Claude"/>
+          <span>Claude</span>
+        </Link>
+        <Link href='/connect/mcp-server' className="flex items-center gap-2 text-sm font-medium hover:text-blue-600 transition-colors">
+          <Image src="/images/apps/mcp.svg" width={20} height={20} alt="MCP Host" className="opacity-80" />
+          <span>Any MCP Host</span>
+        </Link>
       </nav>
       <div id="profile">
         <SignedOut>
