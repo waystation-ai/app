@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: {
-    template: '%s - WayStation',
+    template: '%s | WayStation',
     default: 'Home',
   },  
   description: "Empowering LLMs to take real-world actions",
@@ -17,5 +17,6 @@ export const metadata: Metadata = {
       url: '/images/named-logo-w512.png'
     },
     url: "https://waystation.ai"
-  }
+  },
+  metadataBase: process.env.NEXT_PUBLIC_APP_URL ? new URL(process.env.NEXT_PUBLIC_APP_URL) : null
 };

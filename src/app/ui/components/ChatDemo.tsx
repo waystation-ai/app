@@ -1,4 +1,5 @@
 "use client"
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 export interface ChatMessage {
@@ -174,13 +175,13 @@ export default function ChatDemo({ messages }: ChatDemoProps) {
       </div>
       <div className="flex gap-3 border-t pt-4 justify-center sm:justify-start">
         <div className="w-8 h-8 rounded bg-[#E2ECFF] flex items-center justify-center">
-          <img src="/images/chat/file.svg" alt="File" className="w-4 h-4 opacity-80" />
+          <Image src="/images/chat/file.svg" alt="File" className="w-4 h-4 opacity-80" width={32} height={32} />
         </div>
         <div className="w-8 h-8 rounded bg-[#E2ECFF] flex items-center justify-center">
-          <img src="/images/chat/globe.svg" alt="Web" className="w-4 h-4 opacity-80" />
+          <Image src="/images/chat/globe.svg" alt="Web" className="w-4 h-4 opacity-80" width={32} height={32} />
         </div>
         <div className="w-8 h-8 rounded bg-[#E2ECFF] flex items-center justify-center">
-          <img src="/images/chat/window.svg" alt="Apps" className="w-4 h-4 opacity-80" />
+          <Image src="/images/chat/window.svg" alt="Apps" className="w-4 h-4 opacity-80" width={32} height={32} />
         </div>
       </div>
     </div>
