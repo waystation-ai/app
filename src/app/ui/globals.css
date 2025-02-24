@@ -83,6 +83,14 @@ li {
 
 }
 
+.app-link {
+  @apply flex items-center gap-2 text-sm font-medium transition-colors
+}
+
+.app-link:hover {
+  @apply text-blue-600 scale-105 duration-500
+}
+
 
 
 .chat-msg {
