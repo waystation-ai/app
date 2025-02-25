@@ -4,12 +4,13 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link"; 
 
 import { Metadata } from 'next';
+import { auth } from "@clerk/nextjs/server";
  
 export const metadata: Metadata = {
   title: 'Integrate any MCP host with the productivity apps',
 };
 
-export default function Home() {
+export default async function Home() {
   const messages = [
     { isAI: true, content: "Can you please process fresh user feedback using instructions in the Feedback Processing doc?" },
     { isAI: false, content: "Reading and analyzing the Feedback Processing document in Google Drive..." },

@@ -1,5 +1,15 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
+
+export interface ToolContext {
+  userId: string;
+}
+
+export interface ToolResult {
+  error: boolean;
+  content: unknown;
+};
+
 
 export async function authenticateRequest(request: NextRequest): Promise<string | null> {
   const session = await auth();
@@ -28,4 +38,8 @@ export async function authenticateRequest(request: NextRequest): Promise<string 
   }
 
   return userId;
+}
+
+export function nextResponse(result: ToolResult) {
+  return NextResponse.json(result.content, { status: result.error ? 500 : 200 });
 }

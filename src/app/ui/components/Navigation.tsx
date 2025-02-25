@@ -4,6 +4,7 @@ import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from 'next/navigation';
+import { McpIcon, McpKey } from "./McpKey";
 
 export default function Partners() {
   const pathname = usePathname();
@@ -27,7 +28,11 @@ export default function Partners() {
                   Dashboard
                 </Link>
               )}
-              <UserButton/>
+              <UserButton>
+                <UserButton.UserProfilePage label="MCP Key" url="mcp-key" labelIcon={<McpIcon />}>
+                  <McpKey />
+                </UserButton.UserProfilePage>
+              </UserButton>
             </div>
           </SignedIn>
         </div>

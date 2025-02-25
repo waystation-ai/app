@@ -37,3 +37,7 @@
 - Vercel platform
 - Neon PostgreSQL
 - Clerk authentication
+
+## Coding style
+- Do not break function definition headers (with params) and function calls into separate line for every param
+- Only break function definition or call if the line exceeds roughly 80 characters

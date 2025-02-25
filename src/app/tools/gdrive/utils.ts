@@ -1,12 +1,6 @@
-import { NextResponse } from 'next/server';
 import { oauthService } from '@/app/lib/services/oauth-service';
 
-export async function queryGoogleDriveApi(
-  userId: string,
-  endpoint: string,
-  params?: Record<string, string>,
-  exportFormat?: string
-): Promise<NextResponse> {
+export async function queryGdriveApi(userId: string, endpoint: string, params?: Record<string, string>, exportFormat?: string) {
   try {
     const accessToken = await oauthService.getValidAccessToken('gdrive', userId);
     
@@ -38,20 +32,14 @@ export async function queryGoogleDriveApi(
     if (!response.ok) {
       const error = await response.json().catch(() => response.text());
       console.error('Google Drive API error:', error);
-      return NextResponse.json(error, { status: response.status });
+      throw new Error(error.error?.message || 'Failed to query Google Drive API');
     }
 
     const data = await (isTextResponse ? response.text() : response.json());
     console.log('Google Drive API response:', data);
 
-    return isTextResponse
-      ? NextResponse.json({ content: data })
-      : NextResponse.json(data);
+    return data;
   } catch (error) {
-    console.error('Error querying Google Drive API:', error);
-    if (error instanceof Error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-    return NextResponse.json({ error: 'Unknown error occurred' }, { status: 500 });
+    throw error instanceof Error ? error : new Error(String(error));
   }
 }

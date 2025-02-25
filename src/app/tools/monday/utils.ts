@@ -1,11 +1,7 @@
-import { NextResponse } from 'next/server';
 import { oauthService } from '@/app/lib/services/oauth-service';
+import { ToolResult } from '../core/types';
 
-export async function queryMondayApi(
-  userId: string, 
-  query: string, 
-  variables?: Record<string, unknown> 
-): Promise<NextResponse> { 
+export async function queryMondayApi(userId: string, query: string, variables?: Record<string, unknown>): Promise<ToolResult> { 
   try {
     const accessToken = await oauthService.getValidAccessToken('monday', userId);
 
@@ -30,20 +26,20 @@ export async function queryMondayApi(
 
     if (!response.ok) {
         const {errors} = await response.json();
-        return NextResponse.json(errors);
+        return { error: true, content: errors };
     }
 
     const data = await response.json();
     console.log(data);
 
-    return NextResponse.json(data.data);
+    return {error: false, content: data.data};
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message);
-      return NextResponse.json(error.message);
+      return { error: true, content: error.message };
     }
 
     console.log(error);
-    return NextResponse.json(error);
+    return { error: true, content: error };
   }
 }
