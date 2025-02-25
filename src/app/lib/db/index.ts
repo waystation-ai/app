@@ -22,15 +22,7 @@ export async function getValidConnection(userId: string, provider: string) {
     return null;
   }
 
-  const connection = connections[0];
-  
-  // Check if token is expired
-  if (connection.expiresAt && new Date(connection.expiresAt) < new Date()) {
-    // Token is expired, needs refresh
-    return null;
-  }
-
-  return connection;
+  return connections[0];
 }
 
 // Helper function to store or update OAuth tokens

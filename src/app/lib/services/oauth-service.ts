@@ -50,6 +50,7 @@ export class OAuthService {
       client_id: config.clientId,
       redirect_uri: config.redirectUri,
       response_type: 'code',
+      access_type: 'offline',
       scope: config.scopes.join(' '),
       state
     });
@@ -65,15 +66,7 @@ export class OAuthService {
     };
   }
 
-  async exchangeCodeForTokens(
-    provider: string,
-    code: string
-  ): Promise<{
-    accessToken: string;
-    refreshToken?: string;
-    expiresAt?: Date;
-    scopes?: string[];
-  }> {
+  async exchangeCodeForTokens(provider: string, code: string): Promise<{ accessToken: string; refreshToken?: string; expiresAt?: Date; scopes?: string[];}> {
     const config = getProviderConfig(provider);
     
     if (!config.clientId) {
@@ -132,15 +125,7 @@ export class OAuthService {
     };
   }
 
-  async refreshAccessToken(
-    provider: string,
-    refreshToken: string
-  ): Promise<{
-    accessToken: string;
-    refreshToken?: string;
-    expiresAt?: Date;
-    scopes?: string[];
-  }> {
+  async refreshAccessToken(provider: string, refreshToken: string): Promise<{ accessToken: string; refreshToken?: string; expiresAt?: Date; scopes?: string[];}> {
     const config = getProviderConfig(provider);
     
     if (!config.clientId) {
