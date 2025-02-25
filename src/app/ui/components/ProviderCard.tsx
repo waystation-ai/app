@@ -12,7 +12,7 @@ interface ProviderCardProps {
 
 export default function ProviderCard({ name, description, isConnected, provider }: ProviderCardProps) {
   return (
-    <div className="bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-lg rounded-xl p-6 flex flex-col space-y-4 hover:from-white/25 hover:to-white/15 transition-all shadow-xl shadow-white/5">
+    <div className="bg-gradient-to-br from-white/60 to-white/30 backdrop-blur-lg rounded-xl p-6 flex flex-col space-y-4 hover:from-white/100 hover:to-white/70 transition-all shadow-xl hover:scale-105 duration-500 ">
       <div className="flex items-center space-x-4">
         <div className="relative w-12 h-12 shrink-0">
           <Image src={`/images/tools/${provider}.svg`} alt={name} fill className="object-contain"/>
