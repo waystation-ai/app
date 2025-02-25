@@ -4,7 +4,6 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link"; 
 
 import { Metadata } from 'next';
-import { auth } from "@clerk/nextjs/server";
  
 export const metadata: Metadata = {
   title: 'Integrate any MCP host with the productivity apps',
