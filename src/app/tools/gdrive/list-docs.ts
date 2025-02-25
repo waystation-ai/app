@@ -14,7 +14,7 @@ const responseSchema = z.object({
 export type ListDocsResponse = z.infer<typeof responseSchema>;
 
 export const listDocs = defineTool({
-  id: 'listDocs',
+  id: 'listGoogleDocs',
   summary: 'List Google Docs',
   description: 'Retrieves a list of Google Docs from the user\'s Drive, ordered by last modified date.',
   method: 'GET',

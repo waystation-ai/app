@@ -11,7 +11,7 @@ export type ReadDocParams = z.infer<typeof parametersSchema>;
 const responseSchema = z.string().describe('Plain text content of the Google Doc');
 
 export const readDoc = defineTool({
-  id: 'readDoc',
+  id: 'readGoogleDoc',
   summary: 'Read Google Doc content',
   description: 'Retrieves the content of a specific Google Doc as plain text.',
   method: 'GET',
