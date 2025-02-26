@@ -6,7 +6,7 @@ import Image from "next/image";
 import { usePathname } from 'next/navigation';
 import { McpIcon, McpKey } from "./McpKey";
 
-export default function Partners() {
+export default function Navigation() {
   const pathname = usePathname();
   return (
     <div className="flex flex-col md:flex-row md:items-center flex-grow">

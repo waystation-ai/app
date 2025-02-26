@@ -54,22 +54,26 @@ export default async function Page() {
         ))}
       </div>
 
-      <p className="text-3xl lg:text-4xl text-gray-900 font-bold px-6 w-full md:text-center">
+      <p className="my-4 text-3xl lg:text-4xl text-gray-900 font-bold px-6 w-full text-center">
             ...and launch!
       </p>
       <Link href={`https://chatgpt.com/g/${process.env.GPT_ID}-waystation`} target='_blank' className="launch-btn my-9 px-4 py-2 text-lg font-bold rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
           <span>Launch WayStation GPT</span>
         </Link>
-      <div>
-        Alternatively 
-        <Link href={`/connect/claude/guide`} className="mx-4 text-blue-800">
-          <Image src='/images/apps/claude.svg' width={20} height={20} alt="ChatGPT" className="inline mr-2"/><span>Connect Claude Desktop</span>
+
+      <nav className="flex items-center gap-4 mt-4 md:mt-0 md:ml-8">
+        <span className="text-sm font-medium text-gray-500">Alternatively</span>
+        <Link href='/connect/claude/guide' className="app-link">
+          <Image src='/images/apps/claude.svg' width={20} height={20} alt="Claude"/>
+          <span>Connect to Claude Desktop</span>
         </Link>
-        or
-        <Link href={`/connect/mcp-server/guide`} className="mx-4 text-blue-800">
-        <Image src='/images/apps/mcp.svg' width={20} height={20} alt="ChatGPT" className="inline mr-2"/><span>Connect MCP host</span>
+        <span className="text-sm font-medium text-gray-500">or</span>
+        <Link href='/connect/mcp-server/guide' className="app-link">
+          <Image src="/images/apps/mcp.svg" width={20} height={20} alt="MCP Host" />
+          <span>Connect to Any MCP host</span>
         </Link>
-      </div>
+      </nav>
+
 
       <p className="mt-12 text-xl lg:text-2xl text-gray-900 font-bold">
         Coming Soon
