@@ -59,7 +59,7 @@ export default async function Page() {
       <p className="my-4 text-3xl lg:text-4xl text-gray-900 font-bold px-6 w-full text-center">
             ...and launch!
       </p>
-      <LaunchPad />
+      <LaunchPad gptId={process.env.GPT_ID} />
       <LaunchPadBasement />
 
       <p className="mt-12 text-xl lg:text-2xl text-gray-900 font-bold">
