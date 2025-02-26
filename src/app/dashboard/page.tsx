@@ -4,6 +4,8 @@ import { oauthConnections } from '@/app/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import ProviderCard from '@/app/ui/components/ProviderCard';
 import Link from 'next/link';
+import Image from "next/image";
+
 import { providers } from '@/app/lib/config/oauth-providers';
 
 import { Metadata } from 'next';
@@ -55,9 +57,17 @@ export default async function Page() {
       <p className="text-3xl lg:text-4xl text-gray-900 font-bold px-6 w-full md:text-center">
             ...and launch!
       </p>
-      <div className="flex my-9 px-6 w-full md:justify-center">
-        <Link href={`https://chatgpt.com/g/${process.env.GPT_ID}-waystation`} target='_blank' className="aurora-btn px-4 py-2 text-lg font-bold rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
-          Launch WayStation GPT
+      <Link href={`https://chatgpt.com/g/${process.env.GPT_ID}-waystation`} target='_blank' className="launch-btn my-9 px-4 py-2 text-lg font-bold rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
+          <span>Launch WayStation GPT</span>
+        </Link>
+      <div>
+        Alternatively 
+        <Link href={`/connect/claude/guide`} className="mx-4 text-blue-800">
+          <Image src='/images/apps/claude.svg' width={20} height={20} alt="ChatGPT" className="inline mr-2"/><span>Connect Claude Desktop</span>
+        </Link>
+        or
+        <Link href={`/connect/mcp-server/guide`} className="mx-4 text-blue-800">
+        <Image src='/images/apps/mcp.svg' width={20} height={20} alt="ChatGPT" className="inline mr-2"/><span>Connect MCP host</span>
         </Link>
       </div>
 

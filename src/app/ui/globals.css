@@ -61,7 +61,7 @@ li {
 }
 
 .aurora-btn:hover {
-  background-color: #0d3580;
+  background-color: var(--deep-blue);
   transform: translateY(-1px);
 }
 
@@ -70,6 +70,18 @@ li {
   color: white;
   transition: all 0.3s ease;
 }
+
+.launch-btn {
+  background: linear-gradient(120deg, var(--aurora-green), var(--aurora-blue));
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.launch-btn:hover {
+  background-color: #0d3580;
+  transform: translateY(-1px);
+}
+
 
 .provider-icon {
   @apply opacity-80 transition-opacity
@@ -90,7 +102,6 @@ li {
 .app-link:hover {
   @apply text-blue-600 scale-105 duration-500
 }
-
 
 
 .chat-msg {

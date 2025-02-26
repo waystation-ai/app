@@ -1,6 +1,7 @@
 'use server';
 
 import { auth } from "@clerk/nextjs/server";
+import { McpKeyDisplay } from "./McpKeyDisplay";
 
 export async function McpIcon() {
   return (
@@ -20,15 +21,9 @@ export async function McpIcon() {
 }
 
 export async function McpKey() {
-
   const { getToken } = await auth();
   const template = 'mcp';
   const token = await getToken({ template });
 
-  return (
-    <div>
-      <h1>Custom page</h1>
-      <p>{token}</p>
-    </div>
-  )
+  return <McpKeyDisplay token={token} />;
 }
