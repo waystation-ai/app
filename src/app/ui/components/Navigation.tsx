@@ -1,13 +1,23 @@
 'use client';
 
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, useAuth, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from 'next/navigation';
+import { usePostHog } from 'posthog-js/react';
+
 import { McpIcon, McpKey } from "./McpKey";
 
 export default function Navigation() {
   const pathname = usePathname();
+
+  const posthog = usePostHog();
+  const auth = useAuth();
+
+  if (auth.userId) {
+    posthog.identify(auth.userId);
+  }
+
   return (
     <div className="flex flex-col md:flex-row md:items-center flex-grow">
       <div className="flex w-full md:w-auto">

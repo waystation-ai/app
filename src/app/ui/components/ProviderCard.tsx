@@ -1,6 +1,9 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import clsx from 'clsx';
+import { usePostHog } from 'posthog-js/react';
 
 
 interface ProviderCardProps {
@@ -11,6 +14,12 @@ interface ProviderCardProps {
 }
 
 export default function ProviderCard({ name, description, isConnected, provider }: ProviderCardProps) {
+  const posthog = usePostHog();
+
+  function trackConnect() {
+    posthog.capture(isConnected ? 'disconnectProvider' : 'connectProvider', { provider: provider });
+  }
+
   return (
     <div className="bg-gradient-to-br from-white/60 to-white/30 backdrop-blur-lg rounded-xl p-6 flex flex-col space-y-4 hover:from-white/100 hover:to-white/70 transition-all shadow-xl hover:scale-105 duration-500 ">
       <div className="flex items-center space-x-4">
@@ -24,6 +33,7 @@ export default function ProviderCard({ name, description, isConnected, provider 
       <p className="flex-grow leading-relaxed">{description}</p>
       <Link
         href={`/api/auth/${provider}/${isConnected ? 'disconnect' : 'connect'}`}
+        onClick={trackConnect}
         prefetch={false}
         className={clsx('connect-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 w-2/3 text-center',
           {

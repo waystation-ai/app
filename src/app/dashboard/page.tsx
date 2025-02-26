@@ -1,15 +1,17 @@
 import { auth } from '@clerk/nextjs/server';
-import { db } from '@/app/lib/db';
-import { oauthConnections } from '@/app/lib/db/schema';
 import { eq } from 'drizzle-orm';
-import ProviderCard from '@/app/ui/components/ProviderCard';
-import Link from 'next/link';
-import Image from "next/image";
-
-import { providers } from '@/app/lib/config/oauth-providers';
 
 import { Metadata } from 'next';
-import { ProviderIcon } from '../ui/components/ProviderIcon';
+import Link from 'next/link';
+
+import { db } from '@/app/lib/db';
+import { oauthConnections } from '@/app/lib/db/schema';
+import { providers } from '@/app/lib/config/oauth-providers';
+
+import ProviderCard from '@/app/ui/components/ProviderCard';
+import { ProviderIcon } from '@/app/ui/components/ProviderIcon';
+import { LaunchPad } from '../ui/components/LaunchPad';
+import { LaunchPadBasement } from '../ui/components/LaunchPadBasement';
  
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -17,7 +19,7 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   let connectedProviders: Record<string, boolean> = {};
-  
+
   try {
     const session = await auth();
     
@@ -57,23 +59,8 @@ export default async function Page() {
       <p className="my-4 text-3xl lg:text-4xl text-gray-900 font-bold px-6 w-full text-center">
             ...and launch!
       </p>
-      <Link href={`https://chatgpt.com/g/${process.env.GPT_ID}-waystation`} target='_blank' className="launch-btn my-9 px-4 py-2 text-lg font-bold rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
-          <span>Launch WayStation GPT</span>
-        </Link>
-
-      <nav className="flex items-center gap-4 mt-4 md:mt-0 md:ml-8">
-        <span className="text-sm font-medium text-gray-500">Alternatively</span>
-        <Link href='/connect/claude/guide' className="app-link">
-          <Image src='/images/apps/claude.svg' width={20} height={20} alt="Claude"/>
-          <span>Connect to Claude Desktop</span>
-        </Link>
-        <span className="text-sm font-medium text-gray-500">or</span>
-        <Link href='/connect/mcp-server/guide' className="app-link">
-          <Image src="/images/apps/mcp.svg" width={20} height={20} alt="MCP Host" />
-          <span>Connect to Any MCP host</span>
-        </Link>
-      </nav>
-
+      <LaunchPad />
+      <LaunchPadBasement />
 
       <p className="mt-12 text-xl lg:text-2xl text-gray-900 font-bold">
         Coming Soon
