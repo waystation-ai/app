@@ -5,15 +5,14 @@ import { storeOAuthTokens } from '@/app/lib/db';
 import { getRequestOrigin } from '@/app/lib/utils/get-request-origin';
 import { stateStore } from '@/app/lib/services/state-store';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ provider: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ provider: string }> }) {
   try {
     const session = await auth();
     if (!session.userId) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
+
+    const { provider } = await params;
 
     const url = new URL(request.url);
     const code = url.searchParams.get('code');
@@ -23,14 +22,13 @@ export async function GET(
     if (error) {
       console.error('OAuth error:', error);
       // Redirect to error page
-      return NextResponse.redirect(new URL('/settings/connections?error=oauth_denied', getRequestOrigin(request)));
+      return NextResponse.redirect(new URL(`/connect/denied?provider=${provider}`, getRequestOrigin(request)));
     }
 
     if (!code || !state) {
       return new NextResponse('Missing code or state', { status: 400 });
     }
 
-    const { provider } = await params;
 
     // Validate state
     const storedState = stateStore.get(state);
@@ -41,8 +39,8 @@ export async function GET(
     // Clean up used state
     stateStore.delete(state);
 
-    // Exchange code for tokens
-    const tokens = await oauthService.exchangeCodeForTokens(provider, code);
+    // Exchange code for tokens with PKCE for Airtable
+    const tokens = await oauthService.exchangeCodeForTokens(provider, code, storedState.codeVerifier);
 
     // Store tokens in database
     await storeOAuthTokens(session.userId, provider, tokens);

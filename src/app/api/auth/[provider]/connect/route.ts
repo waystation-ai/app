@@ -23,11 +23,11 @@ export async function GET(
       return new NextResponse('Invalid provider', { status: 400 });
     }
 
-    // Generate authorization URL with state
-    const { url, state } = oauthService.buildAuthorizationUrl(provider);
+    // Generate authorization URL with state and PKCE for Airtable
+    const { url, state, codeVerifier } = await oauthService.buildAuthorizationUrl(provider);
 
-    // Store state for validation in callback
-    stateStore.set(state, { state, provider });
+    // Store state and code verifier for validation in callback
+    stateStore.set(state, { state, provider, codeVerifier });
 
     // Clean up old states
     cleanupOldStates();

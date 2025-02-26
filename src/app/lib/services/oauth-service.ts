@@ -2,6 +2,16 @@ import { auth } from '@clerk/nextjs/server';
 import { getProviderConfig } from '@/app/lib/config/oauth-providers';
 import { getValidConnection, storeOAuthTokens } from '@/app/lib/db';
 import { z } from 'zod';
+import { Buffer } from 'buffer';
+
+// Helper function for base64URL encoding
+function base64URLEncode(buffer: Uint8Array): string {
+  return Buffer.from(buffer)
+    .toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '');
+}
 
 const TokenResponseSchema = z.object({
   access_token: z.string(),
@@ -19,6 +29,19 @@ export class OAuthService {
     return Math.random().toString(36).substring(2) + Date.now().toString(36);
   }
 
+  private generateCodeVerifier(): string {
+    const array = new Uint8Array(64);
+    crypto.getRandomValues(array);
+    return base64URLEncode(array);
+  }
+
+  private async generateCodeChallenge(verifier: string): Promise<string> {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(verifier);
+    const digest = await crypto.subtle.digest('SHA-256', data);
+    return base64URLEncode(new Uint8Array(digest));
+  }
+
   private getExpiryDate(expiresIn?: number): Date | undefined {
     if (!expiresIn) return undefined;
     return new Date(Date.now() + expiresIn * 1000);
@@ -28,7 +51,7 @@ export class OAuthService {
     return scope?.split(' ');
   }
 
-  buildAuthorizationUrl(provider: string): { url: string; state: string } {
+  async buildAuthorizationUrl(provider: string): Promise<{ url: string; state: string; codeVerifier: string }> {
     const config = getProviderConfig(provider);
     
     if (!config.clientId) {
@@ -45,6 +68,8 @@ export class OAuthService {
     }
 
     const state = this.generateState();
+    const codeVerifier = this.generateCodeVerifier();
+    const codeChallenge = await this.generateCodeChallenge(codeVerifier);
 
     const params = new URLSearchParams({
       client_id: config.clientId,
@@ -60,13 +85,21 @@ export class OAuthService {
       params.append('user_scope', config.scopes.join(' '));
     }
 
+    // Add PKCE parameters for Airtable
+    if (provider === 'airtable') {
+      params.append('code_challenge', codeChallenge);
+      params.append('code_challenge_method', 'S256');
+    }
+
     return {
       url: `${config.authorizationUrl}?${params.toString()}`,
-      state
+      state,
+      codeVerifier
     };
   }
 
-  async exchangeCodeForTokens(provider: string, code: string): Promise<{ accessToken: string; refreshToken?: string; expiresAt?: Date; scopes?: string[];}> {
+  async exchangeCodeForTokens(provider: string, code: string, codeVerifier?: string):
+   Promise<{ accessToken: string; refreshToken?: string; expiresAt?: Date; scopes?: string[];}> {
     const config = getProviderConfig(provider);
     
     if (!config.clientId) {
@@ -90,11 +123,18 @@ export class OAuthService {
       grant_type: 'authorization_code'
     });
 
+    // Add code verifier for Airtable PKCE
+    if (provider === 'airtable' && codeVerifier) {
+      params.delete('client_secret');
+      params.append('code_verifier', codeVerifier);
+    }
+
     const response = await fetch(config.tokenUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        Accept: 'application/json'
+        Accept: 'application/json',
+        Authorization: `Basic ${Buffer.from(`${config.clientId}:${config.clientSecret}`).toString('base64')}`
       },
       body: params.toString()
     });
@@ -145,11 +185,17 @@ export class OAuthService {
       grant_type: 'refresh_token'
     });
 
+    // Add code verifier for Airtable PKCE
+    if (provider === 'airtable') {
+      params.delete('client_secret');
+    }
+
     const response = await fetch(config.tokenUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        Accept: 'application/json'
+        Accept: 'application/json',
+        Authorization: `Basic ${Buffer.from(`${config.clientId}:${config.clientSecret}`).toString('base64')}`
       },
       body: params.toString()
     });

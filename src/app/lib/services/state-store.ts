@@ -1,6 +1,12 @@
 // In-memory state store for OAuth flows
 // In production, use Redis or similar for cross-request state
-export const stateStore = new Map<string, { state: string; provider: string }>();
+interface StateData {
+  state: string;
+  provider: string;
+  codeVerifier?: string;
+}
+
+export const stateStore = new Map<string, StateData>();
 
 export function cleanupOldStates() {
   const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;

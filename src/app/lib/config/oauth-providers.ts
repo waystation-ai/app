@@ -113,7 +113,7 @@ export const providers: Record<string, OAuthProvider> = {
     description: 'Read emails, send messages, and manage labels in your Gmail account.',
     clientId: process.env.GOOGLE_CLIENT_ID || '',
     clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-    authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
+    //authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
     tokenUrl: 'https://oauth2.googleapis.com/token',
     scopes: [
       'https://www.googleapis.com/auth/gmail.readonly',
@@ -181,6 +181,16 @@ export const providers: Record<string, OAuthProvider> = {
   airtable: {
     name: 'Airtable',
     description: 'Access and manage your Airtable bases, tables, and records seamlessly.',
+    clientId: process.env.AIRTABLE_CLIENT_ID || '',
+    clientSecret: process.env.AIRTABLE_CLIENT_SECRET || '',
+    authorizationUrl: 'https://airtable.com/oauth2/v1/authorize',
+    tokenUrl: 'https://airtable.com/oauth2/v1/token',
+    scopes: [
+      'data.records:read',
+      'data.records:write',
+      'schema.bases:read'
+    ],
+    redirectUri: `${baseRedirectUri}/airtable/callback`,
     bullets: [
       "Sync and update records automatically across your bases",
       "Transform data into structured insights and reports",
