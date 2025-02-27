@@ -1,5 +1,6 @@
 'use client';
 
+import clsx from 'clsx';
 import { useState } from 'react';
 
 function CopyIcon() {
@@ -20,14 +21,14 @@ function CopyIcon() {
   );
 }
 
-interface McpKeyDisplayProps {
-  token: string | null;
+interface CopyBoxProps {
+  text: string | null;
 }
 
-export function McpKeyDisplay({ token }: McpKeyDisplayProps) {
+export function McpKeyDisplay({ text }: CopyBoxProps) {
   const [copied, setCopied] = useState(false);
 
-  if (!token) {
+  if (!text) {
     return (
       <div className="text-sm text-red-600 bg-red-50 p-4 rounded-lg border border-red-200">
         Unable to generate WAY_KEY. Please try again later.
@@ -37,7 +38,7 @@ export function McpKeyDisplay({ token }: McpKeyDisplayProps) {
 
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(token);
+      await navigator.clipboard.writeText(text);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -48,15 +49,16 @@ export function McpKeyDisplay({ token }: McpKeyDisplayProps) {
   return (
     <div className="relative">
       <div className="font-mono text-sm bg-gray-50 p-4 pr-20 rounded-lg border border-gray-200 break-all">
-        {token}
+        {text}
       </div>
       <button
         type="button"
-        className={`absolute top-2 right-2 p-2 rounded-md transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 ${
-          copied ? 'text-green-600' : 'text-gray-500'
-        }`}
+        className={clsx("absolute top-2 right-2 p-2 rounded-md transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400", {
+          "text-green-600": copied,
+          "text-gray-500": !copied,
+        })}
         onClick={copyToClipboard}
-        aria-label="Copy WAY_KEY to clipboard"
+        aria-label="Copy to clipboard"
       >
         <CopyIcon />
       </button>
