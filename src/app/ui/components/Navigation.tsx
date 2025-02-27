@@ -6,8 +6,6 @@ import Image from "next/image";
 import { usePathname } from 'next/navigation';
 import { usePostHog } from 'posthog-js/react';
 
-import { McpIcon, McpKey } from "./McpKey";
-
 export default function Navigation() {
   const pathname = usePathname();
 
@@ -38,11 +36,7 @@ export default function Navigation() {
                   Dashboard
                 </Link>
               )}
-              <UserButton>
-                <UserButton.UserProfilePage label="MCP Key" url="mcp-key" labelIcon={<McpIcon />}>
-                  <McpKey />
-                </UserButton.UserProfilePage>
-              </UserButton>
+              <UserButton/>
             </div>
           </SignedIn>
         </div>

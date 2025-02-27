@@ -1,4 +1,4 @@
-import { McpKey } from '@/app/ui/components/McpKey';
+import { McpKey } from '@/app/ui/components/McpProfilePage';
 import Link from 'next/link';
 
 export default async function Page() {
