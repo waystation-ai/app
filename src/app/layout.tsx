@@ -5,6 +5,8 @@ import { ClerkProvider} from '@clerk/nextjs';
 import { PostHogProvider } from './providers';
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
+import { GoogleTagManager } from '@next/third-parties/google';
+
 
 import BodyBackground from './ui/components/BodyBackground';
 import Navigation from '@/app/ui/components/Navigation';
@@ -18,6 +20,7 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
   return (
     <ClerkProvider waitlistUrl="/waitlist">
     <html lang="en">
+      <GoogleTagManager gtmId="AW-16889842454" />
       <body className={`${sora.className} antialiased flex flex-col`}>
         <PostHogProvider>
           <BodyBackground/>
