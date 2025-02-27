@@ -2,6 +2,7 @@ import ChatDemo from "@/app/ui/components/ChatDemo";
 import Providers from "@/app/ui/components/Providers";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link"; 
+import Image from "next/image";
 
 import { Metadata } from 'next';
  
@@ -45,6 +46,21 @@ export default function Home() {
                 Get Started
               </Link>
             </SignedOut>
+            <div className="flex items-center gap-4 mt-4 md:mt-0">
+              <span className="text-sm font-medium text-gray-500">Works with</span>
+              <Link href='/connect/chatgpt' className="app-link">
+                <Image src='/images/apps/chatgpt.svg' width={20} height={20} alt="ChatGPT"/>
+                <span>ChatGPT</span>
+              </Link>
+              <Link href='/connect/claude' className="app-link">
+                <Image src='/images/apps/claude.svg' width={20} height={20} alt="Claude"/>
+                <span>Claude</span>
+              </Link>
+              <Link href='/connect/mcp-server' className="app-link">
+                <Image src="/images/apps/mcp.svg" width={20} height={20} alt="MCP Host" />
+                <span>Any MCP host</span>
+              </Link>
+            </div>
 
           </div>
 

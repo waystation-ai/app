@@ -7,7 +7,8 @@ export const metadata: Metadata = {
   },  
   description: "Empowering LLMs to take real-world actions",
   icons: {
-    icon: '/images/logo.svg'
+    icon: '/images/logo-32.png',
+    apple: '/images/logo-32.png'
   },
   openGraph: {
     title: "WayStation",
