@@ -1,6 +1,7 @@
 import ChatDemo from "@/app/ui/components/ChatDemo";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link"; 
+import Image from "next/image"; 
 
 import { getProviderConfig } from "@/app/lib/config/oauth-providers";
 import Providers from "@/app/ui/components/Providers";
@@ -27,15 +28,15 @@ export default async function Home({ params }: { params: Promise<{ provider: str
       <main className="flex-1 flex flex-col">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 px-4 sm:px-8 py-8 max-w-7xl mx-auto">
           {/* Left Column - Branding */}
-          <div className="flex flex-col justify-center text-left space-y-4 lg:space-y-6">
-            <h1 className="text-3xl lg:text-4xl font-bold">
+          <div className="flex flex-col justify-center text-left">
+            <h1 className="text-3xl lg:text-4xl font-bold mb-4">
             Connect ChatGPT to <span className="bg-yellow-100">{config.name}</span>
             </h1>
-            <h2 className="text-lg lg:text-xl leading-snug">
+            <h2 className="text-lg lg:text-xl mb-2 leading-snug">
               {config.description}
             </h2>
             {config.bullets &&
-            <ul>{config.bullets.map((bullet, index) => <li key={index}>{bullet}</li>)}
+            <ul className="my-2">{config.bullets.map((bullet, index) => <li key={index}>{bullet}</li>)}
             </ul>
             }
 
@@ -49,7 +50,19 @@ export default async function Home({ params }: { params: Promise<{ provider: str
                 Get Started
               </Link>
             </SignedOut>
-            <div className="mt-auto">
+            <div className="flex items-center gap-4 mt-4 mb-8">
+              <span className="text-sm font-medium text-gray-500">Also connects to</span>
+              <Link href={`/connect/claude/${provider}`} className="app-link">
+                <Image src='/images/apps/claude.svg' width={20} height={20} alt="Claude"/>
+                <span>Claude Desktop</span>
+              </Link>
+              <span className="text-sm font-medium text-gray-500">or</span>
+              <Link href={`/connect/mcp-server/${provider}`} className="app-link">
+                <Image src="/images/apps/mcp.svg" width={20} height={20} alt="MCP Host" />
+                <span>Any MCP host</span>
+              </Link>
+            </div>
+            <div className="sm:mt-8">
               <p>And make it even more powerful with other providers we support</p>
               <div>
                 <Providers className="grid grid-cols-9 gap-1 mt-3" width={30} height={30} />
