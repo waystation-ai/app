@@ -1,21 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { usePostHog } from 'posthog-js/react';
+import { useTrackEvent } from '@/app/lib/utils/track-event';
 
 interface LaunchPadProps {
   gptId?: string;
 }
 
 export function LaunchPad({ gptId }: LaunchPadProps) {
-  const posthog = usePostHog();
-
-  function trackLaunch() {
-    posthog.capture('launchGPT');
-  }
+  const trackEvent = useTrackEvent();
 
   return (
-    <Link href={`https://chatgpt.com/g/${gptId}-waystation`} onClick={trackLaunch} target='_blank' className="launch-btn my-2 sm:my-8 px-4 py-2 text-lg font-bold rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
+    <Link href={`https://chatgpt.com/g/${gptId}-waystation`} onClick={() => trackEvent('launchGPT')} target='_blank' className="launch-btn my-2 sm:my-8 px-4 py-2 text-lg font-bold rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
       <span>Launch WayStation GPT</span>
     </Link>
   )

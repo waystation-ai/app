@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import clsx from 'clsx';
-import { usePostHog } from 'posthog-js/react';
+import { useTrackEvent } from '@/app/lib/utils/track-event';
 
 
 interface ProviderCardProps {
@@ -14,10 +14,10 @@ interface ProviderCardProps {
 }
 
 export default function ProviderCard({ name, description, isConnected, provider }: ProviderCardProps) {
-  const posthog = usePostHog();
+  const trackEvent = useTrackEvent();
 
   function trackConnect() {
-    posthog.capture(isConnected ? 'disconnectProvider' : 'connectProvider', { provider: provider });
+    trackEvent(isConnected ? 'disconnectProvider' : 'connectProvider', { provider });
   }
 
   return (
