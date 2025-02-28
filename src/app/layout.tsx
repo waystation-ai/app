@@ -20,7 +20,7 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
   return (
     <ClerkProvider waitlistUrl="/waitlist">
     <html lang="en">
-      <GoogleTagManager gtmId="GT-M3S2RRMX" />
+      <GoogleTagManager gtmId="GTM-TBLJV48V" />
       <body className={`${sora.className} antialiased flex flex-col`}>
         <PostHogProvider>
           <BodyBackground/>
