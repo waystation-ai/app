@@ -1,4 +1,4 @@
-import { pgTable, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, timestamp, varchar, jsonb } from 'drizzle-orm/pg-core';
 
 export const oauthConnections = pgTable('oauth_connections', {
   id: serial('id').primaryKey(),
@@ -8,6 +8,7 @@ export const oauthConnections = pgTable('oauth_connections', {
   refreshToken: text('refresh_token'),
   expiresAt: timestamp('expires_at'),
   scopes: text('scopes').array(),
+  metadata: jsonb('metadata'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow()
 });

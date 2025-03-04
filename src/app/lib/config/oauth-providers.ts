@@ -84,28 +84,25 @@ export const providers: Record<string, OAuthProvider> = {
   },
   gdrive: {
     name: 'Google Drive',
-    description: 'Browse, search, and manage your Google Drive files and folders.',
+    description: 'Browse, search, and manage your selected Google Drive files.',
     clientId: process.env.GOOGLE_CLIENT_ID || '',
     clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
     tokenUrl: 'https://oauth2.googleapis.com/token',
     scopes: [
-      'https://www.googleapis.com/auth/userinfo.email',
-      'https://www.googleapis.com/auth/userinfo.profile',
-      'https://www.googleapis.com/auth/drive.readonly',
-      'https://www.googleapis.com/auth/drive.metadata.readonly'
+      'https://www.googleapis.com/auth/drive.file'
     ],
     redirectUri: `${baseRedirectUri}/gdrive/callback`,
     bullets: [
-      "Search and analyze documents across your Drive intelligently",
-      "Extract insights from spreadsheets and presentations automatically",
-      "Keep your team's documentation organized and up-to-date"
+      "Select specific documents to analyze with AI assistance",
+      "Extract insights from spreadsheets and presentations securely",
+      "Maintain full control over which files can be accessed"
     ],
     chat: [
       { isAI: true, content: "Can you find all product specs from Q1 and summarize the key features we planned?" },
-      { isAI: false, content: "Searching through Q1 product specification documents. Would you like me to organize features by priority or timeline?" },
+      { isAI: false, content: "Searching through the product specification documents you've shared. Would you like me to organize features by priority or timeline?" },
       { isAI: true, content: "Let's see them by priority" },
-      { isAI: false, content: "I've analyzed 12 spec documents and created a summary of key features, sorted by priority. I can share this as a new document or update the existing product roadmap." }
+      { isAI: false, content: "I've analyzed the spec documents you provided and created a summary of key features, sorted by priority. I can share this as a new document or update the existing product roadmap." }
     ]
   },
   gmail: {

@@ -34,6 +34,7 @@ export async function storeOAuthTokens(
     refreshToken?: string;
     expiresAt?: Date;
     scopes?: string[];
+    metadata?: Record<string, unknown>; 
   }
 ) {
   const existing = await db.select().from(schema.oauthConnections)
@@ -43,7 +44,13 @@ export async function storeOAuthTokens(
     ));
 
   if (existing.length) {
-    console.log(`Updating tokens for user "${userId}" for provider "${provider}" saved`)
+    console.log(`Updating tokens for user "${userId}" for provider "${provider}" saved`);
+    
+    // If updating and we have new metadata but want to preserve existing metadata
+    let updatedMetadata = tokens.metadata;
+    if (tokens.metadata && existing[0].metadata) {
+      updatedMetadata = { ...existing[0].metadata, ...tokens.metadata };
+    }
 
     // Update existing connection
     return db.update(schema.oauthConnections)
@@ -52,6 +59,7 @@ export async function storeOAuthTokens(
         refreshToken: tokens.refreshToken,
         expiresAt: tokens.expiresAt,
         scopes: tokens.scopes,
+        metadata: updatedMetadata || existing[0].metadata,
         updatedAt: new Date()
       })
       .where(and(
@@ -69,13 +77,46 @@ export async function storeOAuthTokens(
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     expiresAt: tokens.expiresAt,
-    scopes: tokens.scopes
+    scopes: tokens.scopes,
+    metadata: tokens.metadata
   });
 }
 
 // Helper function to remove an OAuth connection
 export async function removeOAuthConnection(userId: string, provider: string) {
   return db.delete(schema.oauthConnections)
+    .where(and(
+      eq(schema.oauthConnections.userId, userId),
+      eq(schema.oauthConnections.provider, provider)
+    ));
+}
+
+// Helper function to update OAuth connection metadata
+export async function updateConnectionMetadata(
+  userId: string, 
+  provider: string, 
+  metadata: Record<string, unknown>
+) {
+  const existing = await db.select().from(schema.oauthConnections)
+    .where(and(
+      eq(schema.oauthConnections.userId, userId),
+      eq(schema.oauthConnections.provider, provider)
+    ));
+  
+  if (!existing.length) {
+    throw new Error(`No connection found for user ${userId} and provider ${provider}`);
+  }
+
+  // Merge with existing metadata if it exists
+  const updatedMetadata = existing[0].metadata 
+    ? { ...existing[0].metadata, ...metadata }
+    : metadata;
+
+  return db.update(schema.oauthConnections)
+    .set({
+      metadata: updatedMetadata,
+      updatedAt: new Date()
+    })
     .where(and(
       eq(schema.oauthConnections.userId, userId),
       eq(schema.oauthConnections.provider, provider)

@@ -45,7 +45,15 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     // Store tokens in database
     await storeOAuthTokens(session.userId, provider, tokens);
 
-    // Redirect to success page
+    // For providers with settings, redirect to dashboard with flag to auto-open settings
+    // Currently only Google Drive has settings, but this is extensible
+    const providersWithSettings = ['gdrive'];
+    
+    if (providersWithSettings.includes(provider)) {
+      return NextResponse.redirect(new URL('/dashboard?justConnected=true', getRequestOrigin(request)));
+    }
+    
+    // For providers without settings, redirect to dashboard without flag
     return NextResponse.redirect(new URL('/dashboard', getRequestOrigin(request)));
   } catch (error) {
     console.error('Error in OAuth callback:', error);
