@@ -102,7 +102,8 @@ export default function GDrivePickerButton({
       const { accessToken, apiKey } = await credentialsResponse.json();
       
       // Create and display the picker
-      const googleViewId = window.google.picker.ViewId.DOCS;
+      const docsView = new window.google.picker.DocsView(window.google.picker.ViewId.DOCUMENTS)
+        .setMode(window.google.picker.DocsViewMode.LIST); // Set to list mode
       
       const picker = new window.google.picker.PickerBuilder()
         .enableFeature(window.google.picker.Feature.MULTISELECT_ENABLED)
@@ -110,7 +111,7 @@ export default function GDrivePickerButton({
         .setAppId(77803289750)
         .setDeveloperKey(apiKey)
         .setOAuthToken(accessToken)
-        .addView(googleViewId)
+        .addView(docsView)
         .setCallback((data: any) => pickerCallback(data)) // eslint-disable-line @typescript-eslint/no-explicit-any
         .build();
       
