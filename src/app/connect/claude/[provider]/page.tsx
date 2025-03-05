@@ -13,7 +13,17 @@ export async function generateMetadata ({ params }: { params: Promise<{ provider
 
   return {
     title: `Integrate Claude Desktop with ${config.name}`,
-    description: `With WayStation plugin for Claude Desktop you can ${config.description}`
+    description: `With WayStation plugin for Claude Desktop you can ${config.description}`,
+    openGraph: {
+      type: 'article',
+      title: `Integrate Claude Desktop with ${config.name}`,
+      description: `With WayStation plugin for Claude Desktop you can ${config.description}`,
+      siteName: "WayStation",
+      url: `/connect/claude/${provider}`,
+      images : {
+        url: '/images/promo-wide.png'
+      }
+    }
   }
 };
 

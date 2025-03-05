@@ -13,7 +13,17 @@ export async function generateMetadata ({ params }: { params: Promise<{ provider
 
   return {
     title: `Integrate any MCP host with ${config.name}`,
-    description: `With universal WayStation MCP Server you can ${config.description}`
+    description: `With universal WayStation MCP Server you can ${config.description}`,
+    openGraph: {
+      type: 'article',
+      title: `Integrate any MCP host with ${config.name}`,
+      description: `With universal WayStation MCP Server you can ${config.description}`,
+      siteName: "WayStation",
+      url: `/connect/mcp-server/${provider}`,
+      images : {
+        url: '/images/promo-wide.png'
+      }
+    }
   }
 };
 

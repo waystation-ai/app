@@ -9,7 +9,13 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'WayStation - Empowering LLMs to take real-world actions',
   openGraph: {
-    type: 'website'
+    type: 'website',
+    title: "WayStation",
+    description: "Empowering LLMs to take real-world actions",
+    siteName: "WayStation",
+    images : {
+      url: '/images/promo-wide.png'
+    }
   }
 };
 

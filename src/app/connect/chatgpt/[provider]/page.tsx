@@ -13,7 +13,17 @@ export async function generateMetadata ({ params }: { params: Promise<{ provider
 
   return {
     title: `Integrate ChatGPT with ${config.name}`,
-    description: `With WayStation plugin for ChatGPT you can ${config.description}`
+    description: `With WayStation plugin for ChatGPT you can ${config.description}`,
+    openGraph: {
+      type: 'article',
+      title: `Integrate ChatGPT with ${config.name}`,
+      description: `With WayStation plugin for ChatGPT you can ${config.description}`,
+      siteName: "WayStation",
+      url: `/connect/chatgpt/${provider}`,
+      images : {
+        url: '/images/promo-wide.png'
+      }
+    }
   }
 };
 
