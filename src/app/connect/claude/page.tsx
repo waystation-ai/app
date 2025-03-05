@@ -2,11 +2,13 @@ import ChatDemo from "@/app/ui/components/ChatDemo";
 import Providers from "@/app/ui/components/Providers";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link"; 
+import Image from "next/image";
 
 import { Metadata } from 'next';
  
 export const metadata: Metadata = {
   title: 'Integrate Claude Desktop with the productivity apps',
+  description: "The only Claude Desktop agent you need. Connect Claude Desktop with the tools you use daily through our no-code, secure integration hub.",
 };
 
 export default function Home() {
@@ -25,13 +27,11 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 px-4 sm:px-8 py-8 max-w-7xl mx-auto">
           {/* Left Column - Branding */}
           <div className="flex flex-col justify-center text-left space-y-4 lg:space-y-6">
-            <p className="text-3xl lg:text-4xl font-bold">
-            The only Claude Desktop agent<br/>you need 
-            </p>
-            <p className="text-lg lg:text-xl leading-snug">
+            <h1 className="text-3xl lg:text-4xl font-bold">The only Claude Desktop agent<br/>you need</h1>
+            <h2 className="text-lg lg:text-xl leading-snug">
               <span className="bg-yellow-100">Connect Claude Desktop with the tools you use daily</span><br/>through our 
               no-code, secure integration hub.
-            </p>
+            </h2>
             <div className="mt-6">
               <Providers app={"claude"} className="grid grid-cols-6 lg:grid-cols-8 gap-4 lg:gap-3" />
             </div>
@@ -45,6 +45,18 @@ export default function Home() {
                 Get Started
               </Link>
             </SignedOut>
+            <div className="flex items-center gap-4 mt-4 mb-8">
+              <span className="text-sm font-medium text-gray-500">Also connects to</span>
+              <Link href={`/connect/chatgpt`} className="app-link">
+                <Image src='/images/apps/chatgpt.svg' width={20} height={20} alt="Claude"/>
+                <span>ChatGPT</span>
+              </Link>
+              <span className="text-sm font-medium text-gray-500">or</span>
+              <Link href={`/connect/mcp-server`} className="app-link">
+                <Image src="/images/apps/mcp.svg" width={20} height={20} alt="MCP Host" />
+                <span>Any MCP host</span>
+              </Link>
+            </div>
 
           </div>
 

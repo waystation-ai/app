@@ -21,7 +21,7 @@ export default function Navigation() {
       <div className="flex w-full md:w-auto">
         <Link className="flex items-center gap-2" href="/">
         <Image src="/images/logo.svg" width={32} height={32} alt="WayStation" className="h-8 w-8" />
-        <h1 className="text-2xl font-bold aurora-text">WayStation</h1>
+        <p className="text-2xl font-bold aurora-text">WayStation</p>
         </Link>
         <div id="profile" className="md:hidden ml-auto">
           <SignedOut>

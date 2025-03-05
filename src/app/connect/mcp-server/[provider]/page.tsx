@@ -1,6 +1,7 @@
 import ChatDemo from "@/app/ui/components/ChatDemo";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link"; 
+import Image from "next/image";
 
 import { getProviderConfig } from "@/app/lib/config/oauth-providers";
 import Providers from "@/app/ui/components/Providers";
@@ -49,6 +50,18 @@ export default async function Home({ params }: { params: Promise<{ provider: str
                 Get Started
               </Link>
             </SignedOut>
+            <div className="flex items-center gap-4 mt-4 mb-8">
+              <span className="text-sm font-medium text-gray-500">Also connects to</span>
+              <Link href={`/connect/chatgpt/${provider}`} className="app-link">
+                <Image src='/images/apps/chatgpt.svg' width={20} height={20} alt="ChatGPT"/>
+                <span>ChatGPT</span>
+              </Link>
+              <span className="text-sm font-medium text-gray-500">or</span>
+              <Link href={`/connect/claude/${provider}`} className="app-link">
+                <Image src="/images/apps/claude.svg" width={20} height={20} alt="Claude" />
+                <span>Claude Desktop</span>
+              </Link>
+            </div>
             <div className="mt-auto">
               <p>And make it even more powerful with other providers we support</p>
               <div>

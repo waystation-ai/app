@@ -11,13 +11,13 @@ export const metadata: Metadata = {
     apple: '/images/logo.svg'
   },
   openGraph: {
+    type: 'article',
     title: "WayStation",
     description: "Empowering LLMs to take real-world actions",
     siteName: "WayStation",
     images : {
-      url: '/images/promo.png'
-    },
-    url: "https://waystation.ai"
+      url: '/images/promo-wide.png'
+    }
   },
   metadataBase: process.env.NEXT_PUBLIC_APP_URL ? new URL(process.env.NEXT_PUBLIC_APP_URL) : null
 };

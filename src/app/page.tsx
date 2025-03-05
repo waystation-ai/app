@@ -8,6 +8,9 @@ import { Metadata } from 'next';
  
 export const metadata: Metadata = {
   title: 'WayStation - Empowering LLMs to take real-world actions',
+  openGraph: {
+    type: 'website'
+  }
 };
 
 export default function Home() {
