@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     title: "WayStation",
     description: "Empowering LLMs to take real-world actions",
     siteName: "WayStation",
+    url: 'https://waystation.ai',
     images : {
       url: '/images/promo-wide.png'
     }
