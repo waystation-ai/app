@@ -21,7 +21,7 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
   return (
     <ClerkProvider waitlistUrl="/waitlist">
     <html lang="en">
-      <GoogleTagManager gtmId="GTM-TBLJV48V" />
+      <GoogleTagManager gtmId="AW-16889842454" />
       <Script id="twitter-pixel" strategy="afterInteractive">
         {`
           !function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
