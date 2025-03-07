@@ -1,5 +1,4 @@
 import ChatDemo from "@/app/ui/components/ChatDemo";
-import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link"; 
 import Image from "next/image";
 
@@ -50,16 +49,10 @@ export default async function Home({ params }: { params: Promise<{ provider: str
             </ul>
             }
 
-            <SignedIn>
-              <Link href="/dashboard" className="aurora-btn hidden lg:block px-4 py-2 text-sm font-bold rounded hover:scale-105 transition-transform duration-300 w-1/2 text-center">
-                Connect
-              </Link>
-            </SignedIn>
-            <SignedOut>
-              <Link href="/sign-in" className="aurora-btn hidden lg:block px-4 py-2 text-sm font-bold rounded hover:scale-105 transition-transform duration-300 w-1/2 text-center">
-                Get Started
-              </Link>
-            </SignedOut>
+            <Link href={`/dashboard?provider=${provider}`} className="aurora-btn hidden lg:block px-4 py-2 text-sm font-bold rounded hover:scale-105 transition-transform duration-300 w-1/2 text-center">
+              Connect Now
+            </Link>
+
             <div className="flex items-center gap-4 mt-4 mb-8">
               <span className="text-sm font-medium text-gray-500">Also connects to</span>
               <Link href={`/connect/chatgpt/${provider}`} className="app-link">

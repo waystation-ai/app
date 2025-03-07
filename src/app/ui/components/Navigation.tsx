@@ -45,7 +45,7 @@ export default function Navigation() {
       <div id="profile" className="hidden md:block md:ml-auto">
         <SignedOut>
           <Link href="/sign-in" className="aurora-btn px-4 py-2 text-sm font-bold rounded hover:scale-105 transition-transform duration-300 w-auto text-center">
-            Get Early Access
+            Sign Up Free
           </Link>
         </SignedOut>
         <SignedIn>
