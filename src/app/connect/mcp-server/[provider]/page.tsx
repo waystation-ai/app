@@ -1,5 +1,4 @@
 import ChatDemo from "@/app/ui/components/ChatDemo";
-import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link"; 
 import Image from "next/image";
 
