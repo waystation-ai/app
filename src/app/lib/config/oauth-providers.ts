@@ -248,6 +248,15 @@ export const providers: Record<string, OAuthProvider> = {
   office: {
     name: 'Microsoft Office',
     description: 'Create, edit, and collaborate on Office documents and spreadsheets.',
+    clientId: process.env.OFFICE_CLIENT_ID || '',
+    clientSecret: process.env.OFFICE_CLIENT_SECRET || '',
+    authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+    tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+    scopes: [
+      'Files.Read.All',
+      'offline_access'
+    ],
+    redirectUri: `${baseRedirectUri}/office/callback`,
     bullets: [
       "Extract insights and data from documents automatically",
       "Generate reports and presentations from your data",

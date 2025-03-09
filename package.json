@@ -26,6 +26,7 @@
     "drizzle-orm": "^0.40.0",
     "jose": "^5.9.6",
     "next": "^15.2.1",
+    "pdf-parse": "^1.1.1",
     "pg": "^8.13.3",
     "posthog-js": "^1.223.4",
     "react": "^19.0.0",
@@ -35,6 +36,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/node": "^22.13.9",
+    "@types/pdf-parse": "^1.1.4",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.20",

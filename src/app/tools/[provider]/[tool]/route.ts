@@ -52,7 +52,23 @@ async function handleToolRequest({ request, params, method, getParams}: {
       params
     });
     
-    return NextResponse.json(result);
+    // Handle binary responses (ArrayBuffer)
+    if (result instanceof ArrayBuffer) {
+      return new Response(result, {
+        headers: {
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': 'attachment; filename="document.pdf"'
+        }
+      });
+    }
+    
+    // Handle regular JSON responses
+    if (typeof result === 'object' && result !== null) {
+      return NextResponse.json(result);
+    }
+    
+    // Handle other response types
+    return NextResponse.json({ content: result });
   } catch (error) {
     console.error(`Error executing tool ${tool}:`, error);
     return NextResponse.json(

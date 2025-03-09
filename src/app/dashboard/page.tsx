@@ -42,7 +42,7 @@ export default async function Page() {
       <p className="mt-8 text-3xl lg:text-4xl text-gray-900 font-bold">
             Connect your apps...
       </p>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full my-3 sm:my-9">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 w-full my-3 sm:my-9">
         {Object.entries(providers)
           .filter(([, config]) => config.authorizationUrl)
           .map(([provider, config]) => (

@@ -23,6 +23,7 @@ export interface Tool<T = unknown, R = unknown> {
   responses: Record<string, {
     description: string;
     schema: z.ZodType<R>;
+    contentTypes?: string[];
   }>;
   handler: ToolHandler<T, R>;
 }

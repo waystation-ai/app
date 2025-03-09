@@ -66,13 +66,25 @@ function toolToOpenApiOperation(tool: Tool) {
   // Generate response schemas with standard error responses
   operation.responses = {
     ...Object.entries(tool.responses).reduce((acc: Record<string, unknown>, [code, response]) => {
+      const schema = zodToJsonSchema(response.schema);
+      
       acc[code] = {
         description: response.description,
-        content: {
-          'application/json': {
-            schema: zodToJsonSchema(response.schema)
+        content: response.contentTypes ? 
+          response.contentTypes.reduce((contentObj, mimeType) => ({
+            ...contentObj,
+            [mimeType]: {
+              schema: {
+                type: 'string',
+                format: 'binary'
+              }
+            }
+          }), {}) : 
+          {
+            'application/json': {
+              schema
+            }
           }
-        }
       };
       return acc;
     }, {}),
