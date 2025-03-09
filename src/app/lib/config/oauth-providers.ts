@@ -130,21 +130,6 @@ export const providers: Record<string, OAuthProvider> = {
       { isAI: false, content: "I've analyzed your emails and found 3 high-priority client requests. I've labeled them and drafted response templates for your review." }
     ]
   },
-  asana: {
-    name: 'Asana',
-    description: 'Manage tasks, projects, and team collaboration in your Asana workspace.',
-    bullets: [
-      "Track project progress and milestone completion automatically",
-      "Convert conversations and emails into structured tasks",
-      "Keep teams aligned with smart project updates and summaries"
-    ],
-    chat: [
-      { isAI: true, content: "Can you create tasks for all the action items from today's meeting?" },
-      { isAI: false, content: "I'll review the meeting notes. Would you like these organized by project or deadline?" },
-      { isAI: true, content: "Let's organize them by project" },
-      { isAI: false, content: "I've created 8 tasks across 3 projects, assigned them to the relevant team members, and added the context from our meeting notes." }
-    ]
-  },
   zoom: {
     name: 'Zoom',
     description: 'Schedule, manage, and enhance your Zoom meetings and webinars.',
@@ -198,6 +183,34 @@ export const providers: Record<string, OAuthProvider> = {
       { isAI: false, content: "I'll examine the sales base. Would you like to focus on revenue trends or customer segments?" },
       { isAI: true, content: "Let's look at customer segments first" },
       { isAI: false, content: "I've analyzed the data and created a new view showing key customer segments, their growth rates, and potential opportunities. I've also added charts to visualize the trends." }
+    ]
+  },
+  asana: {
+    name: 'Asana',
+    description: 'Access and manage your Asana workspaces, projects, and tasks seamlessly.',
+    clientId: process.env.ASANA_CLIENT_ID || '',
+    clientSecret: process.env.ASANA_CLIENT_SECRET || '',
+    authorizationUrl: 'https://app.asana.com/-/oauth_authorize',
+    tokenUrl: 'https://app.asana.com/-/oauth_token',
+    scopes: [
+      'default',
+      'projects:read',
+      'projects:write',
+      'tasks:read',
+      'tasks:write',
+      'workspaces:read'
+    ],
+    redirectUri: `${baseRedirectUri}/asana/callback`,
+    bullets: [
+      "Track project progress and milestone completion automatically",
+      "Convert conversations and emails into structured tasks",
+      "Keep teams aligned with smart project updates and summaries"
+    ],
+    chat: [
+      { isAI: true, content: "Can you create tasks for all the action items from today's meeting?" },
+      { isAI: false, content: "I'll review the meeting notes. Would you like these organized by project or deadline?" },
+      { isAI: true, content: "Let's organize them by project" },
+      { isAI: false, content: "I've created 8 tasks across 3 projects, assigned them to the relevant team members, and added the context from our meeting notes." }
     ]
   },
   hubspot: {

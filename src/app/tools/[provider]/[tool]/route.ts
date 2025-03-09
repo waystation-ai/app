@@ -5,7 +5,7 @@ import { registry } from '../../core/registry';
 import '@/app/tools/main';
 
 type RequestParams = Promise<{ provider: string; tool: string }>;
-type HttpMethod = 'GET' | 'POST';
+type HttpMethod = 'GET' | 'POST' | 'PUT';
 type QueryParams = Record<string, string>;
 type JsonBody = Record<string, unknown>;
 type ToolParams = QueryParams | JsonBody;
@@ -95,3 +95,13 @@ export async function POST(request: NextRequest, { params }: { params: RequestPa
     getParams: (req) => req.json()
   });
 }
+
+export async function PUT(request: NextRequest, { params }: { params: RequestParams }) {
+  return handleToolRequest({
+    request,
+    params,
+    method: 'PUT',
+    getParams: (req) => req.json()
+  });
+}
+
