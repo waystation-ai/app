@@ -282,6 +282,35 @@ export const providers: Record<string, OAuthProvider> = {
       { isAI: false, content: "I've created a presentation highlighting key growth metrics, with charts showing trend lines and projections. I've also added notes identifying the main drivers of growth." }
     ]
   },
+  notion: {
+    name: 'Notion',
+    description: 'Access and manage your Notion databases, pages, and content.',
+    clientId: process.env.NOTION_CLIENT_ID || '',
+    clientSecret: process.env.NOTION_CLIENT_SECRET || '',
+    authorizationUrl: 'https://api.notion.com/v1/oauth/authorize',
+    tokenUrl: 'https://api.notion.com/v1/oauth/token',
+    scopes: [
+      'read_user',
+      'read_databases',
+      'write_databases',
+      'read_pages',
+      'write_pages',
+      'read_blocks',
+      'write_blocks'
+    ],
+    redirectUri: `${baseRedirectUri}/notion/callback`,
+    bullets: [
+      "Access and manage your Notion databases and pages",
+      "Create and update content in your Notion workspace",
+      "Search across your Notion content and organize information"
+    ],
+    chat: [
+      { isAI: true, content: "Can you summarize all our product specs in Notion and create a feature comparison table?" },
+      { isAI: false, content: "I'll analyze your Notion documents. Would you like to focus on current features or include the roadmap items too?" },
+      { isAI: true, content: "Let's include roadmap items as well" },
+      { isAI: false, content: "I've created a comprehensive comparison table in Notion with current features and roadmap items, color-coded by development status and priority." }
+    ]
+  },
   outlook: {
     name: 'Outlook',
     description: 'Manage emails, calendar events, and contacts in Outlook.',
