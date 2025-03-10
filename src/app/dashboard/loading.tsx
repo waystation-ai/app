@@ -4,6 +4,16 @@ import { providers } from '@/app/lib/config/oauth-providers';
 export default async function Page() {
   const connectedProviders: Record<string, boolean> = {};
 
+  // Get providers with authorization URLs for "Connect your apps" section
+  const providersToDisplay = Object.entries(providers)
+    .filter(([, config]) => config.authorizationUrl)
+    .slice(0, 4);
+  
+  // Get providers without authorization URLs for "More integrations" section
+  const moreIntegrationsProviders = Object.entries(providers)
+    .filter(([, config]) => !config.authorizationUrl)
+    .slice(0, 8);
+
   return (
     <div className="mt-4 sm:mt-8 px-4 sm:px-6 lg:px-8 mx-auto">
       {/* Top section - Two columns */}
@@ -14,10 +24,7 @@ export default async function Page() {
                 Connect your apps...
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 w-full my-3 sm:my-9">
-            {Object.entries(providers)
-              .filter(([, config]) => config.authorizationUrl)
-              .slice(0, 4)
-              .map(([provider, config]) => (
+            {providersToDisplay.map(([provider, config]) => (
               <ProviderCard
                 key={provider}
                 provider={provider}
@@ -30,7 +37,7 @@ export default async function Page() {
         </div>
 
         {/* Right Column - Launch section placeholder */}
-        <div className="flex flex-col lg:w-1/3 items-center">
+        <div className="flex flex-col lg:w-1/3 items-center justify-center h-full">
           <p className="my-4 text-3xl lg:text-4xl text-gray-900 font-bold w-full text-center">
                 ...and launch!
           </p>
@@ -47,15 +54,12 @@ export default async function Page() {
           More Integrations
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-8 gap-6 w-full my-6">
-          {Object.entries(providers)
-            .filter(([, config]) => !config.authorizationUrl)
-            .slice(0, 8)
-            .map(([provider]) => (
-              <div key={provider} className="provider-card flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-sm">
-                <div className="w-12 h-12 bg-gray-100 rounded-full animate-pulse"></div>
-                <div className="mt-2 w-16 h-4 bg-gray-100 rounded animate-pulse"></div>
-              </div>
-            ))}
+          {moreIntegrationsProviders.map(([provider]) => (
+            <div key={provider} className="provider-card flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-sm">
+              <div className="w-12 h-12 bg-gray-100 rounded-full animate-pulse"></div>
+              <div className="mt-2 w-16 h-4 bg-gray-100 rounded animate-pulse"></div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
