@@ -1,7 +1,7 @@
 'use client';
 
 import { usePostHog } from 'posthog-js/react';
-import { sendGAEvent } from '@next/third-parties/google';
+import { sendGTMEvent } from '@next/third-parties/google';
 
 export interface EventProperties {
   [key: string]: string | number | boolean | undefined;
@@ -15,6 +15,6 @@ export function useTrackEvent() {
     posthog.capture(eventName, properties);
     
     // Send to Google Analytics via GTM
-    sendGAEvent({event: eventName, ...properties});
+    sendGTMEvent({event: eventName, ...properties});
   }
 }
