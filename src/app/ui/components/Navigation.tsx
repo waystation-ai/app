@@ -1,6 +1,6 @@
 'use client';
 
-import { SignedIn, SignedOut, useAuth, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, useUser, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from 'next/navigation';
@@ -10,10 +10,13 @@ export default function Navigation() {
   const pathname = usePathname();
 
   const posthog = usePostHog();
-  const auth = useAuth();
+  const user = useUser();
 
-  if (auth.userId) {
-    posthog.identify(auth.userId);
+  if (user.isSignedIn) {
+    posthog.identify(user.user.id, {
+      email: user.user.primaryEmailAddress?.emailAddress,
+      name: user.user.fullName,
+    });
   }
 
   return (
