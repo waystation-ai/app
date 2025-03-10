@@ -246,6 +246,18 @@ export const providers: Record<string, OAuthProvider> = {
   teams: {
     name: 'Microsoft Teams',
     description: 'Collaborate, chat, and manage meetings in Microsoft Teams.',
+    clientId: process.env.OFFICE_CLIENT_ID || '',
+    clientSecret: process.env.OFFICE_CLIENT_SECRET || '',
+    authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+    tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+    scopes: [
+      'User.Read',
+      'Team.ReadBasic.All',
+      'Channel.ReadBasic.All',
+      'ChannelMessage.Send',
+      'offline_access'
+    ],
+    redirectUri: `${baseRedirectUri}/teams/callback`,
     bullets: [
       "Coordinate team communications and meeting schedules intelligently",
       "Generate summaries from chats and channel discussions",
@@ -259,7 +271,7 @@ export const providers: Record<string, OAuthProvider> = {
     ]
   },
   office: {
-    name: 'Microsoft Office',
+    name: 'Office 365',
     description: 'Create, edit, and collaborate on Office documents and spreadsheets.',
     clientId: process.env.OFFICE_CLIENT_ID || '',
     clientSecret: process.env.OFFICE_CLIENT_SECRET || '',
