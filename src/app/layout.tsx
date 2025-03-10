@@ -5,7 +5,7 @@ import { ClerkProvider} from '@clerk/nextjs';
 import { PostHogProvider } from './providers';
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
-import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
+import { GoogleTagManager } from '@next/third-parties/google';
 import Script from 'next/script';
 
 
@@ -21,8 +21,7 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
   return (
     <ClerkProvider waitlistUrl="/waitlist">
     <html lang="en">
-      <GoogleTagManager gtmId="GTM-TBLJV48V" />
-      <GoogleAnalytics gaId="G-B1Y0GR6KFF" />
+      <GoogleTagManager gtmId="AW-16889842454" />
       <Script id="twitter-pixel" strategy="afterInteractive">
         {`
           !function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);

@@ -3,7 +3,6 @@
 import { usePostHog } from 'posthog-js/react';
 import { sendGAEvent } from '@next/third-parties/google';
 
-
 export interface EventProperties {
   [key: string]: string | number | boolean | undefined;
 }
