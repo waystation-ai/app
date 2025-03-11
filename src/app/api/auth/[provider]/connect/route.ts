@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { oauthService } from '@/app/lib/services/oauth-service';
 import { getProviderConfig } from '@/app/lib/config/oauth-providers';
 
-import { stateStore, cleanupOldStates } from '@/app/lib/services/state-store';
+import { stateStore } from '@/app/lib/services/state-store';
 
 export async function GET(
   request: Request,
@@ -27,10 +27,15 @@ export async function GET(
     const { url, state, codeVerifier } = await oauthService.buildAuthorizationUrl(provider);
 
     // Store state and code verifier for validation in callback
-    stateStore.set(state, { state, provider, codeVerifier });
+    await stateStore.saveState({
+      state,
+      provider,
+      codeVerifier,
+      userId: session.userId
+    });
 
-    // Clean up old states
-    cleanupOldStates();
+    // Clean up expired states
+    await stateStore.cleanupExpiredStates();
 
     return NextResponse.redirect(url);
   } catch (error) {

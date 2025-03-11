@@ -31,19 +31,19 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
 
     // Validate state
-    const storedState = stateStore.get(state);
-    if (!storedState || storedState.provider !== provider) {
+    const storedState = await stateStore.getState(state);
+    if (!storedState || storedState.provider !== provider || storedState.userId !== session.userId) {
       return new NextResponse('Invalid state', { status: 400 });
     }
-
-    // Clean up used state
-    stateStore.delete(state);
 
     // Exchange code for tokens with PKCE for Airtable
     const tokens = await oauthService.exchangeCodeForTokens(provider, code, storedState.codeVerifier);
 
     // Store tokens in database
     await storeOAuthTokens(session.userId, provider, tokens);
+    
+    // Clean up used state after successful token exchange and storage
+    await stateStore.deleteState(state);
 
     // For providers with settings, redirect to dashboard with flag to auto-open settings
     // Currently only Google Drive has settings, but this is extensible

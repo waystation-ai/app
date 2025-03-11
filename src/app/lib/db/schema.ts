@@ -1,5 +1,15 @@
 import { pgTable, serial, text, timestamp, varchar, jsonb } from 'drizzle-orm/pg-core';
 
+export const oauthStates = pgTable('oauth_states', {
+  id: serial('id').primaryKey(),
+  state: text('state').notNull().unique(),
+  provider: varchar('provider', { length: 50 }).notNull(),
+  codeVerifier: text('code_verifier'),
+  userId: text('user_id').notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+  expiresAt: timestamp('expires_at').notNull()
+});
+
 export const oauthConnections = pgTable('oauth_connections', {
   id: serial('id').primaryKey(),
   userId: text('user_id').notNull(),
