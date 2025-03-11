@@ -1,4 +1,16 @@
-import { pgTable, serial, text, timestamp, varchar, jsonb } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, timestamp, varchar, jsonb, unique } from 'drizzle-orm/pg-core';
+
+export const waitlistEntries = pgTable('waitlist_entries', {
+  id: serial('id').primaryKey(),
+  userId: text('user_id').notNull(),
+  provider: varchar('provider', { length: 50 }).notNull(),
+  createdAt: timestamp('created_at').defaultNow()
+}, (table) => {
+  return {
+    // Create a unique constraint to prevent duplicate entries
+    userProviderIdx: unique().on(table.userId, table.provider)
+  };
+});
 
 export const oauthStates = pgTable('oauth_states', {
   id: serial('id').primaryKey(),

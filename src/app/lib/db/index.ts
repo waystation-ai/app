@@ -10,6 +10,34 @@ if (!process.env.DATABASE_URL) {
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 export const db = drizzle(pool, { schema });
 
+// Helper function to check if a user is on the waitlist for a specific provider
+export async function checkWaitlistStatus(userId: string, provider: string): Promise<boolean> {
+  const existingEntry = await db.select()
+    .from(schema.waitlistEntries)
+    .where(
+      and(
+        eq(schema.waitlistEntries.userId, userId),
+        eq(schema.waitlistEntries.provider, provider)
+      )
+    )
+    .limit(1);
+  
+  return existingEntry.length > 0;
+}
+
+// Helper function to add a user to the waitlist for a specific provider
+export async function addToWaitlist(userId: string, provider: string): Promise<void> {
+  // Check if already on waitlist
+  const isOnWaitlist = await checkWaitlistStatus(userId, provider);
+  
+  if (!isOnWaitlist) {
+    await db.insert(schema.waitlistEntries).values({
+      userId,
+      provider
+    });
+  }
+}
+
 // Helper function to get a valid connection for a specific user and provider
 export async function getValidConnection(userId: string, provider: string) {
   const connections = await db.select().from(schema.oauthConnections)
