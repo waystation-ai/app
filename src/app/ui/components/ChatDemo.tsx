@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 export interface ChatMessage {
-  isAI: boolean;
+  role: 'user' | 'agent';
   content: string;
 }
 
@@ -23,16 +23,17 @@ function TypingIndicator() {
   );
 }
 
-function ChatMessage({ isAI, displayedContent, showCursor, showTypingIndicator }: ChatMessageProps) {
+function ChatMessage({ role, displayedContent, showCursor, showTypingIndicator }: ChatMessageProps) {
+  const isUser = role === 'user';
   return (
-    <div className={`flex ${isAI ? 'justify-start' : 'justify-end'} mb-4`}>
+    <div className={`flex ${isUser ? 'justify-start' : 'justify-end'} mb-4`}>
       <div className={`max-w-[85%] p-3 sm:p-4 rounded-2xl ${
-        isAI ? 'bg-[#e2ecff]' : 'chat-msg'
+        isUser? 'bg-[#e2ecff]' : 'chat-msg'
       }`}>
         {showTypingIndicator ? (
           <TypingIndicator />
         ) : (
-          <p className={`text-base ${isAI ? 'text-gray-800' : 'text-white'} ${
+          <p className={`text-base ${isUser ? 'text-gray-800' : 'text-white'} ${
             showCursor ? 'typing-cursor' : ''
           }`}>
             {displayedContent}
@@ -51,11 +52,11 @@ export default function ChatDemo({ messages }: ChatDemoProps) {
 
   if (!messages) {
     messages = [
-      { isAI: true, content: "Can you please process fresh user feedback using instructions in the Feedback Processing doc?" },
-      { isAI: false, content: "Reading and analyzing the Feedback Processing document in Google Drive..." },
-      { isAI: false, content: "Here is what I'm going to do. I'll process all incoming tickets in Zendesk labeled Feedback. I'll triage them and match them to items on the Stories board on Monday. Please confirm." },
-      { isAI: true, content: "Go ahead! Can you also summarize and send a Slack message to the team once it's done so we can review it?" },
-      { isAI: false, content: "On it! We'll get back to you shortly." }
+      { role: 'user', content: "Can you please process fresh user feedback using instructions in the Feedback Processing doc?" },
+      { role: 'agent', content: "Reading and analyzing the Feedback Processing document in Google Drive..." },
+      { role: 'agent', content: "Here is what I'm going to do. I'll process all incoming tickets in Zendesk labeled Feedback. I'll triage them and match them to items on the Stories board on Monday. Please confirm." },
+      { role: 'user', content: "Go ahead! Can you also summarize and send a Slack message to the team once it's done so we can review it?" },
+      { role: 'agent', content: "On it! We'll get back to you shortly." }
     ];
   }
   
@@ -91,7 +92,7 @@ export default function ChatDemo({ messages }: ChatDemoProps) {
     }
 
     const currentMessage = messages[currentMessageIndex];
-    const isAIMessage = currentMessage.isAI;
+    const isAgentMessage = currentMessage.role === 'agent';
     let typingTimer: NodeJS.Timeout | null = null;
     let nextMessageTimer: NodeJS.Timeout | null = null;
 
@@ -99,12 +100,12 @@ export default function ChatDemo({ messages }: ChatDemoProps) {
     if (currentMessageIndex === 0) {
       const initialDelay = setTimeout(() => {
         // Set initial states
-        setShowCursor(!isAIMessage);
-        setShowTypingIndicator(!isAIMessage);
+        setShowCursor(isAgentMessage);
+        setShowTypingIndicator(isAgentMessage);
         setDisplayedContent("");
 
         // Start message animation after delay
-        if (!isAIMessage) {
+        if (isAgentMessage) {
           typingTimer = setTimeout(() => {
             setShowTypingIndicator(false);
             startTyping();
@@ -118,12 +119,12 @@ export default function ChatDemo({ messages }: ChatDemoProps) {
     }
 
     // For subsequent messages, proceed normally
-    setShowCursor(!isAIMessage);
-    setShowTypingIndicator(!isAIMessage);
+    setShowCursor(isAgentMessage);
+    setShowTypingIndicator(isAgentMessage);
     setDisplayedContent("");
 
-    // Show typing indicator for user messages
-    if (!isAIMessage) {
+    // Show typing indicator for agent messages
+    if (isAgentMessage) {
       typingTimer = setTimeout(() => {
         setShowTypingIndicator(false);
         startTyping();
@@ -140,7 +141,7 @@ export default function ChatDemo({ messages }: ChatDemoProps) {
         if (currentIndex < messageContent.length) {
           setDisplayedContent(messageContent.slice(0, currentIndex + 1));
           currentIndex++;
-          typingTimer = setTimeout(typeNextChar, isAIMessage ? 50 : 30);
+          typingTimer = setTimeout(typeNextChar, isAgentMessage ? 30 : 50);
         } else {
           // Message complete, schedule next message
           nextMessageTimer = setTimeout(() => {
@@ -165,7 +166,7 @@ export default function ChatDemo({ messages }: ChatDemoProps) {
         {messages.slice(0, currentMessageIndex + 1).map((msg, idx) => (
           <ChatMessage 
             key={idx}
-            isAI={msg.isAI}
+            role={msg.role}
             content={msg.content}
             displayedContent={idx === currentMessageIndex ? displayedContent : msg.content}
             showCursor={idx === currentMessageIndex && showCursor}

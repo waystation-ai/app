@@ -11,7 +11,7 @@ export const OAuthProviderSchema = z.object({
   redirectUri: z.string().url().optional(),
   bullets: z.array(z.string()).optional(),
   chat: z.array(z.object({
-    isAI: z.boolean(),
+    role: z.enum(['user', 'agent']),
     content: z.string()
   })).optional(),
 });
@@ -47,10 +47,10 @@ export const providers: Record<string, OAuthProvider> = {
       "Generate progress reports and insights from your Monday data"
     ],
     chat: [
-      { isAI: true, content: "Can you process all the customer feedback from last week and organize it in Monday?" },
-      { isAI: false, content: "I'll analyze the feedback and update our Customer Feedback board. Would you like me to categorize by priority or feature type?" },
-      { isAI: true, content: "Let's categorize by feature type" },
-      { isAI: false, content: "Processing feedback and creating categorized items in Monday. I'll also prepare a summary of key trends for our next team meeting." }
+      { role: 'user', content: "Can you process all the customer feedback from last week and organize it in Monday?" },
+      { role: 'agent', content: "I'll analyze the feedback and update our Customer Feedback board. Would you like me to categorize by priority or feature type?" },
+      { role: 'user', content: "Let's categorize by feature type" },
+      { role: 'agent', content: "Processing feedback and creating categorized items in Monday. I'll also prepare a summary of key trends for our next team meeting." }
     ]
   },
   slack: {
@@ -76,10 +76,10 @@ export const providers: Record<string, OAuthProvider> = {
       "Keep teams in sync with smart notifications and summaries"
     ],
     chat: [
-      { isAI: true, content: "Can you summarize today's #product-team discussions and share the key points with #engineering?" },
-      { isAI: false, content: "I'll analyze the product team channel and create a summary. Would you like me to focus on technical requirements?" },
-      { isAI: true, content: "Yes, and highlight any upcoming deadlines" },
-      { isAI: false, content: "I've posted a summary to #engineering highlighting the technical requirements and deadlines. I've also added reminders for the critical milestones." }
+      { role: 'user', content: "Can you summarize today's #product-team discussions and share the key points with #engineering?" },
+      { role: 'agent', content: "I'll analyze the product team channel and create a summary. Would you like me to focus on technical requirements?" },
+      { role: 'user', content: "Yes, and highlight any upcoming deadlines" },
+      { role: 'agent', content: "I've posted a summary to #engineering highlighting the technical requirements and deadlines. I've also added reminders for the critical milestones." }
     ]
   },
   gdrive: {
@@ -99,10 +99,10 @@ export const providers: Record<string, OAuthProvider> = {
       "Maintain full control over which files can be accessed"
     ],
     chat: [
-      { isAI: true, content: "Can you find all product specs from Q1 and summarize the key features we planned?" },
-      { isAI: false, content: "Searching through the product specification documents you've shared. Would you like me to organize features by priority or timeline?" },
-      { isAI: true, content: "Let's see them by priority" },
-      { isAI: false, content: "I've analyzed the spec documents you provided and created a summary of key features, sorted by priority. I can share this as a new document or update the existing product roadmap." }
+      { role: 'user', content: "Can you find all product specs from Q1 and summarize the key features we planned?" },
+      { role: 'agent', content: "Searching through the product specification documents you've shared. Would you like me to organize features by priority or timeline?" },
+      { role: 'user', content: "Let's see them by priority" },
+      { role: 'agent', content: "I've analyzed the spec documents you provided and created a summary of key features, sorted by priority. I can share this as a new document or update the existing product roadmap." }
     ]
   },
   gmail: {
@@ -124,10 +124,10 @@ export const providers: Record<string, OAuthProvider> = {
       "Extract insights and action items from your email communications"
     ],
     chat: [
-      { isAI: true, content: "Can you check my emails from last week and identify any urgent client requests?" },
-      { isAI: false, content: "I'll scan your recent emails. Would you like me to categorize them by priority or response time needed?" },
-      { isAI: true, content: "Priority please, and flag any that need immediate response" },
-      { isAI: false, content: "I've analyzed your emails and found 3 high-priority client requests. I've labeled them and drafted response templates for your review." }
+      { role: 'user', content: "Can you check my emails from last week and identify any urgent client requests?" },
+      { role: 'agent', content: "I'll scan your recent emails. Would you like me to categorize them by priority or response time needed?" },
+      { role: 'user', content: "Priority please, and flag any that need immediate response" },
+      { role: 'agent', content: "I've analyzed your emails and found 3 high-priority client requests. I've labeled them and drafted response templates for your review." }
     ]
   },
   zoom: {
@@ -139,10 +139,10 @@ export const providers: Record<string, OAuthProvider> = {
       "Track attendance and engagement across your meetings"
     ],
     chat: [
-      { isAI: true, content: "Can you schedule our quarterly review and invite the whole team?" },
-      { isAI: false, content: "I'll help set that up. Would you like me to find the best time based on everyone's calendar?" },
-      { isAI: true, content: "Yes, and make it a 2-hour slot" },
-      { isAI: false, content: "I've scheduled the quarterly review for next Tuesday at 10 AM, sent calendar invites, and included the Q3 report in the meeting details." }
+      { role: 'user', content: "Can you schedule our quarterly review and invite the whole team?" },
+      { role: 'agent', content: "I'll help set that up. Would you like me to find the best time based on everyone's calendar?" },
+      { role: 'user', content: "Yes, and make it a 2-hour slot" },
+      { role: 'agent', content: "I've scheduled the quarterly review for next Tuesday at 10 AM, sent calendar invites, and included the Q3 report in the meeting details." }
     ]
   },
   jira: {
@@ -154,10 +154,10 @@ export const providers: Record<string, OAuthProvider> = {
       "Automate workflow transitions and notifications"
     ],
     chat: [
-      { isAI: true, content: "Can you check our current sprint and highlight any blockers?" },
-      { isAI: false, content: "I'll analyze the sprint board. Would you like to focus on high-priority items or all blocked tasks?" },
-      { isAI: true, content: "Show me high-priority blockers first" },
-      { isAI: false, content: "I found 3 high-priority blocked issues. I've tagged the relevant team leads and created a summary for our daily standup." }
+      { role: 'user', content: "Can you check our current sprint and highlight any blockers?" },
+      { role: 'agent', content: "I'll analyze the sprint board. Would you like to focus on high-priority items or all blocked tasks?" },
+      { role: 'user', content: "Show me high-priority blockers first" },
+      { role: 'agent', content: "I found 3 high-priority blocked issues. I've tagged the relevant team leads and created a summary for our daily standup." }
     ]
   },
   airtable: {
@@ -179,10 +179,10 @@ export const providers: Record<string, OAuthProvider> = {
       "Automate workflows between Airtable and other tools"
     ],
     chat: [
-      { isAI: true, content: "Can you analyze our sales data from Q4 and create a summary report?" },
-      { isAI: false, content: "I'll examine the sales base. Would you like to focus on revenue trends or customer segments?" },
-      { isAI: true, content: "Let's look at customer segments first" },
-      { isAI: false, content: "I've analyzed the data and created a new view showing key customer segments, their growth rates, and potential opportunities. I've also added charts to visualize the trends." }
+      { role: 'user', content: "Can you analyze our sales data from Q4 and create a summary report?" },
+      { role: 'agent', content: "I'll examine the sales base. Would you like to focus on revenue trends or customer segments?" },
+      { role: 'user', content: "Let's look at customer segments first" },
+      { role: 'agent', content: "I've analyzed the data and created a new view showing key customer segments, their growth rates, and potential opportunities. I've also added charts to visualize the trends." }
     ]
   },
   asana: {
@@ -207,10 +207,10 @@ export const providers: Record<string, OAuthProvider> = {
       "Keep teams aligned with smart project updates and summaries"
     ],
     chat: [
-      { isAI: true, content: "Can you create tasks for all the action items from today's meeting?" },
-      { isAI: false, content: "I'll review the meeting notes. Would you like these organized by project or deadline?" },
-      { isAI: true, content: "Let's organize them by project" },
-      { isAI: false, content: "I've created 8 tasks across 3 projects, assigned them to the relevant team members, and added the context from our meeting notes." }
+      { role: 'user', content: "Can you create tasks for all the action items from today's meeting?" },
+      { role: 'agent', content: "I'll review the meeting notes. Would you like these organized by project or deadline?" },
+      { role: 'user', content: "Let's organize them by project" },
+      { role: 'agent', content: "I've created 8 tasks across 3 projects, assigned them to the relevant team members, and added the context from our meeting notes." }
     ]
   },
   hubspot: {
@@ -222,10 +222,10 @@ export const providers: Record<string, OAuthProvider> = {
       "Analyze customer interactions and engagement patterns"
     ],
     chat: [
-      { isAI: true, content: "Can you identify leads that haven't been contacted in the last month?" },
-      { isAI: false, content: "I'll search through our contacts. Would you like to filter by lead score or industry?" },
-      { isAI: true, content: "Filter by lead score, focus on high-value prospects" },
-      { isAI: false, content: "I found 12 high-scoring leads needing follow-up. I've created a smart list and drafted personalized email templates based on their recent interactions." }
+      { role: 'user', content: "Can you identify leads that haven't been contacted in the last month?" },
+      { role: 'agent', content: "I'll search through our contacts. Would you like to filter by lead score or industry?" },
+      { role: 'user', content: "Filter by lead score, focus on high-value prospects" },
+      { role: 'agent', content: "I found 12 high-scoring leads needing follow-up. I've created a smart list and drafted personalized email templates based on their recent interactions." }
     ]
   },
   trello: {
@@ -237,10 +237,10 @@ export const providers: Record<string, OAuthProvider> = {
       "Automate task assignments and status updates"
     ],
     chat: [
-      { isAI: true, content: "Can you organize our product backlog and prioritize this month's features?" },
-      { isAI: false, content: "I'll review the backlog. Should I prioritize based on customer impact or development effort?" },
-      { isAI: true, content: "Let's prioritize by customer impact" },
-      { isAI: false, content: "I've reorganized the backlog, tagged high-impact features, and created a new board for this month's sprint with estimated story points." }
+      { role: 'user', content: "Can you organize our product backlog and prioritize this month's features?" },
+      { role: 'agent', content: "I'll review the backlog. Should I prioritize based on customer impact or development effort?" },
+      { role: 'user', content: "Let's prioritize by customer impact" },
+      { role: 'agent', content: "I've reorganized the backlog, tagged high-impact features, and created a new board for this month's sprint with estimated story points." }
     ]
   },
   teams: {
@@ -264,10 +264,10 @@ export const providers: Record<string, OAuthProvider> = {
       "Automate updates and notifications across teams"
     ],
     chat: [
-      { isAI: true, content: "Can you summarize the key decisions from our project channels this week?" },
-      { isAI: false, content: "I'll analyze the discussions. Would you like to focus on technical decisions or project timelines?" },
-      { isAI: true, content: "Technical decisions please" },
-      { isAI: false, content: "I've compiled the technical decisions from 5 channels and created a summary document. I've also flagged items that need further discussion in our next architecture review." }
+      { role: 'user', content: "Can you summarize the key decisions from our project channels this week?" },
+      { role: 'agent', content: "I'll analyze the discussions. Would you like to focus on technical decisions or project timelines?" },
+      { role: 'user', content: "Technical decisions please" },
+      { role: 'agent', content: "I've compiled the technical decisions from 5 channels and created a summary document. I've also flagged items that need further discussion in our next architecture review." }
     ]
   },
   office: {
@@ -288,10 +288,10 @@ export const providers: Record<string, OAuthProvider> = {
       "Keep documents and spreadsheets synchronized"
     ],
     chat: [
-      { isAI: true, content: "Can you analyze our Q4 sales spreadsheets and create a presentation for the board?" },
-      { isAI: false, content: "I'll examine the sales data. Would you like to emphasize growth trends or regional performance?" },
-      { isAI: true, content: "Focus on growth trends" },
-      { isAI: false, content: "I've created a presentation highlighting key growth metrics, with charts showing trend lines and projections. I've also added notes identifying the main drivers of growth." }
+      { role: 'user', content: "Can you analyze our Q4 sales spreadsheets and create a presentation for the board?" },
+      { role: 'agent', content: "I'll examine the sales data. Would you like to emphasize growth trends or regional performance?" },
+      { role: 'user', content: "Focus on growth trends" },
+      { role: 'agent', content: "I've created a presentation highlighting key growth metrics, with charts showing trend lines and projections. I've also added notes identifying the main drivers of growth." }
     ]
   },
   notion: {
@@ -317,10 +317,10 @@ export const providers: Record<string, OAuthProvider> = {
       "Search across your Notion content and organize information"
     ],
     chat: [
-      { isAI: true, content: "Can you summarize all our product specs in Notion and create a feature comparison table?" },
-      { isAI: false, content: "I'll analyze your Notion documents. Would you like to focus on current features or include the roadmap items too?" },
-      { isAI: true, content: "Let's include roadmap items as well" },
-      { isAI: false, content: "I've created a comprehensive comparison table in Notion with current features and roadmap items, color-coded by development status and priority." }
+      { role: 'user', content: "Can you summarize all our product specs in Notion and create a feature comparison table?" },
+      { role: 'agent', content: "I'll analyze your Notion documents. Would you like to focus on current features or include the roadmap items too?" },
+      { role: 'user', content: "Let's include roadmap items as well" },
+      { role: 'agent', content: "I've created a comprehensive comparison table in Notion with current features and roadmap items, color-coded by development status and priority." }
     ]
   },
   outlook: {
@@ -332,10 +332,10 @@ export const providers: Record<string, OAuthProvider> = {
       "Generate response drafts and follow-ups automatically"
     ],
     chat: [
-      { isAI: true, content: "Can you help schedule our team's 1:1 meetings for next month?" },
-      { isAI: false, content: "I'll check everyone's availability. Would you like 30-minute or 1-hour slots?" },
-      { isAI: true, content: "30-minute slots, and try to group them on the same days" },
-      { isAI: false, content: "I've scheduled all 1:1s for Tuesdays and Thursdays, found optimal times for each team member, and sent calendar invites with prep agenda templates." }
+      { role: 'user', content: "Can you help schedule our team's 1:1 meetings for next month?" },
+      { role: 'agent', content: "I'll check everyone's availability. Would you like 30-minute or 1-hour slots?" },
+      { role: 'user', content: "30-minute slots, and try to group them on the same days" },
+      { role: 'agent', content: "I've scheduled all 1:1s for Tuesdays and Thursdays, found optimal times for each team member, and sent calendar invites with prep agenda templates." }
     ]
   },
   chrome: {
@@ -347,10 +347,10 @@ export const providers: Record<string, OAuthProvider> = {
       "Synchronize information across browser sessions"
     ],
     chat: [
-      { isAI: true, content: "Can you collect pricing data from our competitor's websites?" },
-      { isAI: false, content: "I'll scan their product pages. Would you like to focus on specific product categories?" },
-      { isAI: true, content: "Yes, just the enterprise plans" },
-      { isAI: false, content: "I've gathered pricing data for enterprise plans from 5 competitors, created a comparison spreadsheet, and highlighted key differentiators in our offering." }
+      { role: 'user', content: "Can you collect pricing data from our competitor's websites?" },
+      { role: 'agent', content: "I'll scan their product pages. Would you like to focus on specific product categories?" },
+      { role: 'user', content: "Yes, just the enterprise plans" },
+      { role: 'agent', content: "I've gathered pricing data for enterprise plans from 5 competitors, created a comparison spreadsheet, and highlighted key differentiators in our offering." }
     ]
   },
   gmeet: {
@@ -362,10 +362,10 @@ export const providers: Record<string, OAuthProvider> = {
       "Track attendance and participation analytics"
     ],
     chat: [
-      { isAI: true, content: "Can you set up our weekly team syncs for next quarter?" },
-      { isAI: false, content: "I'll help schedule those. Would you like to keep the same time slots or find new ones based on team availability?" },
-      { isAI: true, content: "Let's find new times that work better for our remote team" },
-      { isAI: false, content: "I've analyzed everyone's calendars and time zones, found optimal slots, and scheduled the meetings with rotating discussion topics and prep materials." }
+      { role: 'user', content: "Can you set up our weekly team syncs for next quarter?" },
+      { role: 'agent', content: "I'll help schedule those. Would you like to keep the same time slots or find new ones based on team availability?" },
+      { role: 'user', content: "Let's find new times that work better for our remote team" },
+      { role: 'agent', content: "I've analyzed everyone's calendars and time zones, found optimal slots, and scheduled the meetings with rotating discussion topics and prep materials." }
     ]
   },
   mailchimp: {
@@ -377,10 +377,10 @@ export const providers: Record<string, OAuthProvider> = {
       "Generate personalized content for different segments"
     ],
     chat: [
-      { isAI: true, content: "Can you analyze our last campaign's performance and prepare next month's newsletter?" },
-      { isAI: false, content: "I'll review the metrics. Should we focus on improving open rates or click-through rates?" },
-      { isAI: true, content: "Let's improve click-through rates" },
-      { isAI: false, content: "I've analyzed the data and drafted a new newsletter with optimized CTAs, personalized content blocks, and A/B test variants based on successful patterns." }
+      { role: 'user', content: "Can you analyze our last campaign's performance and prepare next month's newsletter?" },
+      { role: 'agent', content: "I'll review the metrics. Should we focus on improving open rates or click-through rates?" },
+      { role: 'user', content: "Let's improve click-through rates" },
+      { role: 'agent', content: "I've analyzed the data and drafted a new newsletter with optimized CTAs, personalized content blocks, and A/B test variants based on successful patterns." }
     ]
   },
   salesforce: {
@@ -392,10 +392,10 @@ export const providers: Record<string, OAuthProvider> = {
       "Automate follow-ups and task assignments"
     ],
     chat: [
-      { isAI: true, content: "Can you analyze our pipeline and highlight deals we might close this quarter?" },
-      { isAI: false, content: "I'll examine the opportunities. Would you like to focus on deal size or closing probability?" },
-      { isAI: true, content: "Let's look at high-probability deals first" },
-      { isAI: false, content: "I've identified 8 high-probability opportunities worth $1.2M. I've created a detailed report and suggested next actions for each deal." }
+      { role: 'user', content: "Can you analyze our pipeline and highlight deals we might close this quarter?" },
+      { role: 'agent', content: "I'll examine the opportunities. Would you like to focus on deal size or closing probability?" },
+      { role: 'user', content: "Let's look at high-probability deals first" },
+      { role: 'agent', content: "I've identified 8 high-probability opportunities worth $1.2M. I've created a detailed report and suggested next actions for each deal." }
     ]
   },
   smartsheet: {
@@ -407,10 +407,10 @@ export const providers: Record<string, OAuthProvider> = {
       "Track milestones and deliverables across teams"
     ],
     chat: [
-      { isAI: true, content: "Can you update our project timeline based on this week's progress?" },
-      { isAI: false, content: "I'll review the updates. Should I adjust resource allocations or just delivery dates?" },
-      { isAI: true, content: "Let's look at both to optimize the schedule" },
-      { isAI: false, content: "I've updated the timeline, rebalanced team workloads, and flagged potential bottlenecks. I've also created a summary of changes for stakeholders." }
+      { role: 'user', content: "Can you update our project timeline based on this week's progress?" },
+      { role: 'agent', content: "I'll review the updates. Should I adjust resource allocations or just delivery dates?" },
+      { role: 'user', content: "Let's look at both to optimize the schedule" },
+      { role: 'agent', content: "I've updated the timeline, rebalanced team workloads, and flagged potential bottlenecks. I've also created a summary of changes for stakeholders." }
     ]
   }
 };

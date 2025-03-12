@@ -1,4 +1,4 @@
-import ChatDemo from "@/app/ui/components/ChatDemo";
+import ChatDemo, { ChatMessage } from "@/app/ui/components/ChatDemo";
 import Providers from "@/app/ui/components/Providers";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link"; 
@@ -20,12 +20,12 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  const messages = [
-    { isAI: true, content: "Can you please process fresh user feedback using instructions in the Feedback Processing doc?" },
-    { isAI: false, content: "Reading and analyzing the Feedback Processing document in Google Drive..." },
-    { isAI: false, content: "Here is what I'm going to do. I'll process all incoming tickets in Zendesk labeled Feedback. I'll triage them and match them to items on the Stories board on Monday. Please confirm." },
-    { isAI: true, content: "Go ahead! Can you also summarize and send a Slack message to the team once it's done so we can review it?" },
-    { isAI: false, content: "On it! We'll get back to you shortly." }
+  const messages: ChatMessage[] = [
+    { role: 'user', content: "Can you please process fresh user feedback using instructions in the Feedback Processing doc?" },
+    { role: 'agent', content: "Reading and analyzing the Feedback Processing document in Google Drive..." },
+    { role: 'agent', content: "Here is what I'm going to do. I'll process all incoming tickets in Zendesk labeled Feedback. I'll triage them and match them to items on the Stories board on Monday. Please confirm." },
+    { role: 'user', content: "Go ahead! Can you also summarize and send a Slack message to the team once it's done so we can review it?" },
+    { role: 'agent', content: "On it! We'll get back to you shortly." }
   ];
 
   return (
