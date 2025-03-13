@@ -53,6 +53,20 @@ export async function getValidConnection(userId: string, provider: string) {
   return connections[0];
 }
 
+// Helper function to get all valid connections for a specific user
+export async function getValidConnections(userId: string) {
+  const connections = await db.select().from(schema.oauthConnections)
+    .where(eq(schema.oauthConnections.userId, userId));
+
+  // Create a map of provider -> connection for easy lookup
+  const connectionMap = new Map();
+  for (const connection of connections) {
+    connectionMap.set(connection.provider, connection);
+  }
+
+  return connectionMap;
+}
+
 // Helper function to store or update OAuth tokens
 export async function storeOAuthTokens(
   userId: string,
