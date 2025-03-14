@@ -28,6 +28,7 @@ export default function Providers({ className, app = undefined, width, height }:
       <ProviderIconLink app={app} provider="smartsheet" width={width} height={height}  />
       <ProviderIconLink app={app} provider="trello" width={width} height={height}  />
       <ProviderIconLink app={app} provider="airtable" width={width} height={height}  />
+      <ProviderIconLink app={app} provider="notion" width={width} height={height}  />
     </div>
   );
 }
