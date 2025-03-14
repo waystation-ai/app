@@ -49,7 +49,7 @@ export default async function Home({ params }: { params: Promise<{ provider: str
             </ul>
             }
 
-            <Link href={config.authorizationUrl ? `/api/auth/${provider}/connect` : `/dashboard?provider=${provider}`} prefetch={false} rel="nofollow" className="aurora-btn hidden lg:block px-4 py-2 text-sm font-bold rounded hover:scale-105 transition-transform duration-300 w-1/2 text-center">
+            <Link href={config.authorizationUrl ? `/api/auth/${provider}/connect` : `/dashboard?provider=${provider}`} className="aurora-btn hidden lg:block px-4 py-2 text-sm font-bold rounded hover:scale-105 transition-transform duration-300 w-1/2 text-center">
               Connect Now
             </Link>
 
