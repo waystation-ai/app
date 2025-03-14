@@ -7,7 +7,7 @@ interface ProvidersProps {
   height?: number;
 }
 
-export default function Providers({ className, app = "chatgpt", width, height }: ProvidersProps) {
+export default function Providers({ className, app = undefined, width, height }: ProvidersProps) {
   return (
     <div className={className}>
       <ProviderIconLink app={app} provider="gdrive" width={width} height={height} />

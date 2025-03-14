@@ -7,10 +7,10 @@ export interface ProviderIconLinkProps extends ProviderIconProps {
   app?: string;
 }
 
-export function ProviderIconLink({ provider, app = "chatgpt", width = 40, height = 40 }: ProviderIconLinkProps) {
+export function ProviderIconLink({ provider, app = undefined, width = 40, height = 40 }: ProviderIconLinkProps) {
   const config = getProviderConfig(provider);
   return (
-    <Link href={`/connect/${app}/${provider}`}>
+    <Link href={app ? `/connect/${app}/${provider}` : `/connect/${provider}`}>
       <Image 
         src={`/images/tools/${provider}.svg`}
         width={width}

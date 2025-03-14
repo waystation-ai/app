@@ -40,7 +40,14 @@ export async function GET() {
 
   // Add provider-specific routes for each app
   for (const [providerKey] of Object.entries(providers)) {
-    for (const app of apps) {
+    xml += `
+    <url>
+      <loc>${domain}/connect/${providerKey}</loc>
+      <lastmod>${currentDate}</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>`;
+      for (const app of apps) {
       xml += `
   <url>
     <loc>${domain}/connect/${app}/${providerKey}</loc>

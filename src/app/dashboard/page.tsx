@@ -114,7 +114,7 @@ export default async function Page() {
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-8 gap-6 w-full my-6">
           {moreIntegrationsProviders.map(([provider, config]) => (
-            <Link key={provider} href={config.authorizationUrl ? `/connect/chatgpt/${provider}` : `/waitlist/${provider}`} className="provider-card flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+            <Link key={provider} href={config.authorizationUrl ? `/connect/${provider}` : `/waitlist/${provider}`} className="provider-card flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
               <ProviderIcon provider={provider} />
               <p className="mt-2 text-sm text-gray-600 text-center">{config.name}</p>
             </Link>
