@@ -3,8 +3,7 @@ import Link from "next/link";
 import { getProviderConfig } from "@/app/lib/config/oauth-providers";
 import Providers from "@/app/ui/components/Providers";
 import AlternativeApps from "./AlternativeApps";
-
-export type AppType = "chatgpt" | "claude" | "mcp-server" | "generic";
+import { AppType } from "./metadata";
 
 interface AppInfo {
   type: AppType;

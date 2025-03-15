@@ -1,10 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
-
-type AppType = "chatgpt" | "claude" | "mcp-server" | "generic";
+import { AppType } from "./metadata";
 
 interface AlternativeAppsProps {
-  provider: string;
+  provider?: string;
   currentApp: AppType;
 }
 
@@ -16,9 +15,9 @@ interface AppInfo {
 }
 
 // Reusable component for app links
-function AppLink({ app, provider }: { app: AppInfo; provider: string }) {
+function AppLink({ app, provider }: { app: AppInfo; provider?: string }) {
   return (
-    <Link href={`/connect/${app.type}/${provider}`} className="app-link">
+    <Link href={provider? `/connect/${app.type}/${provider}`:`/connect/${app.type}`} className="app-link">
       <Image src={app.imagePath} width={20} height={20} alt={app.name} />
       <span>{app.displayName}</span>
     </Link>
