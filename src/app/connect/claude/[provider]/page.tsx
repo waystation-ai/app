@@ -68,7 +68,7 @@ export default async function Home({ params }: { params: Promise<{ provider: str
             <div className="sm:mt-8">
               <p>And make it even more powerful with other providers we support</p>
               <div>
-                <Providers className="grid grid-cols-9 gap-1 mt-3" width={30} height={30} />
+                <Providers className="grid grid-cols-9 gap-1 mt-3" width={30} height={30} app={"claude"} />
               </div>
             </div>
 
