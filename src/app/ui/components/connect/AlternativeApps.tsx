@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-type AppType = "chatgpt" | "claude" | "mcp-server";
+type AppType = "chatgpt" | "claude" | "mcp-server" | "generic";
 
 interface AlternativeAppsProps {
   provider: string;
@@ -13,6 +13,16 @@ interface AppInfo {
   name: string;
   imagePath: string;
   displayName: string;
+}
+
+// Reusable component for app links
+function AppLink({ app, provider }: { app: AppInfo; provider: string }) {
+  return (
+    <Link href={`/connect/${app.type}/${provider}`} className="app-link">
+      <Image src={app.imagePath} width={20} height={20} alt={app.name} />
+      <span>{app.displayName}</span>
+    </Link>
+  );
 }
 
 const APPS: AppInfo[] = [
@@ -37,21 +47,29 @@ const APPS: AppInfo[] = [
 ];
 
 export default function AlternativeApps({ provider, currentApp }: AlternativeAppsProps) {
-  // Filter out the current app
+  // For generic app type, show all apps
+  if (currentApp === "generic") {
+    return (
+      <div className="flex items-center gap-4 mt-4 mb-8">
+        <span className="text-sm font-medium text-gray-500">Works with</span>
+        <AppLink app={APPS[0]} provider={provider} />
+        <span className="text-sm font-medium text-gray-500">or</span>
+        <AppLink app={APPS[1]} provider={provider} />
+        <span className="text-sm font-medium text-gray-500">or</span>
+        <AppLink app={APPS[2]} provider={provider} />
+      </div>
+    );
+  }
+
+  // For specific app types, filter out the current app and show alternatives
   const alternativeApps = APPS.filter(app => app.type !== currentApp);
 
   return (
     <div className="flex items-center gap-4 mt-4 mb-8">
       <span className="text-sm font-medium text-gray-500">Also connects to</span>
-      <Link href={`/connect/${alternativeApps[0].type}/${provider}`} className="app-link">
-        <Image src={alternativeApps[0].imagePath} width={20} height={20} alt={alternativeApps[0].name} />
-        <span>{alternativeApps[0].displayName}</span>
-      </Link>
+      <AppLink app={alternativeApps[0]} provider={provider} />
       <span className="text-sm font-medium text-gray-500">or</span>
-      <Link href={`/connect/${alternativeApps[1].type}/${provider}`} className="app-link">
-        <Image src={alternativeApps[1].imagePath} width={20} height={20} alt={alternativeApps[1].name} />
-        <span>{alternativeApps[1].displayName}</span>
-      </Link>
+      <AppLink app={alternativeApps[1]} provider={provider} />
     </div>
   );
 }

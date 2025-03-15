@@ -4,25 +4,35 @@ import { getProviderConfig } from "@/app/lib/config/oauth-providers";
 import Providers from "@/app/ui/components/Providers";
 import AlternativeApps from "./AlternativeApps";
 
-export type AppType = "chatgpt" | "claude" | "mcp-server";
+export type AppType = "chatgpt" | "claude" | "mcp-server" | "generic";
 
 interface AppInfo {
   type: AppType;
   displayName: string;
+  className?: string;
+  titlePrefix?: string;
 }
 
 const APP_INFO: Record<AppType, AppInfo> = {
   "chatgpt": {
     type: "chatgpt",
     displayName: "ChatGPT",
+    titlePrefix: "Connect"
   },
   "claude": {
     type: "claude",
     displayName: "Claude Desktop",
+    titlePrefix: "Connect"
   },
   "mcp-server": {
     type: "mcp-server",
     displayName: "any MCP host",
+    titlePrefix: "Connect",
+  },
+  "generic": {
+    type: "generic",
+    displayName: "your LLM",
+    titlePrefix: "Integrate"
   }
 };
 
@@ -44,7 +54,7 @@ export default async function ConnectPage({ params, appType }: ConnectPageProps)
           {/* Left Column - Branding */}
           <div className="flex flex-col justify-center text-left">
             <h1 className="text-3xl lg:text-4xl font-bold mb-4">
-              Connect {appInfo.displayName} to <span className="bg-yellow-100">{config.name}</span>
+              {appInfo.titlePrefix || "Connect"} {appInfo.displayName} with <span className="bg-yellow-100">{config.name}</span>
             </h1>
             <h2 className="text-lg lg:text-xl mb-2 leading-snug">
               {config.description}
@@ -69,7 +79,12 @@ export default async function ConnectPage({ params, appType }: ConnectPageProps)
             <div className="sm:mt-8">
               <p>And make it even more powerful with other providers we support</p>
               <div>
-                <Providers className="grid grid-cols-9 gap-1 mt-3" width={30} height={30} app={appType} />
+                <Providers 
+                  className="grid grid-cols-9 gap-1 mt-3" 
+                  width={30} 
+                  height={30} 
+                  app={appType !== "generic" ? appType : undefined} 
+                />
               </div>
             </div>
           </div>

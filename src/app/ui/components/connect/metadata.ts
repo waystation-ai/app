@@ -1,6 +1,6 @@
 import { getProviderConfig } from "@/app/lib/config/oauth-providers";
 
-type AppType = "chatgpt" | "claude" | "mcp-server";
+type AppType = "chatgpt" | "claude" | "mcp-server" | "generic";
 
 interface AppMetadataInfo {
   name: string;
@@ -19,6 +19,10 @@ const APP_METADATA: Record<AppType, AppMetadataInfo> = {
   "mcp-server": {
     name: "any MCP host",
     description: "With universal WayStation MCP Server you can"
+  },
+  "generic": {
+    name: "LLM",
+    description: "With WayStation plugin for LLMs you can"
   }
 };
 
@@ -30,6 +34,11 @@ export async function generateConnectMetadata(
   const config = getProviderConfig(provider);
   const appInfo = APP_METADATA[appType];
 
+  // For generic app type, use a different URL format
+  const url = appType === "generic" 
+    ? `/connect/${provider}` 
+    : `/connect/${appType}/${provider}`;
+
   return {
     title: `Integrate ${appInfo.name} with ${config.name}`,
     description: `${appInfo.description} ${config.description}`,
@@ -38,7 +47,7 @@ export async function generateConnectMetadata(
       title: `Integrate ${appInfo.name} with ${config.name}`,
       description: `${appInfo.description} ${config.description}`,
       siteName: "WayStation",
-      url: `/connect/${appType}/${provider}`,
+      url,
       images: {
         url: '/images/promo-wide.png'
       }

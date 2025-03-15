@@ -5,6 +5,6 @@ export async function generateMetadata({ params }: { params: Promise<{ provider:
   return generateConnectMetadata(params, "claude");
 }
 
-export default async function Page({ params }: { params: { provider: string } }) {
-  return <ConnectPage params={params} appType="claude" />;
+export default async function Page({ params }: { params: Promise<{ provider: string }> }) {
+  return <ConnectPage params={await params} appType="claude" />;
 }
