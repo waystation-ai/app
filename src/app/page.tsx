@@ -41,15 +41,15 @@ export default function Home() {
               no-code, secure integration hub.
             </h2>
             <div className="mt-6">
-              <Providers className="grid grid-cols-6 lg:grid-cols-8 gap-4 lg:gap-3" />
+              <Providers className="grid grid-cols-8 gap-4 lg:gap-3" />
             </div>
             <SignedIn>
-              <Link href="/dashboard" className="aurora-btn hidden lg:block px-4 py-2 text-sm font-bold rounded hover:scale-105 transition-transform duration-300 w-1/2 text-center">
+              <Link href="/dashboard" className="getstarted-btn">
                 Get Started
               </Link>
             </SignedIn>
             <SignedOut>
-              <Link href="/sign-in" className="aurora-btn hidden lg:block px-4 py-2 text-sm font-bold rounded hover:scale-105 transition-transform duration-300 w-1/2 text-center">
+              <Link href="/sign-in" className="getstarted-btn">
                 Get Started
               </Link>
             </SignedOut>

@@ -68,7 +68,7 @@ export default async function ConnectPage({ params, appType }: ConnectPageProps)
 
             <Link
               href={config.authorizationUrl ? `/api/auth/${provider}/connect` : `/dashboard?provider=${provider}`}
-              className="aurora-btn hidden lg:block px-4 py-2 text-sm font-bold rounded hover:scale-105 transition-transform duration-300 w-1/2 text-center"
+              className="getstarted-btn"
             >
               Connect Now
             </Link>

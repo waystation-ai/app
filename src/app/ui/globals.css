@@ -84,6 +84,10 @@ li {
   transform: translateY(-1px);
 }
 
+.getstarted-btn {
+  @apply aurora-btn px-4 py-2 text-sm font-bold rounded hover:scale-105 transition-transform duration-300 w-full md:w-1/2 text-center
+}
+
 
 .provider-icon {
   @apply opacity-80 transition-opacity

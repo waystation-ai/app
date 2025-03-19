@@ -49,12 +49,12 @@ export default function AlternativeApps({ provider, currentApp }: AlternativeApp
   // For generic app type, show all apps
   if (currentApp === "generic") {
     return (
-      <div className="flex items-center gap-4 mt-4 mb-8">
-        <span className="text-sm font-medium text-gray-500">Works with</span>
+      <div className="flex flex-wrap items-center gap-3 mt-4 mb-8">
+        <span className="flex text-sm font-medium text-gray-500">Works with</span>
         <AppLink app={APPS[0]} provider={provider} />
-        <span className="text-sm font-medium text-gray-500">or</span>
+        <span className="flex text-sm font-medium text-gray-500">or</span>
         <AppLink app={APPS[1]} provider={provider} />
-        <span className="text-sm font-medium text-gray-500">or</span>
+        <span className="flex text-sm font-medium text-gray-500">or</span>
         <AppLink app={APPS[2]} provider={provider} />
       </div>
     );
@@ -64,7 +64,7 @@ export default function AlternativeApps({ provider, currentApp }: AlternativeApp
   const alternativeApps = APPS.filter(app => app.type !== currentApp);
 
   return (
-    <div className="flex items-center gap-4 mt-4 mb-8">
+    <div className="flex flex-wrap items-center gap-3 mt-4 mb-8">
       <span className="text-sm font-medium text-gray-500">Also connects to</span>
       <AppLink app={alternativeApps[0]} provider={provider} />
       <span className="text-sm font-medium text-gray-500">or</span>
