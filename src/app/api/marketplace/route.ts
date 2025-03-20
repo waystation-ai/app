@@ -15,7 +15,12 @@ export async function GET(request: Request) {
     const isAuthenticated = !!userId;
     
     // Get all providers from the registry
-    const providers = registry.getAllProviders();
+    const registryProviders = registry.getAllProviders();
+    
+    // Create a map of registry providers for easy lookup
+    const registryProvidersMap = new Map(
+      registryProviders.map(provider => [provider.name, provider])
+    );
     
     // Get connection status for authenticated users
     const connections = isAuthenticated 
@@ -25,22 +30,30 @@ export async function GET(request: Request) {
     // Get request origin for constructing full URLs
     const origin = getRequestOrigin(request);
     
+    // Combine registry providers with OAuth providers
+    const allProviderIds = new Set([
+      ...registryProvidersMap.keys(),
+      ...Object.keys(oauthProviders)
+    ]);
+    
     // Format the response
-    const formattedProviders = providers.map(provider => {
-      // Get the OAuth provider config if available
-      const oauthProvider = oauthProviders[provider.name];
+    const formattedProviders = Array.from(allProviderIds).map(providerId => {
+      const registryProvider = registryProvidersMap.get(providerId);
+      const oauthProvider = oauthProviders[providerId];
       
       return {
-        id: provider.name,
-        name: oauthProvider?.name || provider.name, // Use OAuth provider name as title
-        description: provider.description,
-        icon: `${origin}/images/tools/${provider.name}.svg`,
-        isConnected: isAuthenticated ? connections.has(provider.name) : false,
-        tools: provider.tools.map(tool => ({
-          name: tool.id,
-          summary: tool.summary,
-          description: tool.description || ''
-        }))
+        id: providerId,
+        name: oauthProvider?.name || providerId,
+        description: registryProvider?.description || oauthProvider?.description || '',
+        icon: `${origin}/images/tools/${providerId}.svg`,
+        isConnected: isAuthenticated ? connections.has(providerId) : false,
+        tools: registryProvider 
+          ? registryProvider.tools.map(tool => ({
+              name: tool.id,
+              summary: tool.summary,
+              description: tool.description || ''
+            }))
+          : [] // Empty tools array for providers without registry entries
       };
     });
     
