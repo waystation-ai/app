@@ -38,9 +38,10 @@ const APP_INFO: Record<AppType, AppInfo> = {
 interface ConnectPageProps {
   params: { provider: string };
   appType: AppType;
+  redirectUri?: string;
 }
 
-export default async function ConnectPage({ params, appType }: ConnectPageProps) {
+export default async function ConnectPage({ params, appType, redirectUri }: ConnectPageProps) {
   const { provider } = params;
   const config = getProviderConfig(provider);
   const appInfo = APP_INFO[appType];
@@ -67,7 +68,10 @@ export default async function ConnectPage({ params, appType }: ConnectPageProps)
             )}
 
             <Link
-              href={config.authorizationUrl ? `/api/auth/${provider}/connect` : `/dashboard?provider=${provider}`}
+              href={config.authorizationUrl 
+                ? `/api/auth/${provider}/connect${redirectUri ? `?redirect_uri=${encodeURIComponent(redirectUri)}` : ''}`
+                : `/dashboard?provider=${provider}${redirectUri ? `&redirect_uri=${encodeURIComponent(redirectUri)}` : ''}`
+              }
               className="getstarted-btn"
             >
               Connect Now

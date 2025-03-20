@@ -18,6 +18,7 @@ export const oauthStates = pgTable('oauth_states', {
   provider: varchar('provider', { length: 50 }).notNull(),
   codeVerifier: text('code_verifier'),
   userId: text('user_id').notNull(),
+  redirectUri: text('redirect_uri'),
   createdAt: timestamp('created_at').defaultNow(),
   expiresAt: timestamp('expires_at').notNull()
 });

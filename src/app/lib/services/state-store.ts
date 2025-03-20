@@ -7,6 +7,7 @@ interface StateData {
   provider: string;
   codeVerifier?: string;
   userId: string;
+  redirectUri?: string;
 }
 
 export class StateStore {
@@ -19,6 +20,7 @@ export class StateStore {
         provider: stateData.provider,
         codeVerifier: stateData.codeVerifier,
         userId: stateData.userId,
+        redirectUri: stateData.redirectUri,
         expiresAt
       });
       
@@ -46,7 +48,8 @@ export class StateStore {
         state: stateRecord.state,
         provider: stateRecord.provider,
         codeVerifier: stateRecord.codeVerifier || undefined,
-        userId: stateRecord.userId
+        userId: stateRecord.userId,
+        redirectUri: stateRecord.redirectUri || undefined
       };
     } catch (error) {
       console.error(`Failed to retrieve OAuth state ${state}:`, error);

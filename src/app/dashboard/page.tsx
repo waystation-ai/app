@@ -12,6 +12,7 @@ import ProviderCard from '@/app/ui/components/ProviderCard';
 import { ProviderIcon } from '@/app/ui/components/ProviderIcon';
 import { LaunchPad } from '../ui/components/LaunchPad';
 import { LaunchPadBasement } from '../ui/components/LaunchPadBasement';
+import { RedirectHandler } from '../ui/components/RedirectHandler';
  
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -77,6 +78,8 @@ export default async function Page() {
 
   return (
     <div className="mt-4 sm:mt-8 px-4 sm:px-6 lg:px-8  mx-auto">
+      {/* Add the redirect handler */}
+      <RedirectHandler />
       {/* Top section - Two columns */}
       <div className="flex flex-col lg:flex-row gap-8 mb-12">
         {/* Left Column - Connect your apps */}

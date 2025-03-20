@@ -45,16 +45,21 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     // Clean up used state after successful token exchange and storage
     await stateStore.deleteState(state);
 
-    // For providers with settings, redirect to dashboard with flag to auto-open settings
-    // Currently only Google Drive has settings, but this is extensible
-    const providersWithSettings = ['gdrive'];
+    // Always redirect to dashboard, but include redirect_uri as a query parameter if it exists
+    const dashboardUrl = new URL('/dashboard', getRequestOrigin(request));
     
+    // For providers with settings, add the justConnected flag
+    const providersWithSettings = ['gdrive'];
     if (providersWithSettings.includes(provider)) {
-      return NextResponse.redirect(new URL('/dashboard?justConnected=true', getRequestOrigin(request)));
+      dashboardUrl.searchParams.append('justConnected', 'true');
     }
     
-    // For providers without settings, redirect to dashboard without flag
-    return NextResponse.redirect(new URL('/dashboard', getRequestOrigin(request)));
+    // Add the redirect_uri as a query parameter if it exists
+    if (storedState.redirectUri) {
+      dashboardUrl.searchParams.append('redirect_uri', storedState.redirectUri);
+    }
+    
+    return NextResponse.redirect(dashboardUrl);
   } catch (error) {
     console.error('Error in OAuth callback:', error);
     return NextResponse.redirect(new URL('/settings/connections?error=exchange_failed', getRequestOrigin(request)));
