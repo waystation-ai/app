@@ -7,11 +7,11 @@ export async function generateMetadata({ params }: { params: Promise<{ provider:
 
 export default async function Page({ params, searchParams }: { 
   params: Promise<{ provider: string }>;
-  searchParams?: { redirect_uri?: string };
+  searchParams?: Promise<{ redirect_uri?: string }>;
 }) {
   return <ConnectPage 
     params={await params} 
     appType="claude" 
-    redirectUri={searchParams?.redirect_uri} 
+    redirectUri={(await searchParams)?.redirect_uri} 
   />;
 }
