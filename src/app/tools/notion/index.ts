@@ -31,7 +31,6 @@ export const notionProvider = registerProvider({
     'read_blocks',
     'write_blocks'
   ],
-  redirectUri: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/notion/callback`,
   
   // Marketing information
   bullets: [

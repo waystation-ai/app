@@ -1,5 +1,3 @@
-"use client";
-
 import ChatDemo, { ChatMessage } from "@/app/ui/components/ChatDemo";
 import Providers from "@/app/ui/components/Providers";
 import { SignedIn, SignedOut } from "@clerk/nextjs";

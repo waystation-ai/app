@@ -22,7 +22,6 @@ export const slackProvider = registerProvider({
     'files:read',
     'users:read'
   ],
-  redirectUri: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/slack/callback`,
   
   // Marketing information
   bullets: [

@@ -57,9 +57,6 @@ export class OAuthService {
     if (!config.clientId) {
       throw new Error(`Client ID not configured for provider: ${provider}`);
     }
-    if (!config.redirectUri) {
-      throw new Error(`Redirect URI not configured for provider: ${provider}`);
-    }
     if (!config.authorizationUrl) {
       throw new Error(`Authorization URL not configured for provider: ${provider}`);
     }
@@ -73,7 +70,7 @@ export class OAuthService {
 
     const params = new URLSearchParams({
       client_id: config.clientId,
-      redirect_uri: config.redirectUri,
+      redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/${provider}/callback`,
       response_type: 'code',
       access_type: 'offline',
       scope: config.scopes.join(' '),
@@ -108,9 +105,6 @@ export class OAuthService {
     if (!config.clientSecret) {
       throw new Error(`Client secret not configured for provider: ${provider}`);
     }
-    if (!config.redirectUri) {
-      throw new Error(`Redirect URI not configured for provider: ${provider}`);
-    }
     if (!config.tokenUrl) {
       throw new Error(`Token URL not configured for provider: ${provider}`);
     }
@@ -119,7 +113,7 @@ export class OAuthService {
       client_id: config.clientId,
       client_secret: config.clientSecret,
       code,
-      redirect_uri: config.redirectUri,
+      redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/${provider}/callback`,
       grant_type: 'authorization_code'
     });
 

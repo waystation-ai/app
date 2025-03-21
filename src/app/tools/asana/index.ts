@@ -26,7 +26,6 @@ export const asanaProvider = registerProvider({
     'tasks:write',
     'workspaces:read'
   ],
-  redirectUri: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/asana/callback`,
   
   // Marketing information
   bullets: [

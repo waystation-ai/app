@@ -23,7 +23,6 @@ export const mondayProvider = registerProvider({
     'updates:read',
     'updates:write'
   ],
-  redirectUri: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/monday/callback`,
   
   // Marketing information
   bullets: [

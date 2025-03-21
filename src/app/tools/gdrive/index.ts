@@ -15,7 +15,6 @@ export const gdriveProvider = registerProvider({
   scopes: [
     'https://www.googleapis.com/auth/drive.file'
   ],
-  redirectUri: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/gdrive/callback`,
   
   // Marketing information
   bullets: [

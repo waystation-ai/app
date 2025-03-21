@@ -15,7 +15,6 @@ export const gmailProvider = registerProvider({
     'https://www.googleapis.com/auth/gmail.send',
     'https://www.googleapis.com/auth/gmail.labels'
   ],
-  redirectUri: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/gmail/callback`,
   
   // Marketing information
   bullets: [

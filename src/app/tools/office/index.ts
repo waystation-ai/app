@@ -18,7 +18,6 @@ export const officeProvider = registerProvider({
     'Files.Read.All',
     'offline_access'
   ],
-  redirectUri: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/office/callback`,
   
   // Marketing information
   bullets: [

@@ -20,7 +20,6 @@ export const teamsProvider = registerProvider({
     'ChannelMessage.Send',
     'offline_access'
   ],
-  redirectUri: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/teams/callback`,
   
   // Marketing information
   bullets: [

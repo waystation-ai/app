@@ -40,7 +40,6 @@ export interface Provider {
   authorizationUrl?: string;
   tokenUrl?: string;
   scopes?: string[];
-  redirectUri?: string;
   
   // Marketing fields
   bullets?: string[];

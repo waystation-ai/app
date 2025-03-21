@@ -20,7 +20,6 @@ export const airtableProvider = registerProvider({
     'data.records:write',
     'schema.bases:read'
   ],
-  redirectUri: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/airtable/callback`,
   
   // Marketing information
   bullets: [
