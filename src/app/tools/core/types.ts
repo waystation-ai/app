@@ -41,6 +41,7 @@ export interface Provider {
   authorizationUrl?: string;
   tokenUrl?: string;
   scopes?: string[];
+  group?: string;
   
   // Marketing fields
   bullets?: string[];
