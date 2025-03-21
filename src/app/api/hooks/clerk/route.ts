@@ -15,6 +15,7 @@ export async function POST(req: Request) {
       console.log('User created:', data.id);
   } 
 
-  return Response.json({ success: true });
+  await posthog.shutdown();
 
+  return Response.json({ success: true });
 }

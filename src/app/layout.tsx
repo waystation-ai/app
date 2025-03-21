@@ -2,7 +2,7 @@ import "./ui/globals.css";
 import { sora } from './ui/fonts';
 
 import { ClerkProvider} from '@clerk/nextjs';
-import { PostHogProvider } from './providers';
+import { PostHogProvider } from './posthog';
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import { GoogleTagManager } from '@next/third-parties/google';
