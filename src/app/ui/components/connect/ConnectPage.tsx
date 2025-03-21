@@ -1,6 +1,6 @@
 import ChatDemo from "@/app/ui/components/ChatDemo";
 import Link from "next/link";
-import { getProviderConfig } from "@/app/lib/config/oauth-providers";
+import { getProviderConfig } from "@/app/lib/services/provider-config";
 import Providers from "@/app/ui/components/Providers";
 import AlternativeApps from "./AlternativeApps";
 import { AppType } from "./metadata";

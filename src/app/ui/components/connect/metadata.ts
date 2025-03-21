@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { getProviderConfig } from "@/app/lib/config/oauth-providers";
+import { getProviderConfig } from "@/app/lib/services/provider-config";
 
 export type AppType = "chatgpt" | "claude" | "mcp-server" | "generic";
 

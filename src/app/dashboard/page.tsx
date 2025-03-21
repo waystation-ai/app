@@ -6,7 +6,10 @@ import Link from 'next/link';
 
 import { db } from '@/app/lib/db';
 import { oauthConnections } from '@/app/lib/db/schema';
-import { providers } from '@/app/lib/config/oauth-providers';
+import { registry } from '@/app/tools/core/registry';
+
+// Import the main entry point to ensure all providers are registered
+import '@/app/tools/main';
 
 import ProviderCard from '@/app/ui/components/ProviderCard';
 import { ProviderIcon } from '@/app/ui/components/ProviderIcon';
@@ -38,19 +41,24 @@ export default async function Page() {
     // Continue with empty connections
   }
 
+  // Get all providers from registry
+  const allProviders = registry.getAllProviders();
+  
   // Get all providers with authorization URLs
-  const providersWithAuth = Object.entries(providers)
-    .filter(([, config]) => config.authorizationUrl);
+  const providersWithAuth = allProviders
+    .filter(provider => provider.authorizationUrl)
+    .map(provider => [provider.id, provider] as [string, typeof provider]);
   
   // Get providers without authorization URLs
-  const providersWithoutAuth = Object.entries(providers)
-    .filter(([, config]) => !config.authorizationUrl);
+  const providersWithoutAuth = allProviders
+    .filter(provider => !provider.authorizationUrl)
+    .map(provider => [provider.id, provider] as [string, typeof provider]);
   
   // Split into connected and unconnected providers
   const connectedProviderEntries = providersWithAuth
-    .filter(([provider]) => connectedProviders[provider]);
+    .filter(([providerName]) => connectedProviders[providerName]);
   const unconnectedProviderEntries = providersWithAuth
-    .filter(([provider]) => !connectedProviders[provider]);
+    .filter(([providerName]) => !connectedProviders[providerName]);
   
   // Determine which providers to display in "Connect your apps"
   let providersToDisplay;
@@ -66,12 +74,12 @@ export default async function Page() {
   
   // Create a Set of provider IDs that are displayed in "Connect your apps"
   const displayedProviderIds = new Set(
-    providersToDisplay.map(([provider]) => provider)
+    providersToDisplay.map(([providerName]) => providerName)
   );
   
   // Get providers with authorization URLs that weren't displayed
   const remainingAuthProviders = providersWithAuth
-    .filter(([provider]) => !displayedProviderIds.has(provider));
+    .filter(([providerName]) => !displayedProviderIds.has(providerName));
   
   // Combine both for "More integrations"
   const moreIntegrationsProviders = [...remainingAuthProviders, ...providersWithoutAuth];

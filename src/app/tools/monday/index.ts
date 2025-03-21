@@ -6,8 +6,39 @@ import { updateMondayItem } from './update-item';
 import { createMondayUpdate } from './create-update';
 
 export const mondayProvider = registerProvider({
-  name: 'monday',
+  id: 'monday',
+  name: 'Monday',
   description: 'Access and manage your Monday.com boards, items, and updates seamlessly.',
+  
+  // OAuth settings
+  clientId: process.env.MONDAY_CLIENT_ID || '',
+  clientSecret: process.env.MONDAY_CLIENT_SECRET || '',
+  authorizationUrl: 'https://auth.monday.com/oauth2/authorize',
+  tokenUrl: 'https://auth.monday.com/oauth2/token',
+  scopes: [
+    'me:read',
+    'boards:read',
+    'boards:write',
+    'workspaces:read',
+    'updates:read',
+    'updates:write'
+  ],
+  redirectUri: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/monday/callback`,
+  
+  // Marketing information
+  bullets: [
+    "Automate routine tasks and updates across your Monday boards",
+    "Transform requests and feedback into organized board items",
+    "Generate progress reports and insights from your Monday data"
+  ],
+  chat: [
+    { role: 'user', content: "Can you process all the customer feedback from last week and organize it in Monday?" },
+    { role: 'agent', content: "I'll analyze the feedback and update our Customer Feedback board. Would you like me to categorize by priority or feature type?" },
+    { role: 'user', content: "Let's categorize by feature type" },
+    { role: 'agent', content: "Processing feedback and creating categorized items in Monday. I'll also prepare a summary of key trends for our next team meeting." }
+  ],
+  
+  // Tools
   tools: [
     listMondayBoards,
     readMondayBoard,

@@ -1,18 +1,26 @@
 import ProviderCard from '@/app/ui/components/ProviderCard';
-import { providers } from '@/app/lib/config/oauth-providers';
+import { registry } from '@/app/tools/core/registry';
+
+// Import the main entry point to ensure all providers are registered
+import '@/app/tools/main';
 
 export default async function Page() {
   const connectedProviders: Record<string, boolean> = {};
 
+  // Get all providers from registry
+  const allProviders = registry.getAllProviders();
+  
   // Get providers with authorization URLs for "Connect your apps" section
-  const providersToDisplay = Object.entries(providers)
-    .filter(([, config]) => config.authorizationUrl)
-    .slice(0, 4);
+  const providersToDisplay = allProviders
+    .filter(provider => provider.authorizationUrl)
+    .slice(0, 4)
+    .map(provider => [provider.id, provider] as [string, typeof provider]);
   
   // Get providers without authorization URLs for "More integrations" section
-  const moreIntegrationsProviders = Object.entries(providers)
-    .filter(([, config]) => !config.authorizationUrl)
-    .slice(0, 8);
+  const moreIntegrationsProviders = allProviders
+    .filter(provider => !provider.authorizationUrl)
+    .slice(0, 8)
+    .map(provider => [provider.id, provider] as [string, typeof provider]);
 
   return (
     <div className="mt-4 sm:mt-8 px-4 sm:px-6 lg:px-8 mx-auto">

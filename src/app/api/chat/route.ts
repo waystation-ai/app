@@ -42,7 +42,7 @@ export async function POST(req: Request) {
       
       for (const provider of providers) {
         // Check if the user has a valid connection to this provider
-        const connection = connections.get(provider.name);
+        const connection = connections.get(provider.id);
 
         if (!connection)
           continue;

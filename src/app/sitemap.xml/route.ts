@@ -1,4 +1,7 @@
-import { providers } from '../lib/config/oauth-providers';
+import { registry } from '../tools/core/registry';
+
+// Import the main entry point to ensure all providers are registered
+import '@/app/tools/main';
 
 export async function GET() {
   // Get current date for lastmod
@@ -38,8 +41,12 @@ export async function GET() {
   // Define supported apps
   const apps = ['chatgpt', 'claude', 'mcp-server'];
 
+  // Get all providers from registry
+  const allProviders = registry.getAllProviders();
+
   // Add provider-specific routes for each app
-  for (const [providerKey] of Object.entries(providers)) {
+  for (const provider of allProviders) {
+    const providerKey = provider.id;
     xml += `
     <url>
       <loc>${domain}/connect/${providerKey}</loc>

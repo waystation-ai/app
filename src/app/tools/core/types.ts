@@ -29,9 +29,25 @@ export interface Tool<T = unknown, R = unknown> {
 }
 
 export interface Provider {
+  id: string;
   name: string;
   description: string;
   tools: Tool<any, any>[]; // eslint-disable-line @typescript-eslint/no-explicit-any
+  
+  // OAuth fields (optional for providers without OAuth)
+  clientId?: string;
+  clientSecret?: string;
+  authorizationUrl?: string;
+  tokenUrl?: string;
+  scopes?: string[];
+  redirectUri?: string;
+  
+  // Marketing fields
+  bullets?: string[];
+  chat?: Array<{
+    role: 'user' | 'agent';
+    content: string;
+  }>;
 }
 
 export function defineTool<T, R>(tool: Tool<T, R>): Tool<T, R> {

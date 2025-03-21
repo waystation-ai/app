@@ -1,7 +1,7 @@
 import ChatDemo from "@/app/ui/components/ChatDemo";
 import WaitlistButton from "@/app/ui/components/WaitlistButton";
 
-import { getProviderConfig } from "@/app/lib/config/oauth-providers";
+import { getProviderConfig } from "@/app/lib/services/provider-config";
 import { auth } from "@clerk/nextjs/server";
 import { checkWaitlistStatus } from "@/app/lib/db";
  

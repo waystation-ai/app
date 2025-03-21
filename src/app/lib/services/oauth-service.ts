@@ -1,5 +1,5 @@
 import { auth } from '@clerk/nextjs/server';
-import { getProviderConfig } from '@/app/lib/config/oauth-providers';
+import { getProviderConfig } from '@/app/lib/services/provider-config';
 import { getValidConnection, storeOAuthTokens } from '@/app/lib/db';
 import { z } from 'zod';
 import { Buffer } from 'buffer';

@@ -4,12 +4,12 @@ export class ProviderRegistry {
   private providers: Map<string, Provider> = new Map();
   
   registerProvider(provider: Provider): Provider {
-    this.providers.set(provider.name, provider);
+    this.providers.set(provider.id, provider);
     return provider;
   }
   
-  getProvider(name: string): Provider | undefined {
-    return this.providers.get(name);
+  getProvider(id: string): Provider | undefined {
+    return this.providers.get(id);
   }
   
   getAllProviders(): Provider[] {
