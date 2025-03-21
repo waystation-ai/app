@@ -28,7 +28,7 @@ export const listNotionDatabases = defineTool({
   },
   handler: async ({ context }) => {
     //const result = await queryNotionApi(context.userId, '/databases');
-    const result = await queryNotionApi(context.userId, '/search', 'POST', {
+    const result = await queryNotionApi(context, '/search', 'POST', {
       filter: {
         value: 'database',
         property: 'object'

@@ -30,7 +30,7 @@ export const updateRecord = defineTool({
   },
   handler: async ({ context, params }) => {
     try {
-      const response = await callAirtableApi(`/${params.baseId}/${params.tableId}/${params.recordId}`,
+      const response = await callAirtableApi(context, `/${params.baseId}/${params.tableId}/${params.recordId}`,
         {
           method: 'PUT',
           userId: context.userId,

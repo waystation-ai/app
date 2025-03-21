@@ -58,7 +58,7 @@ export const createAsanaTask = defineTool({
     }
     
     const result = await queryAsanaApi(
-      context.userId,
+      context,
       '/tasks',
       'POST',
       taskData

@@ -31,7 +31,7 @@ export const listNotionPages = defineTool({
     }
   },
   handler: async ({ context }) => {
-    const result = await queryNotionApi(context.userId, '/search', 'POST', {
+    const result = await queryNotionApi(context, '/search', 'POST', {
       filter: {
         value: 'page',
         property: 'object'

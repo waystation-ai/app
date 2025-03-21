@@ -23,7 +23,7 @@ export const createNotionDatabaseItem = defineTool({
   },
   handler: async ({ context, params }) => {
     const result = await queryNotionApi(
-      context.userId,
+      context,
       '/pages',
       'POST',
       {

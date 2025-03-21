@@ -1,7 +1,8 @@
+import { ToolContext } from '../core/types';
 import { queryMicrosoftGraphApi } from '../shared/microsoft-graph-api';
 
 export async function queryTeamsApi<T>(
-  userId: string, 
+  context: ToolContext, 
   endpoint: string, 
   options: {
     method?: 'GET' | 'POST' | 'PATCH' | 'DELETE',
@@ -9,8 +10,7 @@ export async function queryTeamsApi<T>(
     body?: Record<string, unknown>
   } = {}
 ): Promise<T> {
-  return queryMicrosoftGraphApi<T>(userId, endpoint, { 
+  return queryMicrosoftGraphApi<T>(context, endpoint, { 
     ...options,
-    providerName: 'teams'
   });
 }

@@ -1,14 +1,13 @@
-import { oauthService } from '@/app/lib/services/oauth-service';
-import { ToolResult } from '../core/types';
+import { ToolContext, ToolResult } from '../core/types';
 
 export async function queryNotionApi(
-  userId: string, 
+  context: ToolContext, 
   endpoint: string, 
   method: 'GET' | 'POST' | 'PATCH' | 'DELETE' = 'GET',
   body?: Record<string, unknown>
 ): Promise<ToolResult> {
   try {
-    const accessToken = await oauthService.getValidAccessToken('notion', userId);
+    const accessToken = await context.getAccessToken();
     
     const response = await fetch(`https://api.notion.com/v1${endpoint}`, {
       method,

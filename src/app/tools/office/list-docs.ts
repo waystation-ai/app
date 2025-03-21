@@ -63,7 +63,7 @@ export const listDocs = defineTool({
       : 'me/drive/root/children';
       
     const response = await queryOffice365Api<DriveItemsResponse>(
-      context.userId,
+      context,
       endpoint,
       {
         $select: 'id,name,lastModifiedDateTime,webUrl,folder,file',

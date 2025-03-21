@@ -34,7 +34,7 @@ export const listAsanaProjects = defineTool({
     queryParams.append('opt_fields', 'id,name,completed,due_on,custom_field_settings.custom_field');
 
     const result = await queryAsanaApi(
-      context.userId, 
+      context, 
       `/workspaces/${params.workspaceId}/projects?${queryParams.toString()}`
     );
     

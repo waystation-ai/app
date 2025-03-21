@@ -357,14 +357,14 @@ export const readNotionPage = defineTool({
   },
   handler: async ({ context, params }) => {
     // Get page metadata
-    const pageResult = await queryNotionApi(context.userId, `/pages/${params.pageId}`);
+    const pageResult = await queryNotionApi(context, `/pages/${params.pageId}`);
     
     if (pageResult.error) {
       throw new Error(JSON.stringify(pageResult.content));
     }
     
     // Get page blocks
-    const blocksResult = await queryNotionApi(context.userId, `/blocks/${params.pageId}/children`);
+    const blocksResult = await queryNotionApi(context, `/blocks/${params.pageId}/children`);
     
     if (blocksResult.error) {
       throw new Error(JSON.stringify(blocksResult.content));

@@ -1,14 +1,13 @@
-import { oauthService } from '@/app/lib/services/oauth-service';
-import { ToolResult } from '../core/types';
+import { ToolContext, ToolResult } from '../core/types';
 
 export async function queryAsanaApi(
-  userId: string, 
+  context: ToolContext, 
   endpoint: string, 
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET',
   data?: Record<string, unknown>
 ): Promise<ToolResult> {
   try {
-    const accessToken = await oauthService.getValidAccessToken('asana', userId);
+    const accessToken = await context.getAccessToken();
 
     console.log(`Endpoint: ${endpoint}`);
     console.log(`Method: ${method}`);

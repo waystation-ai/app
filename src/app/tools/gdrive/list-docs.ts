@@ -33,7 +33,7 @@ export const listDocs = defineTool({
       orderBy: 'modifiedTime desc'
     };
 
-    const response = await queryGdriveApi(context.userId, 'files', params);
+    const response = await queryGdriveApi(context, 'files', params);
     
     return response as ListDocsResponse;
   }

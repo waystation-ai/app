@@ -64,7 +64,7 @@ export const myNewTool = defineTool({
   },
   handler: async ({ context, params }) => {
     // Implement the tool logic
-    // context.userId contains the authenticated user ID
+    // context.getAccessToken() returns access token for a provider
     
     // Return data matching the response schema
     return {

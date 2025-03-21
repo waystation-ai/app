@@ -65,7 +65,7 @@ export const updateAsanaTask = defineTool({
     console.log('taskData', taskData);
     
     const result = await queryAsanaApi(
-      context.userId,
+      context,
       `/tasks/${params.taskId}`,
       'PUT',
       taskData

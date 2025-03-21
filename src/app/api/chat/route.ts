@@ -1,6 +1,7 @@
 import { azure } from '@ai-sdk/azure';
 import { streamText, tool } from 'ai';
 import { auth } from '@clerk/nextjs/server';
+import { oauthService } from '@/app/lib/services/oauth-service';
 import { registry } from '@/app/tools/core/registry';
 import { getValidConnections } from '@/app/lib/db';
 
@@ -56,7 +57,12 @@ export async function POST(req: Request) {
               try {
                 // Call the tool handler with the user context
                 const result = await providerTool.handler({
-                  context: { userId },
+                  context: { 
+                    userId,  
+                    getAccessToken: () => { 
+                      return oauthService.getValidAccessToken(provider.id, userId);
+                    }
+                  },
                   params
                 });
                 

@@ -55,7 +55,7 @@ export const createNotionPage = defineTool({
     
     // Create page with title and content
     const createPageResult = await queryNotionApi(
-      context.userId,
+      context,
       '/pages',
       'POST',
       {

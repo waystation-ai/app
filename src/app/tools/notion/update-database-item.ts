@@ -23,7 +23,7 @@ export const updateNotionDatabaseItem = defineTool({
   },
   handler: async ({ context, params }) => {
     const result = await queryNotionApi(
-      context.userId,
+      context,
       `/pages/${params.pageId}`,
       'PATCH',
       {

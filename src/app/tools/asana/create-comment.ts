@@ -32,7 +32,7 @@ export const createAsanaComment = defineTool({
   handler: async ({ context, params }) => {
     // In Asana, comments are called "stories" and are created on tasks
     const result = await queryAsanaApi(
-      context.userId,
+      context,
       `/tasks/${params.taskId}/stories`,
       'POST',
       {

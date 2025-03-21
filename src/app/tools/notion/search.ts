@@ -46,7 +46,7 @@ export const searchNotion = defineTool({
     
     // Execute search
     const result = await queryNotionApi(
-      context.userId,
+      context,
       '/search',
       'POST',
       searchRequest

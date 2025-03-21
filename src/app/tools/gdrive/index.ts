@@ -15,6 +15,7 @@ export const gdriveProvider = registerProvider({
   scopes: [
     'https://www.googleapis.com/auth/drive.file'
   ],
+  group: 'google',
   
   // Marketing information
   bullets: [

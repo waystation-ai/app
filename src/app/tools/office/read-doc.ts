@@ -28,7 +28,7 @@ export const readDoc = defineTool({
   },
   handler: async ({ context, params }) => {
     const pdfBuffer = await queryOffice365Api<ArrayBuffer>(
-      context.userId,
+      context,
       `me/drive/items/${params.docId}/content`,
       undefined,
       'pdf'

@@ -50,7 +50,7 @@ export const searchAsanaTasks = defineTool({
     }
     
     const result = await queryAsanaApi(
-      context.userId, 
+      context, 
       `/workspaces/${params.workspaceId}/tasks/search?${queryParams.toString()}`
     );
     

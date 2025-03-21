@@ -26,7 +26,7 @@ export const listMondayBoards = defineTool({
   },
   handler: async ({ context }) => {
     const query = `query { boards { id name item_terminology items_count url groups {id title}} }`;
-    const result = await queryMondayApi(context.userId, query);
+    const result = await queryMondayApi(context, query);
     
     // Transform the result to match the expected return type
     if (result.error) {

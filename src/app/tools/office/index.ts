@@ -18,6 +18,7 @@ export const officeProvider = registerProvider({
     'Files.Read.All',
     'offline_access'
   ],
+  group: 'microsoft',
   
   // Marketing information
   bullets: [

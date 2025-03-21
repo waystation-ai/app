@@ -79,7 +79,7 @@ export const readSlackChannel = defineTool({
       const channelName = params.channel.startsWith('#') ? params.channel.substring(1) : params.channel;
 
       // First, get channel ID if name was provided
-      const channelsResult = await querySlackApi(context.userId, 'conversations.list?types=public_channel,private_channel');
+      const channelsResult = await querySlackApi(context, 'conversations.list?types=public_channel,private_channel');
       const channel = channelsResult.channels.find((c: SlackChannel) => c.name === channelName || c.id === channelName);
       
       if (!channel) {
@@ -94,10 +94,10 @@ export const readSlackChannel = defineTool({
         ...(params.latest && { latest: params.latest }),
       });
 
-      const historyResult = await querySlackApi(context.userId, `conversations.history?${historyParams}`);
+      const historyResult = await querySlackApi(context, `conversations.history?${historyParams}`);
 
       // Fetch all users to get their information
-      const usersResult = await querySlackApi(context.userId, 'users.list');
+      const usersResult = await querySlackApi(context, 'users.list');
       const userMap = new Map<string, SlackUser>();
       for (const user of usersResult.members) {
         userMap.set(user.id, user);
@@ -120,7 +120,7 @@ export const readSlackChannel = defineTool({
         // Fetch thread replies if message has them and includeThreads is true
         if (baseMessage.has_replies && params.includeThreads) {
           const repliesResult = await querySlackApi(
-            context.userId,
+            context,
             `conversations.replies?channel=${channel.id}&ts=${msg.ts}`
           );
 

@@ -52,7 +52,7 @@ export const listAsanaTasks = defineTool({
     }
     
     const result = await queryAsanaApi(
-      context.userId, 
+      context, 
       `/tasks?${queryParams.toString()}`
     );
     

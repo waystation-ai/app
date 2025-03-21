@@ -51,7 +51,7 @@ export const createMondayUpdate = defineTool({
       ...(params.parent_id && { parentId: params.parent_id })
     };
 
-    const result = await queryMondayApi(context.userId, mutation, variables);
+    const result = await queryMondayApi(context, mutation, variables);
     
     // Transform the result to match the expected return type
     if (result.error) {

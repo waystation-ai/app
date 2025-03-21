@@ -44,7 +44,7 @@ export const updateMondayItem = defineTool({
       }
     }`;  
 
-    const result = await queryMondayApi(context.userId, query);
+    const result = await queryMondayApi(context, query);
     
     // Transform the result to match the expected return type
     if (result.error) {

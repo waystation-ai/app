@@ -1,8 +1,8 @@
-import { oauthService } from '@/app/lib/services/oauth-service';
+import { ToolContext } from '../core/types';
 
-export async function queryGdriveApi(userId: string, endpoint: string, params?: Record<string, string>, exportFormat?: string) {
+export async function queryGdriveApi(context: ToolContext, endpoint: string, params?: Record<string, string>, exportFormat?: string) {
   try {
-    const accessToken = await oauthService.getValidAccessToken('gdrive', userId);
+    const accessToken = await context.getAccessToken();
     
     let url = `https://www.googleapis.com/drive/v3/${endpoint}`;
     

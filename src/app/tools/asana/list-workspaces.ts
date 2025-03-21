@@ -25,7 +25,7 @@ export const listAsanaWorkspaces = defineTool({
     }
   },
   handler: async ({ context }) => {
-    const result = await queryAsanaApi(context.userId, '/workspaces');
+    const result = await queryAsanaApi(context, '/workspaces');
     
     // Transform the result to match the expected return type
     if (result.error) {

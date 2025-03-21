@@ -52,7 +52,7 @@ export const recentDocs = defineTool({
   },
   handler: async ({ context }) => {
     const response = await queryOffice365Api<RecentItemsResponse>(
-      context.userId,
+      context,
       'me/drive/recent',
       {
         $select: 'id,name,lastModifiedDateTime,webUrl,folder,file'

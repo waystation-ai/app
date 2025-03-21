@@ -28,7 +28,7 @@ export const listTables = defineTool({
   },
   handler: async ({ context, params }) => {
     try {
-      const response = await callAirtableApi(`/meta/bases/${params.baseId}/tables`, {
+      const response = await callAirtableApi(context, `/meta/bases/${params.baseId}/tables`, {
         userId: context.userId
       });
 

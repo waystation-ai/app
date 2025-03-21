@@ -20,6 +20,7 @@ export const teamsProvider = registerProvider({
     'ChannelMessage.Send',
     'offline_access'
   ],
+  group: 'microsoft',
   
   // Marketing information
   bullets: [

@@ -1,4 +1,4 @@
-import { Provider, Tool } from './types';
+import { Provider, ProviderTool, Tool } from './types';
 
 export class ProviderRegistry {
   private providers: Map<string, Provider> = new Map();
@@ -16,10 +16,10 @@ export class ProviderRegistry {
     return Array.from(this.providers.values());
   }
   
-  getTool(toolId: string): Tool | undefined {
+  getTool(toolId: string): ProviderTool | undefined {
     for (const provider of this.providers.values()) {
       const tool = provider.tools.find(t => t.id === toolId);
-      if (tool) return tool;
+      if (tool) return {provider, tool};
     }
     return undefined;
   }

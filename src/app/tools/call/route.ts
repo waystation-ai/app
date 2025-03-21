@@ -4,6 +4,7 @@ import { registry } from '../core/registry';
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
 import '@/app/tools/main';
+import { oauthService } from '@/app/lib/services/oauth-service';
 
 export async function POST(request: NextRequest) {
   try {
@@ -33,8 +34,13 @@ export async function POST(request: NextRequest) {
 
     // Execute the tool
     try {
-      const result = await tool.handler({
-        context: { userId },
+      const result = await tool.tool.handler({
+        context: { 
+          userId,  
+          getAccessToken: () => { 
+            return oauthService.getValidAccessToken(tool.provider.id, userId);
+          }
+        },
         params: params.arguments
       });
       

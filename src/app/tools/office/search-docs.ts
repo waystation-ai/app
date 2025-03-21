@@ -58,7 +58,7 @@ export const searchDocs = defineTool({
   },
   handler: async ({ context, params }) => {
     const response = await queryOffice365Api<SearchResponse>(
-      context.userId,
+      context,
       `me/drive/root/search(q='${encodeURIComponent(params.query)}')`,
       {
         $select: 'id,name,lastModifiedDateTime,webUrl,folder,file',

@@ -1,14 +1,13 @@
-import { oauthService } from '@/app/lib/services/oauth-service';
+import { ToolContext } from "../core/types";
 
 export async function queryMicrosoftGraphApi<T>(
-  userId: string, 
+  context: ToolContext, 
   endpoint: string, 
   options: {
     method?: 'GET' | 'POST' | 'PATCH' | 'DELETE',
     params?: Record<string, string>,
     body?: Record<string, unknown>,
     format?: string,
-    providerName?: string // Default to 'office' for backward compatibility
   } = {}
 ): Promise<T> {
   try {
@@ -17,10 +16,9 @@ export async function queryMicrosoftGraphApi<T>(
       params, 
       body, 
       format,
-      providerName = 'office'
     } = options;
     
-    const accessToken = await oauthService.getValidAccessToken(providerName, userId);
+    const accessToken = await context.getAccessToken();
     
     let url = `https://graph.microsoft.com/v1.0/${endpoint}`;
     

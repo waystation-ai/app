@@ -22,7 +22,7 @@ export const readMondayBoard = defineTool({
   },
   handler: async ({ context, params }) => {
     const query = `query { boards (ids: ${params.boardId}) { name columns { id title type} items_page { items { id name column_values {id text value} group {id title}}}}}`;
-    const result = await queryMondayApi(context.userId, query);
+    const result = await queryMondayApi(context, query);
     
     // Transform the result to match the expected return type
     if (result.error) {

@@ -31,7 +31,7 @@ export const listSlackChannels = defineTool({
   handler: async ({ context }) => {
     try {
       const result = await querySlackApi(
-        context.userId, 
+        context, 
         'conversations.list?types=public_channel,private_channel&exclude_archived=false'
       );
       

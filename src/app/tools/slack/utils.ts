@@ -1,13 +1,13 @@
-import { oauthService } from '@/app/lib/services/oauth-service';
+import { ToolContext } from '../core/types';
 
 export async function querySlackApi(
-  userId: string, 
+  context: ToolContext, 
   endpoint: string, 
   method: 'GET' | 'POST' = 'GET', 
   body?: Record<string, unknown>
 ) {
   try {
-    const accessToken = await oauthService.getValidAccessToken('slack', userId);
+    const accessToken = await context.getAccessToken();
 
     const response = await fetch(`https://slack.com/api/${endpoint}`, {
       method,

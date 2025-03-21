@@ -23,7 +23,7 @@ export const readAsanaProject = defineTool({
   handler: async ({ context, params }) => {
     // Asana API requires opt_fields to get detailed task information
     const result = await queryAsanaApi(
-      context.userId, 
+      context, 
       `/projects/${params.projectId}/tasks?opt_fields=name,notes,assignee,due_on,completed,tags,custom_fields`
     );
     

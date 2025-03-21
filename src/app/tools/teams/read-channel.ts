@@ -69,19 +69,19 @@ export const readTeamsChannel = defineTool({
     try {
       // Get team details
       const teamResult = await queryTeamsApi<Team>(
-        context.userId,
+        context,
         `teams/${params.teamId}`
       );
       
       // Get channel details
       const channelResult = await queryTeamsApi<Channel>(
-        context.userId,
+        context,
         `teams/${params.teamId}/channels/${params.channelId}`
       );
       
       // Get messages from the channel
       const messagesResult = await queryTeamsApi<MessagesResponse>(
-        context.userId,
+        context,
         `teams/${params.teamId}/channels/${params.channelId}/messages`,
         {
           params: { '$top': params.limit?.toString() || '50' }

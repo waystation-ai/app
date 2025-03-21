@@ -25,7 +25,7 @@ export const readDoc = defineTool({
   },
   handler: async ({ context, params }) => {
     const response = await queryGdriveApi(
-      context.userId,
+      context,
       `files/${params.docId}/export`,
       undefined,
       'text/plain'

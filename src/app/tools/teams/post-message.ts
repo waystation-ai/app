@@ -30,7 +30,7 @@ export const postTeamsMessage = defineTool({
   handler: async ({ context, params }) => {
     try {
       const result = await queryTeamsApi<MessageResponse>(
-        context.userId,
+        context,
         `teams/${params.teamId}/channels/${params.channelId}/messages`,
         {
           method: 'POST',

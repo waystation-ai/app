@@ -45,14 +45,14 @@ export const listTeamsChannels = defineTool({
     try {
       // First get all teams the user is a member of
       const teamsResult = await queryTeamsApi<TeamsResponse>(
-        context.userId, 
+        context, 
         'me/joinedTeams'
       );
       
       // For each team, get its channels
       const channelsPromises = teamsResult.value.map(async (team) => {
         const channelsResult = await queryTeamsApi<ChannelsResponse>(
-          context.userId, 
+          context, 
           `teams/${team.id}/channels`
         );
         

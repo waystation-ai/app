@@ -1,11 +1,9 @@
-import { oauthService } from '@/app/lib/services/oauth-service';
-import { ToolResult } from '../core/types';
+import { ToolContext, ToolResult } from '../core/types';
 
-export async function queryMondayApi(userId: string, query: string, variables?: Record<string, unknown>): Promise<ToolResult> { 
+export async function queryMondayApi(context: ToolContext, query: string, variables?: Record<string, unknown>): Promise<ToolResult> { 
   try {
-    const accessToken = await oauthService.getValidAccessToken('monday', userId);
+    const accessToken = await context.getAccessToken();
 
-    console.log(`Access token: ${accessToken}`);
     console.log(`Query: ${query}`);
     if (variables) {
       console.log(`Variables: ${JSON.stringify(variables)}`);

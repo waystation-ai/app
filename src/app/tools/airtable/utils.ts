@@ -1,5 +1,5 @@
-import { oauthService } from '@/app/lib/services/oauth-service';
 import { z } from 'zod';
+import { ToolContext } from '../core/types';
 
 // Base Airtable API types
 export const AirtableBaseSchema = z.object({
@@ -31,10 +31,10 @@ export const AirtableRecordSchema = z.object({
 // API client configuration
 const AIRTABLE_API_BASE = 'https://api.airtable.com/v0';
 
-export async function callAirtableApi(path: string, options: { method?: string; body?: unknown; userId: string;}) {
-  const { method = 'GET', body, userId } = options;
+export async function callAirtableApi(context: ToolContext, path: string, options: { method?: string; body?: unknown; userId: string;}) {
+  const { method = 'GET', body} = options;
 
-  const accessToken = await oauthService.getValidAccessToken('airtable', userId);
+  const accessToken = await context.getAccessToken();
     
   const response = await fetch(`${AIRTABLE_API_BASE}${path}`, {
     method,

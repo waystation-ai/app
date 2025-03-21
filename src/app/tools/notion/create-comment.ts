@@ -25,7 +25,7 @@ export const createNotionComment = defineTool({
   handler: async ({ context, params }) => {
     // Create the comment using Notion API
     const createCommentResult = await queryNotionApi(
-      context.userId,
+      context,
       '/comments',
       'POST',
       {

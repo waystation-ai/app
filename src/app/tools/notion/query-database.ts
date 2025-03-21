@@ -25,7 +25,7 @@ export const queryNotionDatabase = defineTool({
   },
   handler: async ({ context, params }) => {
     const result = await queryNotionApi(
-      context.userId, 
+      context, 
       `/databases/${params.databaseId}/query`,
       'POST',
       {

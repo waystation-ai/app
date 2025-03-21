@@ -30,7 +30,7 @@ export const postSlackMessage = defineTool({
         : params.channel;
 
       const result = await querySlackApi(
-        context.userId,
+        context,
         'chat.postMessage',
         'POST',
         {

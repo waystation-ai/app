@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export interface ToolContext {
   userId: string;
+  getAccessToken: () => Promise<string>;
 }
 
 export interface ToolResult {
@@ -48,6 +49,13 @@ export interface Provider {
     content: string;
   }>;
 }
+
+export interface ProviderTool {
+  provider: Provider;
+  tool: Tool;
+}
+
+
 
 export function defineTool<T, R>(tool: Tool<T, R>): Tool<T, R> {
   return tool;
