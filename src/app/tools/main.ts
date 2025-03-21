@@ -18,6 +18,11 @@ import './chrome';
 import './gmeet';
 import './salesforce';
 import './smartsheet';
+import './miro';
+import './wrike';
+import './clickup';
+import './linear';
+import './gsheets';
 
 // This file serves as the main entry point for all tools
 // It imports and registers all providers, making them available to the system
