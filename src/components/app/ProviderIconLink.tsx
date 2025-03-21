@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import {ProviderIconProps} from './ProviderIcon';
-import { getProviderConfig } from '@/app/lib/services/provider-config';
+import { getProviderConfig } from '@/lib/services/provider-config';
 import Link from 'next/link';
 
 export interface ProviderIconLinkProps extends ProviderIconProps {

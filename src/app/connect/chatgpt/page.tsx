@@ -1,5 +1,5 @@
-import LandingPage from "@/app/ui/components/connect/LandingPage";
-import { getLandingPageMetadata } from "@/app/ui/components/connect/metadata";
+import LandingPage from "@/components/app/connect/LandingPage";
+import { getLandingPageMetadata } from "@/components/app/connect/metadata";
 
 export const metadata = getLandingPageMetadata("chatgpt");
 

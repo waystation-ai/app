@@ -1,5 +1,5 @@
-import "./ui/globals.css";
-import { sora } from './ui/fonts';
+import "./globals.css";
+import { sora } from './fonts';
 
 import { ClerkProvider} from '@clerk/nextjs';
 import { PostHogProvider } from './posthog';
@@ -9,9 +9,9 @@ import { GoogleTagManager } from '@next/third-parties/google';
 import Script from 'next/script';
 
 
-import BodyBackground from './ui/components/BodyBackground';
-import Navigation from '@/app/ui/components/Navigation';
-import Footer from '@/app/ui/components/Footer';
+import BodyBackground from '@/components/app/BodyBackground';
+import Navigation from '@/components/app/Navigation';
+import Footer from '@/components/app/Footer';
 
 import { metadata } from './metadata';
 export { metadata };

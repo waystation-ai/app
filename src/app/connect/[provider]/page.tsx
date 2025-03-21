@@ -1,5 +1,5 @@
-import ConnectPage from "@/app/ui/components/connect/ConnectPage";
-import { generateConnectMetadata } from "@/app/ui/components/connect/metadata";
+import ConnectPage from "@/components/app/connect/ConnectPage";
+import { generateConnectMetadata } from "@/components/app/connect/metadata";
 
 export async function generateMetadata({ params }: { params: Promise<{ provider: string }> }) {
   return generateConnectMetadata(params, "generic");

@@ -1,9 +1,9 @@
-import ChatDemo from "@/app/ui/components/ChatDemo";
-import WaitlistButton from "@/app/ui/components/WaitlistButton";
+import ChatDemo from "@/components/app/ChatDemo";
+import WaitlistButton from "@/components/app/WaitlistButton";
 
-import { getProviderConfig } from "@/app/lib/services/provider-config";
+import { getProviderConfig } from "@/lib/services/provider-config";
 import { auth } from "@clerk/nextjs/server";
-import { checkWaitlistStatus } from "@/app/lib/db";
+import { checkWaitlistStatus } from "@/lib/db";
  
 export async function generateMetadata ({ params }: { params: Promise<{ provider: string }> }) {
   const { provider } = await params;

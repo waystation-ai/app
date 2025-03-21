@@ -4,7 +4,7 @@ import { registry } from '../core/registry';
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
 import '@/app/tools/main';
-import { oauthService } from '@/app/lib/services/oauth-service';
+import { oauthService } from '@/lib/services/oauth-service';
 
 export async function POST(request: NextRequest) {
   try {

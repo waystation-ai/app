@@ -1,6 +1,6 @@
 import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
-import { oauthService } from '@/app/lib/services/oauth-service';
+import { oauthService } from '@/lib/services/oauth-service';
 
 export async function GET() {
   try {

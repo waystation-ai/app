@@ -1,9 +1,9 @@
 import { azure } from '@ai-sdk/azure';
 import { streamText, tool } from 'ai';
 import { auth } from '@clerk/nextjs/server';
-import { oauthService } from '@/app/lib/services/oauth-service';
+import { oauthService } from '@/lib/services/oauth-service';
 import { registry } from '@/app/tools/core/registry';
-import { getValidConnections } from '@/app/lib/db';
+import { getValidConnections } from '@/lib/db';
 
 // Import all providers to ensure they're registered
 import '@/app/tools/main';

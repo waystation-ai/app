@@ -1,9 +1,9 @@
 import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
-import { removeOAuthConnection } from '@/app/lib/db';
+import { removeOAuthConnection } from '@/lib/db';
 import { redirect } from 'next/navigation';
-import { getProviderConfig } from '@/app/lib/services/provider-config';
+import { getProviderConfig } from '@/lib/services/provider-config';
 
 export async function GET(
   request: Request,

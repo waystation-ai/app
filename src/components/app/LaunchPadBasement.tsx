@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from "next/image";
 
-import { useTrackEvent } from '@/app/lib/utils/track-event';
+import { useTrackEvent } from '@/lib/utils/track-event';
 
 export  function LaunchPadBasement() {
   const trackEvent = useTrackEvent();

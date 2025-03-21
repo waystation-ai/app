@@ -1,5 +1,5 @@
-import { db } from '@/app/lib/db';
-import { oauthStates } from '@/app/lib/db/schema';
+import { db } from '@/lib/db';
+import { oauthStates } from '@/lib/db/schema';
 import { eq, lt } from 'drizzle-orm';
 
 interface StateData {

@@ -1,7 +1,7 @@
-import ChatDemo from "@/app/ui/components/ChatDemo";
+import ChatDemo from "@/components/app/ChatDemo";
 import Link from "next/link";
-import { getProviderConfig } from "@/app/lib/services/provider-config";
-import Providers from "@/app/ui/components/Providers";
+import { getProviderConfig } from "@/lib/services/provider-config";
+import Providers from "@/components/app/Providers";
 import AlternativeApps from "./AlternativeApps";
 import { AppType } from "./metadata";
 

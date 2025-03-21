@@ -1,9 +1,9 @@
 import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
-import { oauthService } from '@/app/lib/services/oauth-service';
-import { getProviderConfig } from '@/app/lib/services/provider-config';
+import { oauthService } from '@/lib/services/oauth-service';
+import { getProviderConfig } from '@/lib/services/provider-config';
 
-import { stateStore } from '@/app/lib/services/state-store';
+import { stateStore } from '@/lib/services/state-store';
 
 export async function GET(
   request: Request,

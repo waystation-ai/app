@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import clsx from 'clsx';
-import { useTrackEvent } from '@/app/lib/utils/track-event';
+import { useTrackEvent } from '@/lib/utils/track-event';
 import GDrivePickerButton from './provider-settings/GDrivePickerButton';
 
 interface ProviderCardProps {

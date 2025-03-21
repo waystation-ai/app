@@ -1,4 +1,4 @@
-import ProviderCard from '@/app/ui/components/ProviderCard';
+import ProviderCard from '@/components/app/ProviderCard';
 import { registry } from '@/app/tools/core/registry';
 
 // Import the main entry point to ensure all providers are registered

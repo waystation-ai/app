@@ -1,5 +1,5 @@
-import ChatDemo, { ChatMessage } from "@/app/ui/components/ChatDemo";
-import Providers from "@/app/ui/components/Providers";
+import ChatDemo, { ChatMessage } from "@/components/app/ChatDemo";
+import Providers from "@/components/app/Providers";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
 import AlternativeApps from "./AlternativeApps";

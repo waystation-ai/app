@@ -1,4 +1,4 @@
-import  PostHogClient from '@/app/lib/utils/posthog-client';
+import  PostHogClient from '@/lib/utils/posthog-client';
 
 export async function POST(req: Request) {
   const payload = await req.json();

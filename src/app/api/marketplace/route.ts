@@ -1,8 +1,8 @@
 import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import { registry } from '@/app/tools/core/registry';
-import { getValidConnections } from '@/app/lib/db';
-import { getRequestOrigin } from '@/app/lib/utils/get-request-origin';
+import { getValidConnections } from '@/lib/db';
+import { getRequestOrigin } from '@/lib/utils/get-request-origin';
 
 // Import the main entry point to ensure all providers are registered
 import '@/app/tools/main';

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useTrackEvent } from '@/app/lib/utils/track-event';
+import { useTrackEvent } from '@/lib/utils/track-event';
 
 interface LaunchPadProps {
   gptId?: string;

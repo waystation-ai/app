@@ -1,6 +1,6 @@
 import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
-import { checkWaitlistStatus, addToWaitlist } from '@/app/lib/db';
+import { checkWaitlistStatus, addToWaitlist } from '@/lib/db';
 
 export async function POST(
   request: Request
