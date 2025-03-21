@@ -10,7 +10,7 @@ export async function GET() {
     }
 
     // Get the access token
-    const accessToken = await oauthService.getValidAccessToken('google', session.userId);
+    const accessToken = await oauthService.getValidAccessToken('gdrive', session.userId);
     
     // Get the API key
     const apiKey = process.env.GOOGLE_API_KEY || '';
