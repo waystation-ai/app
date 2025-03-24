@@ -1,23 +1,21 @@
-import { auth } from '@clerk/nextjs/server';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { registry } from '@/app/tools/core/registry';
 import { getValidConnections } from '@/lib/db';
 import { getRequestOrigin } from '@/lib/utils/get-request-origin';
 
 // Import the main entry point to ensure all providers are registered
 import '@/app/tools/main';
+import { authenticateRequest } from '@/app/tools/shared/utils';
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
-    const session = await auth();
-    const userId = session?.userId;
-    const isAuthenticated = !!userId;
+    const userId = await authenticateRequest(request);
     
     // Get all providers from the registry
     const providers = registry.getAllProviders();
     
     // Get connection status for authenticated users
-    const connections = isAuthenticated 
+    const connections = userId 
       ? await getValidConnections(userId)
       : new Map();
     
@@ -31,7 +29,7 @@ export async function GET(request: Request) {
         name: provider.name,
         description: provider.description,
         icon: `${origin}/images/tools/${provider.id}.svg`,
-        isConnected: isAuthenticated ? connections.has(provider.id) : false,
+        isConnected: userId ? connections.has(provider.id) : false,
         bullets: provider.bullets || [],
         chat: provider.chat || [],
         tools: provider.tools.map(tool => ({
