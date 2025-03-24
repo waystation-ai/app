@@ -1,0 +1,74 @@
+import Link from "next/link";
+import Image from "next/image";
+import { ProviderIcon } from "@/components/app/ProviderIcon";
+import { registry } from "@/app/tools/core/registry";
+import { Metadata } from 'next';
+
+// Import the main entry point to ensure all providers are registered
+import '@/app/tools/main';
+
+export const metadata: Metadata = {
+    title: `Marketplace for Claude | Effortlessly connect AI to your everyday apps`,
+    description: `Connect Claude to your favorite apps (Slack, Monday, Airtable) with zero code. Automate routine tasks, streamline workflows, and unlock AI's full potential—no complexity, no vendor lock-in. Secure by design.`,
+    openGraph: {
+      type: 'article',
+      title: `Marketplace for Claude | Powered by WayStation`,
+      description: `Effortlessly connect AI to your everyday apps.`,
+      siteName: "WayStation",
+      url: `/claude/marketplace`,
+      images: {
+        url: '/images/hero.png'
+      }
+    }
+  };
+
+
+export default function Page() {
+  // Get all providers from registry
+  const allProviders = registry.getAllProviders();
+  
+  return (
+    <div className="flex flex-col relative">
+      <main className="flex-1 flex flex-col">
+        {/* Hero Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 px-4 sm:px-8 py-8 max-w-7xl mx-auto">
+          {/* Left Column - Branding */}
+          <div className="flex flex-col justify-center text-left space-y-4 lg:space-y-6">
+            <h1 className="text-3xl lg:text-4xl font-bold">Marketplace for Claude</h1>
+            <h2 className="text-lg lg:text-xl leading-snug">Effortlessly connect AI to your everyday apps</h2>
+            <div className="mt-6">
+              Marketplace for Claude connects Claude to your favorite apps (Slack, Monday, Airtable) with zero code. Automate routine tasks, streamline workflows, and unlock AI&apos;s full potential—no complexity, no vendor lock-in. Secure by design.
+            </div>
+            <Link href="https://github.com/waystation-ai/launcher/releases/download/app-v0.2.11/WayStation_0.2.11_universal.dmg" className="getstarted-btn">
+              Download for MacOS
+            </Link>
+          </div>
+
+          {/* Right Column - Chat Demo */}
+          <div className="flex items-center justify-right">
+            <Image src="/images/hero.png" alt="Claude" width={600} height={400} />
+          </div>
+        </div>
+      </main>
+
+      {/* Available Integrations Section */}
+      <div className="px-4 sm:px-8 py-12 max-w-7xl mx-auto">
+        <h2 className="text-2xl lg:text-3xl font-bold mb-1">You, AI and your apps</h2>
+        <p className="mb-8">It takes less than 90 seconds to connect your apps and realize value</p>
+        
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-8 gap-6 w-full my-6">
+          {allProviders.map((provider) => (
+            <Link 
+              key={provider.id} 
+              href={provider.authorizationUrl ? `/connect/${provider.id}` : `/waitlist/${provider.id}`} 
+              className="provider-card flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+            >
+              <ProviderIcon provider={provider.id} />
+              <p className="mt-2 text-sm text-gray-600 text-center">{provider.name}</p>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

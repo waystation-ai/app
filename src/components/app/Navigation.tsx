@@ -58,7 +58,7 @@ export default function Navigation() {
 
       {/* Desktop Navigation Links */}
       <div className="hidden md:flex items-center gap-6 mx-8">
-        <Link href="/connect/claude" className="app-link">
+        <Link href="/claude/marketplace" className="app-link">
           <Image src="/images/apps/claude.svg" width={20} height={20} alt="Claude" />
           <span>Marketplace for Claude</span>
         </Link>
