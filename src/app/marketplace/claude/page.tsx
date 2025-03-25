@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Metadata } from 'next';
 import { ProvidersCarousel } from "@/components/app/ProvidersCarousel";
-import { IconBrandAppleFilled } from '@tabler/icons-react';
+import { DownloadButton } from "@/components/app/DownloadButton";
 
 // Import the main entry point to ensure all providers are registered
 import '@/app/tools/main';
@@ -23,9 +23,8 @@ export const metadata: Metadata = {
     }
   };
 
-export const downloadUrl = "https://github.com/waystation-ai/launcher/releases/download/app-v0.2.15/WayStation_0.2.15_universal.dmg";
-
 export default function Page() {
+
   // Get all providers from registry
   const providers = registry.getAllProviders().map(provider => ({
     id: provider.id,
@@ -48,10 +47,7 @@ export default function Page() {
               <li>Unlock AI&apos;s full potential and boost your productivity</li>
             </ul>
             <div className="flex flex-wrap items-center gap-3 mt-4 mb-8">
-            <Link href={downloadUrl} className="getstarted-btn flex items-center justify-center gap-2">
-              <IconBrandAppleFilled size={18} className="mb-1" /> 
-              <span>Download for MacOS</span>
-            </Link>
+            <DownloadButton />
             <span className="flex text-sm font-medium text-gray-500">or</span>
             <Link href="waystation://" className="app-link">
             <Image src="/images/launcher.png" width={32} height={(32)} alt="App icon"/> launch the installed app
@@ -106,13 +102,10 @@ export default function Page() {
         <div className="px-4 sm:px-8 max-w-7xl mx-auto text-center">
           <h2 className="text-3xl lg:text-4xl font-bold mb-6">Get Started Today</h2>
           <p className="text-lg mb-8">Connect Claude to your favorite apps in less than 90 secs</p>
-          <Link 
-            href={downloadUrl}
-            className="aurora-btn inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-semibold text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            <IconBrandAppleFilled size={24} className="mb-1" />
-            <span>Download for MacOS</span>
-          </Link>
+          <DownloadButton 
+            className="aurora-btn inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-semibold text-white rounded-lg"
+            iconSize={24}
+          />
         </div>
       </div>
     </div>
