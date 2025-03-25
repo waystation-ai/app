@@ -23,6 +23,7 @@ export const metadata: Metadata = {
     }
   };
 
+export const downloadUrl = "https://github.com/waystation-ai/launcher/releases/download/app-v0.2.15/WayStation_0.2.15_universal.dmg";
 
 export default function Page() {
   // Get all providers from registry
@@ -47,7 +48,7 @@ export default function Page() {
               <li>Unlock AI&apos;s full potential and boost your productivity</li>
             </ul>
             <div className="flex flex-wrap items-center gap-3 mt-4 mb-8">
-            <Link href="https://github.com/waystation-ai/launcher/releases/download/latest/WayStation_0.2.15_universal.dmg" className="getstarted-btn flex items-center justify-center gap-2">
+            <Link href={downloadUrl} className="getstarted-btn flex items-center justify-center gap-2">
               <IconBrandAppleFilled size={18} className="mb-1" /> 
               <span>Download for MacOS</span>
             </Link>
@@ -106,7 +107,7 @@ export default function Page() {
           <h2 className="text-3xl lg:text-4xl font-bold mb-6">Get Started Today</h2>
           <p className="text-lg mb-8">Connect Claude to your favorite apps in less than 90 secs</p>
           <Link 
-            href="https://github.com/waystation-ai/launcher/releases/download/latest/WayStation_0.2.15_universal.dmg" 
+            href={downloadUrl}
             className="aurora-btn inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-semibold text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             <IconBrandAppleFilled size={24} className="mb-1" />
