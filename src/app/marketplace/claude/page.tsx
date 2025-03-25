@@ -1,11 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ProviderIcon } from "@/components/app/ProviderIcon";
-import { registry } from "@/app/tools/core/registry";
 import { Metadata } from 'next';
+import { ProvidersCarousel } from "@/components/app/ProvidersCarousel";
 
 // Import the main entry point to ensure all providers are registered
 import '@/app/tools/main';
+import { registry } from "@/app/tools/core/registry";
 
 export const metadata: Metadata = {
     title: `Marketplace for Claude | Effortlessly connect AI to your everyday apps`,
@@ -25,7 +25,11 @@ export const metadata: Metadata = {
 
 export default function Page() {
   // Get all providers from registry
-  const allProviders = registry.getAllProviders();
+  const providers = registry.getAllProviders().map(provider => ({
+    id: provider.id,
+    name: provider.name,
+    description: provider.description,
+  }));
   
   return (
     <div className="flex flex-col relative">
@@ -39,14 +43,14 @@ export default function Page() {
             <div className="mt-6">
               Marketplace for Claude connects Claude to your favorite apps (Slack, Monday, Airtable) with zero code. Automate routine tasks, streamline workflows, and unlock AI&apos;s full potential—no complexity, no vendor lock-in. Secure by design.
             </div>
-            <Link href="https://github.com/waystation-ai/launcher/releases/download/app-v0.2.11/WayStation_0.2.11_universal.dmg" className="getstarted-btn">
+            <Link href="https://github.com/waystation-ai/launcher/releases/download/latest/WayStation_0.2.11_universal.dmg" className="getstarted-btn">
               Download for MacOS
             </Link>
           </div>
 
           {/* Right Column - Chat Demo */}
           <div className="flex items-center justify-right">
-            <Image src="/images/hero.png" alt="Claude" width={600} height={400} />
+            <Image src="/images/hero.png" alt="Claude" width={740} height={438} />
           </div>
         </div>
       </main>
@@ -56,18 +60,7 @@ export default function Page() {
         <h2 className="text-2xl lg:text-3xl font-bold mb-1">You, AI and your apps</h2>
         <p className="mb-8">It takes less than 90 seconds to connect your apps and realize value</p>
         
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-8 gap-6 w-full my-6">
-          {allProviders.map((provider) => (
-            <Link 
-              key={provider.id} 
-              href={provider.authorizationUrl ? `/connect/${provider.id}` : `/waitlist/${provider.id}`} 
-              className="provider-card flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
-            >
-              <ProviderIcon provider={provider.id} />
-              <p className="mt-2 text-sm text-gray-600 text-center">{provider.name}</p>
-            </Link>
-          ))}
-        </div>
+        <ProvidersCarousel providers={providers} />
       </div>
     </div>
   );
