@@ -66,7 +66,7 @@ export default function Page() {
       </main>
 
       {/* Available Integrations Section */}
-      <div className="px-4 sm:px-8 lg:py-12 max-w-7xl mx-auto">
+      <div className="px-4 sm:px-8 lg:py-6 max-w-7xl mx-auto w-full">
         <h2 className="text-2xl lg:text-3xl font-bold mb-1">You, AI and your apps</h2>
         <p className="mb-8">It takes <span className="bg-yellow-100">less than 90 seconds</span> to connect your apps and realize value</p>
         
@@ -80,7 +80,7 @@ export default function Page() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div className="space-y-3 bg-white/50 backdrop-blur-sm rounded-lg p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
             <h3 className="text-xl font-semibold">How does it work?</h3>
-            <p className="text-gray-600">During the onboarding, the app installs secure WayStation MCP server into the Claude Desktop that connects Claude to your productivity apps via our server</p>
+            <p className="text-gray-600">During the onboarding, the app installs secure WayStation MCP server into the Claude Desktop that connects Claude to your productivity apps via our service.</p>
           </div>
 
           <div className="space-y-3 bg-white/50 backdrop-blur-sm rounded-lg p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
