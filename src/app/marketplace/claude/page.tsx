@@ -37,13 +37,15 @@ export default function Page() {
       <main className="flex-1 flex flex-col">
         {/* Hero Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 px-4 sm:px-8 py-8 max-w-7xl mx-auto">
-          {/* Left Column - Branding */}
+          {/* Left Column - Pitch */}
           <div className="flex flex-col justify-center text-left space-y-4 lg:space-y-6">
             <h1 className="text-3xl lg:text-4xl font-bold">Marketplace for Claude</h1>
             <h2 className="text-lg lg:text-xl leading-snug">Effortlessly connect AI to your everyday apps</h2>
-            <div className="mt-6">
-              Marketplace for Claude app <span className="bg-yellow-100">connects Claude Desktop to your favorite apps</span> (Notion, Slack, Monday, Airtable, etc.) in less than 90 seconds. Automate routine tasks, streamline workflows, and unlock AI&apos;s full potential—no complexity, no vendor lock-in. Secure by design.
-            </div>
+            <ul className="my-2">
+              <li>Securely connect Claude Desktop to your favorite apps (Notion, Slack, Monday, Airtable, etc.)</li>
+              <li>Empower LLM to take action on your behalf, automate routine tasks, and streamline workflows</li>
+              <li>Unlock AI&apos;s full potential and boost your productivity</li>
+            </ul>
             <div className="flex flex-wrap items-center gap-3 mt-4 mb-8">
             <Link href="https://github.com/waystation-ai/launcher/releases/download/latest/WayStation_0.2.11_universal.dmg" className="getstarted-btn flex items-center justify-center gap-2">
               <IconBrandAppleFilled size={18} className="mb-1" /> 
@@ -51,14 +53,14 @@ export default function Page() {
             </Link>
             <span className="flex text-sm font-medium text-gray-500">or</span>
             <Link href="waystation://" className="app-link">
-            launch the installed app
+            <Image src="/images/launcher.png" width={32} height={(32)} alt="App icon"/> launch the installed app
             </Link>
             </div>
           </div>
 
-          {/* Right Column - Chat Demo */}
+          {/* Right Column - Hero */}
           <div className="flex items-center justify-right">
-            <Image src="/images/hero.png" alt="Claude" width={740} height={438} />
+            <Image src="/images/hero.png" alt="Marketplace for Claude" width={1168} height={716} />
           </div>
         </div>
       </main>
