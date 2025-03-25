@@ -47,7 +47,7 @@ export default function Page() {
               <li>Unlock AI&apos;s full potential and boost your productivity</li>
             </ul>
             <div className="flex flex-wrap items-center gap-3 mt-4 mb-8">
-            <Link href="https://github.com/waystation-ai/launcher/releases/download/latest/WayStation_0.2.11_universal.dmg" className="getstarted-btn flex items-center justify-center gap-2">
+            <Link href="https://github.com/waystation-ai/launcher/releases/download/latest/WayStation_0.2.15_universal.dmg" className="getstarted-btn flex items-center justify-center gap-2">
               <IconBrandAppleFilled size={18} className="mb-1" /> 
               <span>Download for MacOS</span>
             </Link>
@@ -66,11 +66,53 @@ export default function Page() {
       </main>
 
       {/* Available Integrations Section */}
-      <div className="px-4 sm:px-8 py-12 max-w-7xl mx-auto">
+      <div className="px-4 sm:px-8 lg:py-12 max-w-7xl mx-auto">
         <h2 className="text-2xl lg:text-3xl font-bold mb-1">You, AI and your apps</h2>
         <p className="mb-8">It takes <span className="bg-yellow-100">less than 90 seconds</span> to connect your apps and realize value</p>
         
         <ProvidersCarousel providers={providers} />
+      </div>
+
+      {/* FAQ Section */}
+      <div className="px-4 sm:px-8 max-w-7xl mx-auto">
+        <h2 className="text-2xl lg:text-3xl font-bold mb-8">Frequently Asked Questions</h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="space-y-3 bg-white/50 backdrop-blur-sm rounded-lg p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+            <h3 className="text-xl font-semibold">How does it work?</h3>
+            <p className="text-gray-600">During the onboarding, the app installs secure WayStation MCP server into the Claude Desktop that connects Claude to your productivity apps via our server</p>
+          </div>
+
+          <div className="space-y-3 bg-white/50 backdrop-blur-sm rounded-lg p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+            <h3 className="text-xl font-semibold">Is it secure?</h3>
+            <p className="text-gray-600">Yes, WayStation uses end-to-end encryption and never stores your data. The MCP server runs locally on your machine.</p>
+          </div>
+
+          <div className="space-y-3 bg-white/50 backdrop-blur-sm rounded-lg p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+            <h3 className="text-xl font-semibold">What apps are supported?</h3>
+            <p className="text-gray-600">We support major tools like Slack, Notion, Monday, Airtable, and many more. New integrations added regularly.</p>
+          </div>
+
+          <div className="space-y-3 bg-white/50 backdrop-blur-sm rounded-lg p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+            <h3 className="text-xl font-semibold">Do I need to write any code?</h3>
+            <p className="text-gray-600">No coding or even technical skills required! Our app handles all the technical setup. Just install and connect with a few clicks.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Get Started Section */}
+      <div className="w-full py-16 mt-12 backdrop-blur-md bg-white/30">
+        <div className="px-4 sm:px-8 max-w-7xl mx-auto text-center">
+          <h2 className="text-3xl lg:text-4xl font-bold mb-6">Get Started Today</h2>
+          <p className="text-lg mb-8">Connect Claude to your favorite apps in less than 90 secs</p>
+          <Link 
+            href="https://github.com/waystation-ai/launcher/releases/download/latest/WayStation_0.2.15_universal.dmg" 
+            className="aurora-btn inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-semibold text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <IconBrandAppleFilled size={24} className="mb-1" />
+            <span>Download for MacOS</span>
+          </Link>
+        </div>
       </div>
     </div>
   );
