@@ -58,7 +58,7 @@ export default function Navigation() {
 
       {/* Desktop Navigation Links */}
       <div className="hidden md:flex items-center gap-6 mx-8">
-        <Link href="/claude/marketplace" className="app-link">
+        <Link href="/marketplace/claude" className="app-link">
           <Image src="/images/apps/claude.svg" width={20} height={20} alt="Claude" />
           <span>Marketplace for Claude</span>
         </Link>
@@ -90,7 +90,7 @@ export default function Navigation() {
       <div className={`md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl shadow-lg transition-all duration-300 ease-in-out overflow-hidden ${mobileMenuOpen ? 'max-h-96 py-4' : 'max-h-0'}`}>
         <div className="flex flex-col gap-4 px-6">
           <Link 
-            href="/connect/claude" 
+            href="/marketplace/claude" 
             className="app-link py-2"
             onClick={() => setMobileMenuOpen(false)}
           >
