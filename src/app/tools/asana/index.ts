@@ -51,15 +51,3 @@ export const asanaProvider = registerProvider({
     searchAsanaTasks
   ]
 });
-
-// Re-export tools for direct imports if needed
-export {
-  listAsanaWorkspaces,
-  listAsanaProjects,
-  readAsanaProject,
-  listAsanaTasks,
-  createAsanaTask,
-  updateAsanaTask,
-  createAsanaComment,
-  searchAsanaTasks
-};

@@ -42,12 +42,3 @@ export const airtableProvider = registerProvider({
     updateRecord
   ]
 });
-
-// Re-export tools
-export {
-  listBases,
-  listTables,
-  listRecords,
-  createRecord,
-  updateRecord
-};

@@ -46,12 +46,3 @@ export const mondayProvider = registerProvider({
     createMondayUpdate
   ]
 });
-
-// Re-export tools for direct imports if needed
-export {
-  listMondayBoards,
-  readMondayBoard,
-  createMondayItem,
-  updateMondayItem,
-  createMondayUpdate
-};

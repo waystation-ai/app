@@ -42,10 +42,3 @@ export const slackProvider = registerProvider({
     readSlackChannel
   ]
 });
-
-// Re-export tools for direct imports if needed
-export {
-  listSlackChannels,
-  postSlackMessage,
-  readSlackChannel
-};

@@ -40,11 +40,3 @@ export const officeProvider = registerProvider({
     recentDocs
   ]
 });
-
-// Re-export tools for direct imports if needed
-export {
-  listDocs,
-  readDoc,
-  searchDocs,
-  recentDocs
-};

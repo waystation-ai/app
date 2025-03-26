@@ -35,9 +35,3 @@ export const gdriveProvider = registerProvider({
     readDoc
   ]
 });
-
-// Re-export tools for direct imports if needed
-export {
-  listDocs,
-  readDoc
-};

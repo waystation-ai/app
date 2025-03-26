@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 export interface ToolContext {
-  userId: string;
   getAccessToken: () => Promise<string>;
 }
 

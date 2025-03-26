@@ -41,10 +41,3 @@ export const teamsProvider = registerProvider({
 //    readTeamsChannel
   ]
 });
-
-// Re-export tools for direct imports if needed
-export {
-  listTeamsChannels,
-  postTeamsMessage,
-//  readTeamsChannel
-};

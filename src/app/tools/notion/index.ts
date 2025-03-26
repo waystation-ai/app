@@ -59,18 +59,3 @@ export const notionProvider = registerProvider({
     searchNotion
   ]
 });
-
-// Re-export tools for direct imports if needed
-export {
-  listNotionDatabases,
-  queryNotionDatabase,
-/*
-  createNotionDatabaseItem,
-  updateNotionDatabaseItem,
-*/
-  listNotionPages,
-  readNotionPage,
-  createNotionPage,
-  createNotionComment,
-  searchNotion
-};
