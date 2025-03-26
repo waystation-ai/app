@@ -92,7 +92,7 @@ export default function Page() {
 
           <div className="space-y-3 bg-white/50 backdrop-blur-sm rounded-lg p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
             <h3 className="text-xl font-semibold">Do I need to write any code?</h3>
-            <p className="text-gray-600">No coding or even technical skills required! Our app handles all the technical setup. Just install and connect with a few clicks.</p>
+            <p className="text-gray-600">No coding or even technical skills are required! Our app handles all the technical setup. Just install and connect with a few clicks.</p>
           </div>
         </div>
       </div>
