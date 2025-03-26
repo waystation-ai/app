@@ -58,7 +58,6 @@ export async function POST(req: Request) {
                 // Call the tool handler with the user context
                 const result = await providerTool.handler({
                   context: { 
-                    userId,  
                     getAccessToken: () => { 
                       return oauthService.getValidAccessToken(provider.id, userId);
                     }

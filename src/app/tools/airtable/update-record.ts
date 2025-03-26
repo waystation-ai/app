@@ -33,7 +33,6 @@ export const updateRecord = defineTool({
       const response = await callAirtableApi(context, `/${params.baseId}/${params.tableId}/${params.recordId}`,
         {
           method: 'PUT',
-          userId: context.userId,
           body: {
             fields: params.fields
           }

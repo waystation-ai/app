@@ -36,7 +36,6 @@ export async function POST(request: NextRequest) {
     try {
       const result = await tool.tool.handler({
         context: { 
-          userId,  
           getAccessToken: () => { 
             return oauthService.getValidAccessToken(tool.provider.id, userId);
           }

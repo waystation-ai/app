@@ -50,7 +50,6 @@ async function handleToolRequest({ request, params, method, getParams}: {
     // Execute tool with common error handling
     const result = await toolObj.handler({
       context: { 
-        userId,  
         getAccessToken: () => { 
           return oauthService.getValidAccessToken(providerObj.id, userId);
         }

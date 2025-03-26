@@ -68,7 +68,7 @@ export const listRecords = defineTool({
       const path = `/${params.baseId}/${params.tableId}${queryString ? `?${queryString}` : ''}`;
       console.log(path);
 
-      const response = await callAirtableApi(context, path, { userId: context.userId }) as AirtableGetRecordsResponse;
+      const response = await callAirtableApi(context, path, { }) as AirtableGetRecordsResponse;
 
       console.log(response);
 

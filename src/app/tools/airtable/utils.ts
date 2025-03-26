@@ -31,7 +31,7 @@ export const AirtableRecordSchema = z.object({
 // API client configuration
 const AIRTABLE_API_BASE = 'https://api.airtable.com/v0';
 
-export async function callAirtableApi(context: ToolContext, path: string, options: { method?: string; body?: unknown; userId: string;}) {
+export async function callAirtableApi(context: ToolContext, path: string, options: { method?: string; body?: unknown; }) {
   const { method = 'GET', body} = options;
 
   const accessToken = await context.getAccessToken();

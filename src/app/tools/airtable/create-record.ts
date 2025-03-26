@@ -32,7 +32,6 @@ export const createRecord = defineTool({
       const response = await callAirtableApi(context, `/${params.baseId}/${params.tableId}`,
         {
           method: 'POST',
-          userId: context.userId,
           body: {
             fields: params.fields
           }

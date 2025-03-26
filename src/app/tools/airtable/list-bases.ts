@@ -25,9 +25,7 @@ export const listBases = defineTool({
   },
   handler: async ({ context }) => {
     try {
-      const response = await callAirtableApi(context, '/meta/bases', {
-        userId: context.userId
-      });
+      const response = await callAirtableApi(context, '/meta/bases', {});
 
       return {
         bases: response.bases.map((base: AirtableBaseResponse) => ({
