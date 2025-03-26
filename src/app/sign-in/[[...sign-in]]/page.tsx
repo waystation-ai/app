@@ -1,13 +1,15 @@
 import { SignIn } from '@clerk/nextjs'
 
 import { Metadata } from 'next';
-import Head from 'next/head';
  
 export const metadata: Metadata = {
-  title: 'Sign In or Sign Up | WayStation',
+  title: 'Sign In or Sign Up',
+  alternates: {
+    canonical: 'https://waystation.ai/sign-in',
+  },
   openGraph: {
     type: 'website',
-    title: "Sign In or Sign Up | WayStation",
+    title: "Sign In or Sign Up",
     siteName: "WayStation",
     url: `/sign-in`,
     images : {
@@ -18,9 +20,6 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return <div className="flex flex-col  mt-4 sm:mt-20 justify-center items-center">
-      <Head>
-        <link rel="canonical" href="/sign-in" />
-      </Head>
       <SignIn />
     </div>
 }

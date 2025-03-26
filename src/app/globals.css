@@ -50,6 +50,13 @@ li {
   @apply text-gray-700 mb-2;
 }
 
+nav {
+  li {
+    list-style-type: none;
+    @apply mb-0;
+  }
+}
+
 
 .aurora-text {
   color: var(--deep-blue);
@@ -107,6 +114,13 @@ li {
 
 .app-link:hover {
   @apply text-blue-600 scale-105 duration-500
+}
+
+nav  {
+  .app-link:hover {
+    @apply text-blue-600 scale-100
+  }
+  
 }
 
 

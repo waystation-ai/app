@@ -20,6 +20,7 @@ export async function GET() {
   // Add static routes
   const staticRoutes = [
     '',                    // Homepage
+    '/marketplace/claude',
     '/connect/chatgpt',
     '/connect/claude',
     '/connect/mcp-server',
