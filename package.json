@@ -42,6 +42,7 @@
     "next": "^15.2.1",
     "pdf-parse": "^1.1.1",
     "pg": "^8.13.3",
+    "platform-detect": "^3.0.1",
     "posthog-js": "^1.223.4",
     "posthog-node": "^4.10.1",
     "react": "^19.0.0",
