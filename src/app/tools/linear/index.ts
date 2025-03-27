@@ -49,13 +49,3 @@ export const linearProvider = registerProvider({
   ]
 });
 
-// Re-export tools
-export {
-  listLinearTeams,
-  listLinearProjects,
-  listLinearIssues,
-  listMyLinearIssues,
-  createLinearIssue,
-  updateLinearIssue,
-  createLinearComment
-};

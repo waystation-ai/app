@@ -91,11 +91,6 @@ export const exampleProvider = registerProvider({
   ]
 });
 
-// Re-export tools
-export {
-  myNewTool,
-  otherTool
-};
 ```
 
 3. Import the provider in main.ts:
