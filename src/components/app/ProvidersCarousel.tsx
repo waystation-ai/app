@@ -39,7 +39,7 @@ export function ProvidersCarousel({ providers, app }: ProvidersCarouselProps) {
           {providers.map((provider) => (
             <CarouselItem key={provider.id} className="basis-1/2 sm:basis-1/3 md:basis-1/6 lg:basis-1/8 pl-4">
               <Link 
-                href={`/connect/${app ? app + "/": ""}claude/${provider.id}`} 
+                href={`/connect/${app ? app + "/": ""}${provider.id}`} 
                 className="flex flex-col p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 h-full"
               >
                 <div className="flex items-center mb-2">

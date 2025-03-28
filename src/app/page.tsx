@@ -7,6 +7,7 @@ import { ProvidersCarousel } from "@/components/app/ProvidersCarousel";
 
 import '@/app/tools/main';
 import { registry } from "./tools/core/registry";
+import AlternativeApps from "@/components/app/connect/AlternativeApps";
  
 export const metadata: Metadata = {
   title: 'WayStation - Empowering LLMs to take real-world actions',
@@ -55,6 +56,8 @@ export default function Home() {
                   Get Started
                 </Link>
               </SignedOut>
+              {/* Alternative Apps Section */}
+              <AlternativeApps currentApp="generic"/>
             </div>
           </div>
 
@@ -113,15 +116,16 @@ export default function Home() {
           <h2 className="text-3xl lg:text-4xl font-bold mb-6">Get Started Today</h2>
           <p className="text-lg mb-8">Connect AIs to your favorite apps now!</p>
           <SignedIn>
-                <Link href="/dashboard" className="getstarted-btn text-lg">
-                  Get Started
-                </Link>
-              </SignedIn>
-              <SignedOut>
-                <Link href="/sign-in" className="getstarted-btn">
-                  Sign Up Free
-                </Link>
-              </SignedOut>
+            <Link href="/dashboard" className="getstarted-btn text-lg">
+              Get Started
+            </Link>
+          </SignedIn>
+          <SignedOut>
+            <Link href="/sign-in" className="getstarted-btn">
+              Sign Up Free
+            </Link>
+          </SignedOut>
+    
         </div>
       </div>
 
