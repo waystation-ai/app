@@ -40,7 +40,7 @@ export default function Page() {
           {/* Left Column - Pitch */}
           <div className="flex flex-col justify-center text-left space-y-4 lg:space-y-6">
             <h1 className="text-3xl lg:text-4xl font-bold">Marketplace for Claude</h1>
-            <h2 className="text-lg lg:text-xl leading-snug">Effortlessly connect AI to your everyday apps</h2>
+            <h2 className="!mt-2 text-lg lg:text-xl leading-snug">Effortlessly connect AI to your everyday apps</h2>
             <ul className="my-2">
               <li>Securely connect Claude Desktop to your favorite apps (Notion, Slack, Monday, Airtable, etc.)</li>
               <li>Empower LLM to take action on your behalf, automate routine tasks, and streamline workflows</li>
@@ -57,14 +57,27 @@ export default function Page() {
 
           {/* Right Column - Hero */}
           <div className="flex items-center justify-right">
-            <Image src="/images/hero.png" alt="Marketplace for Claude" width={1168} height={716} />
+            <video 
+              className="w-full h-auto shadow-xl rounded-lg  border-slate-300 border-2"
+              controls
+              autoPlay 
+              muted 
+              loop 
+              playsInline
+              poster="/images/hero.png"
+            >
+              <source src="/videos/marketplace169vo.mp4" type="video/mp4" />
+              <source src="/videos/marketplace169vo.webm" type="video/webm" />
+              {/* Fallback to image if video fails to load */}
+              <Image src="/images/hero.png" alt="Marketplace for Claude" width={1168} height={716} />
+            </video>
           </div>
         </div>
       </main>
 
       {/* Available Integrations Section */}
       <div className="px-4 sm:px-8 lg:py-6 max-w-7xl mx-auto w-full">
-        <h2 className="text-2xl lg:text-3xl font-bold mb-1">You, AI and your apps</h2>
+        <h2 className="text-2xl lg:text-3xl font-bold mb-1">Connect your everyday apps</h2>
         <p className="mb-8">It takes <span className="bg-yellow-100">less than 90 seconds</span> to connect your apps and realize value</p>
         
         <ProvidersCarousel providers={providers} />
