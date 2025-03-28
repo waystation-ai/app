@@ -47,11 +47,11 @@ export default function Page() {
               <li>Unlock AI&apos;s full potential and boost your productivity</li>
             </ul>
             <div className="flex flex-wrap items-center gap-3 mt-4 mb-8">
-            <DownloadButton />
-            <span className="flex text-sm font-medium text-gray-500">or</span>
-            <Link href="waystation://" className="app-link">
-            <Image src="/images/launcher.png" width={32} height={(32)} alt="App icon"/> launch the installed app
-            </Link>
+              <DownloadButton />
+              <span className="flex text-sm font-medium text-gray-500 invisible md:visible">or</span>
+              <Link href="waystation://" className="app-link invisible md:visible">
+                <Image src="/images/launcher.png" width={32} height={(32)} alt="App icon"/> launch the installed app
+              </Link>
             </div>
           </div>
 
