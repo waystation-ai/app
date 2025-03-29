@@ -3,7 +3,7 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
 import { JSONRPCMessage, JSONRPCMessageSchema, ListToolsRequestSchema, CallToolRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { authenticateRequest } from '@/lib/utils/authenticate-request';
-import { registry } from '@/marketplace/main';
+import { registry } from '@/marketplace';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 
 import { oauthService } from '@/lib/services/oauth-service';

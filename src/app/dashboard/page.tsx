@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 import { db } from '@/lib/db';
 import { oauthConnections } from '@/lib/db/schema';
-import { registry } from '@/marketplace/main';
+import { registry } from '@/marketplace';
 
 import ProviderCard from '@/components/app/ProviderCard';
 import { ProviderIcon } from '@/components/app/ProviderIcon';

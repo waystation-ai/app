@@ -1,4 +1,4 @@
-import { registry } from '@/marketplace/main';
+import { registry } from '@/marketplace';
 
 export async function GET() {
   // Get current date for lastmod

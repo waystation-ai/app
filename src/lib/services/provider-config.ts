@@ -1,4 +1,4 @@
-import { registry, Provider } from '@/marketplace/main';
+import { registry, Provider } from '@/marketplace';
 
 /**
  * Get provider configuration from the registry

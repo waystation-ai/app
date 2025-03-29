@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Metadata } from 'next';
 import { ProvidersCarousel } from "@/components/app/ProvidersCarousel";
 
-import {registry} from '@/marketplace/main';
+import {registry} from '@/marketplace';
 import AlternativeApps from "@/components/app/connect/AlternativeApps";
  
 export const metadata: Metadata = {

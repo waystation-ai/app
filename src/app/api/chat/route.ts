@@ -2,7 +2,7 @@ import { azure } from '@ai-sdk/azure';
 import { streamText, tool } from 'ai';
 import { auth } from '@clerk/nextjs/server';
 import { oauthService } from '@/lib/services/oauth-service';
-import { registry } from '@/marketplace/main';
+import { registry } from '@/marketplace';
 import { getValidConnections } from '@/lib/db';
 
 const systemPrompt = `WayStation connects ChatGPT to popular productivity apps, such as Google Drive, Monday, Slack, and Gmail. It makes it possible for ChatGPT to find and read files, work with projects and tasks, engage in conversation on Slack, and communicate over email on behalf of users.

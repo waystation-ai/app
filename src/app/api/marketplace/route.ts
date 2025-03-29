@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { registry } from '@/marketplace/main';
+import { registry } from '@/marketplace';
 import { getValidConnections } from '@/lib/db';
 import { getRequestOrigin } from '@/lib/utils/get-request-origin';
 

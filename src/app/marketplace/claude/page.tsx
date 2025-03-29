@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 import { ProvidersCarousel } from "@/components/app/ProvidersCarousel";
 import { DownloadButton } from "@/components/app/DownloadButton";
 
-import { registry } from "@/marketplace/main";
+import { registry } from "@/marketplace";
 
 export const metadata: Metadata = {
     title: `Marketplace for Claude | Effortlessly connect AI to your everyday apps`,

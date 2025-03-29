@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { ListToolsResult } from '@modelcontextprotocol/sdk/types.js';
-import { registry } from '@/marketplace/main';
+import { registry } from '@/marketplace';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 
 export async function GET() {

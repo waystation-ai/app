@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { registry } from '@/marketplace/main';
+import { registry } from '@/marketplace';
 import { generateOpenApiSpec } from '@/marketplace/core/openapi';
 
 export async function GET() {

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authenticateRequest } from '@/lib/utils/authenticate-request';
-import { registry } from '@/marketplace/main';
+import { registry } from '@/marketplace';
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
 import { oauthService } from '@/lib/services/oauth-service';
