@@ -15,6 +15,7 @@ export const gmailProvider = registerProvider({
     'https://www.googleapis.com/auth/gmail.send',
     'https://www.googleapis.com/auth/gmail.labels'
   ],
+  group: 'google',
   
   // Marketing information
   bullets: [
