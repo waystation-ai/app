@@ -1,5 +1,5 @@
 import { ProviderIconLink } from './ProviderIconLink';
-import { registry } from '@/app/tools/core/registry';
+import { registry } from '@/marketplace/main';
 
 interface ProvidersProps {
   className: string;

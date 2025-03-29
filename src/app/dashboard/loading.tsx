@@ -1,8 +1,5 @@
 import ProviderCard from '@/components/app/ProviderCard';
-import { registry } from '@/app/tools/core/registry';
-
-// Import the main entry point to ensure all providers are registered
-import '@/app/tools/main';
+import { registry } from '@/marketplace/main';
 
 export default async function Page() {
   const connectedProviders: Record<string, boolean> = {};

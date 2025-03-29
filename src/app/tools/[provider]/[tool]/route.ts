@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { oauthService } from '@/lib/services/oauth-service';
-import { authenticateRequest } from '../../shared/utils';
-import { registry } from '../../core/registry';
-
-import '@/app/tools/main';
+import { authenticateRequest } from '@/lib/utils/authenticate-request';
+import { registry } from '@/marketplace/main';
 
 type RequestParams = Promise<{ provider: string; tool: string }>;
 type HttpMethod = 'GET' | 'POST' | 'PUT';

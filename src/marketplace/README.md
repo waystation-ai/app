@@ -7,7 +7,16 @@ This directory contains the tools implementation for WayStation, which allows LL
 The tools architecture follows a provider-based approach:
 
 ```
-src/app/tools/
+src/app/tools
+├── [provider]/            # Dynamic route handler
+│   └── [tool]/
+│       └── route.ts
+├── {provider}/            # Provider-specific implementations
+│   ├── index.ts           # Provider registration
+│   ├── utils.ts           # Shared utilities
+│   └── {tool-name}.ts     # Individual tool implementations
+src/marketplace
+├── main.ts                # Main entry point
 ├── core/                  # Core infrastructure
 │   ├── types.ts           # Type definitions
 │   ├── registry.ts        # Provider and tool registry
@@ -19,7 +28,6 @@ src/app/tools/
 │   └── route.ts
 ├── list/                  # MCP tool listing endpoint
 │   └── route.ts
-├── main.ts                # Main entry point
 └── {provider}/            # Provider-specific implementations
     ├── index.ts           # Provider registration
     ├── utils.ts           # Shared utilities

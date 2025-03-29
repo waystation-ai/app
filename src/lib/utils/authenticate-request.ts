@@ -1,15 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
-
-export interface ToolContext {
-  userId: string;
-}
-
-export interface ToolResult {
-  error: boolean;
-  content: unknown;
-};
-
+import { ToolResult } from '@/marketplace/core/types';
 
 export async function authenticateRequest(request: NextRequest): Promise<string | null> {
   const session = await auth();

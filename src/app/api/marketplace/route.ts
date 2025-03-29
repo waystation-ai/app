@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { registry } from '@/app/tools/core/registry';
+import { registry } from '@/marketplace/main';
 import { getValidConnections } from '@/lib/db';
 import { getRequestOrigin } from '@/lib/utils/get-request-origin';
 
-// Import the main entry point to ensure all providers are registered
-import '@/app/tools/main';
-import { authenticateRequest } from '@/app/tools/shared/utils';
+import { authenticateRequest } from '@/lib/utils/authenticate-request';
 
 export async function GET(request: NextRequest) {
   try {

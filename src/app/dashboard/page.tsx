@@ -6,10 +6,7 @@ import Link from 'next/link';
 
 import { db } from '@/lib/db';
 import { oauthConnections } from '@/lib/db/schema';
-import { registry } from '@/app/tools/core/registry';
-
-// Import the main entry point to ensure all providers are registered
-import '@/app/tools/main';
+import { registry } from '@/marketplace/main';
 
 import ProviderCard from '@/components/app/ProviderCard';
 import { ProviderIcon } from '@/components/app/ProviderIcon';

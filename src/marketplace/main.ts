@@ -1,3 +1,4 @@
+
 // Import all providers
 import './notion';
 import './monday';
@@ -23,6 +24,9 @@ import './chrome';
 import './gmeet';
 import './salesforce';
 import './smartsheet';
+
+export {registry} from './core/registry';
+export type { Provider } from '@/marketplace/core/types';
 
 
 // This file serves as the main entry point for all tools

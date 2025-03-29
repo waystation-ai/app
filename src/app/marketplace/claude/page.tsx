@@ -4,9 +4,7 @@ import { Metadata } from 'next';
 import { ProvidersCarousel } from "@/components/app/ProvidersCarousel";
 import { DownloadButton } from "@/components/app/DownloadButton";
 
-// Import the main entry point to ensure all providers are registered
-import '@/app/tools/main';
-import { registry } from "@/app/tools/core/registry";
+import { registry } from "@/marketplace/main";
 
 export const metadata: Metadata = {
     title: `Marketplace for Claude | Effortlessly connect AI to your everyday apps`,
@@ -80,7 +78,7 @@ export default function Page() {
         <h2 className="text-2xl lg:text-3xl font-bold mb-1">Connect your everyday apps</h2>
         <p className="mb-8">It takes <span className="bg-yellow-100">less than 90 seconds</span> to connect your apps and realize value</p>
         
-        <ProvidersCarousel providers={providers} />
+        <ProvidersCarousel providers={providers} app="claude"/>
       </div>
 
       {/* FAQ Section */}

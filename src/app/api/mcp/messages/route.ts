@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { authenticateRequest } from '@/app/tools/shared/utils';
+import { authenticateRequest } from '@/lib/utils/authenticate-request';
 import { activeTransports } from '../sse/route';
 import { JSONRPCMessageSchema } from '@modelcontextprotocol/sdk/types.js';
 

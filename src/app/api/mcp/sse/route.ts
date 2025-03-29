@@ -2,11 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
 import { JSONRPCMessage, JSONRPCMessageSchema, ListToolsRequestSchema, CallToolRequestSchema } from '@modelcontextprotocol/sdk/types.js';
-import { authenticateRequest } from '@/app/tools/shared/utils';
-import { registry } from '@/app/tools/core/registry';
+import { authenticateRequest } from '@/lib/utils/authenticate-request';
+import { registry } from '@/marketplace/main';
 import { zodToJsonSchema } from 'zod-to-json-schema';
-// Import all tools to ensure they're registered
-import '@/app/tools/main';
+
 import { oauthService } from '@/lib/services/oauth-service';
 
 // Debug flag - set to false in production

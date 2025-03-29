@@ -1,7 +1,4 @@
-import { registry } from '../tools/core/registry';
-
-// Import the main entry point to ensure all providers are registered
-import '@/app/tools/main';
+import { registry } from '@/marketplace/main';
 
 export async function GET() {
   // Get current date for lastmod

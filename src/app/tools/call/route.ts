@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { authenticateRequest } from '../shared/utils';
-import { registry } from '../core/registry';
+import { authenticateRequest } from '@/lib/utils/authenticate-request';
+import { registry } from '@/marketplace/main';
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
-import '@/app/tools/main';
 import { oauthService } from '@/lib/services/oauth-service';
 
 export async function POST(request: NextRequest) {

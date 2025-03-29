@@ -1,9 +1,6 @@
 import { NextResponse } from 'next/server';
-import { registry } from '@/app/tools/core/registry';
-import { generateOpenApiSpec } from '@/app/tools/core/openapi';
-
-// Import the main entry point to ensure all providers are registered
-import '@/app/tools/main';
+import { registry } from '@/marketplace/main';
+import { generateOpenApiSpec } from '@/marketplace/core/openapi';
 
 export async function GET() {
   try {

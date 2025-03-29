@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server';
 import { ListToolsResult } from '@modelcontextprotocol/sdk/types.js';
-import { registry } from '../core/registry';
+import { registry } from '@/marketplace/main';
 import { zodToJsonSchema } from 'zod-to-json-schema';
-
-import '@/app/tools/main';
 
 export async function GET() {
   const tools = [];

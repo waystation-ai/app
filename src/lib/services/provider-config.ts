@@ -1,7 +1,4 @@
-import { registry } from '@/app/tools/core/registry';
-import { Provider } from '@/app/tools/core/types';
-
-import '@/app/tools/main';
+import { registry, Provider } from '@/marketplace/main';
 
 /**
  * Get provider configuration from the registry
