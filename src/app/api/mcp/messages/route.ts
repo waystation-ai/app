@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authenticateRequest } from '@/lib/utils/authenticate-request';
 import { activeTransports } from '../sse/route';
+// Import from the new streamable transport as well
+import { activeTransports as streamableTransports } from '../route';
 import { JSONRPCMessageSchema } from '@modelcontextprotocol/sdk/types.js';
 
 // Maximum message size (from official SDK)
@@ -22,15 +24,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing session ID' }, { status: 400 });
     }
     
-    if (!activeTransports.has(sessionId)) {
+    // Check both transport maps for the session
+    let transport;
+    if (activeTransports.has(sessionId)) {
+      transport = activeTransports.get(sessionId)!;
+    } else if (streamableTransports.has(sessionId)) {
+      transport = streamableTransports.get(sessionId)!;
+    } else {
       return NextResponse.json({ 
         error: 'Invalid session', 
         message: 'No active transport found for this session ID. The connection may have been closed or timed out.' 
       }, { status: 400 });
     }
-
-    // Get transport
-    const transport = activeTransports.get(sessionId)!;
     
     // Validate content type
     const contentType = request.headers.get('content-type');

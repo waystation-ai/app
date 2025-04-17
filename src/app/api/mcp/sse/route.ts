@@ -112,6 +112,9 @@ class NextJsSSETransport implements Transport {
   }
 }
 
+// Import the streamable transports for compatibility
+import { activeTransports as streamableTransports, NextJsStreamableTransport } from '../route';
+
 // Store active transports with their session IDs
 const activeTransports = new Map<string, NextJsSSETransport>();
 
@@ -173,6 +176,10 @@ export async function GET(request: NextRequest) {
           
           // Store the transport for later use
           activeTransports.set(transport.sessionId, transport);
+          
+          // Also add to streamable transports for compatibility with the new endpoint
+          // This is a temporary measure until clients are updated to use the new endpoint
+          streamableTransports.set(transport.sessionId, transport as unknown as NextJsStreamableTransport);
 
           // Create MCP server
           const server = new Server(
