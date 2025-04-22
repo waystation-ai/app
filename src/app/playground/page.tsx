@@ -5,6 +5,7 @@ import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
 import { Thread } from "@/components/assistant-ui/thread";
 import Link from "next/link";
 import Image from "next/image";
+import { ThreadList } from "@/components/assistant-ui/thread-list";
 
 export default function Playground() {
   const runtime = useChatRuntime({
@@ -16,7 +17,7 @@ export default function Playground() {
     <div className="flex flex-col relative">
       {/* Hero Section */}
       <main className="flex-1 flex flex-col">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 px-4 sm:px-8 py-8 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12 py-8 px-8 w-full max-w-[1920px] mx-auto">
           {/* Left Column - Branding */}
           <div className="flex flex-col justify-center text-left space-y-4 lg:space-y-6 lg:col-span-1">
             <h1 className="text-3xl lg:text-4xl font-bold">Playground</h1>
@@ -26,14 +27,19 @@ export default function Playground() {
           </div>
 
           {/* Right Column - Chat Demo */}
-          <div className="flex items-center justify-center mt-4 lg:mt-0 lg:col-span-2 w-full">
+          <div className="flex items-start justify-start mt-4 lg:mt-0 lg:col-span-3">
             <div className="w-full">
               <AssistantRuntimeProvider runtime={runtime}>
-                <div className="h-[60vh] sm:h-[70vh] w-full flex flex-col py-4">
-                  <Thread/>
+                <div className="h-[60vh] sm:h-[70vh] w-full flex flex-row gap-4 p-4 bg-background rounded-2xl shadow-[0px_2px_16px_0px_rgba(0,0,0,0.08)]">
+                  <div className="w-1/4">
+                    <ThreadList/>
+                  </div>
+                  <div className="w-3/4">
+                    <Thread/>
+                  </div>
                 </div>
               </AssistantRuntimeProvider>
-              <div className="flex items-center gap-4 mt-4 md:mt-0">
+              <div className="flex items-center gap-4 mt-4">
                 <span className="text-sm font-medium text-gray-500">Also works with</span>
                 <Link href='/connect/chatgpt' className="app-link">
                   <Image src='/images/apps/chatgpt.svg' width={20} height={20} alt="ChatGPT"/>

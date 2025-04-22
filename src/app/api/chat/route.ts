@@ -25,6 +25,9 @@ export async function POST(req: Request) {
   // Get the current user
   const session = await auth();
   const userId = session.userId;
+
+  if (!userId)
+    return new Response('Unauthorized', { status: 401 });
   
   // Get all available tools from the registry
   const allTools: Record<string, any> = { };  //eslint-disable-line @typescript-eslint/no-explicit-any
@@ -78,11 +81,23 @@ export async function POST(req: Request) {
   }
 
   const result = streamText({
-    model: azure('gpt-4o-mini'),
+    model: azure('o4-mini', {
+      structuredOutputs: false
+    }),
     system: systemPrompt,
     messages,
     tools: allTools,
+    onError({ error }) {
+      console.error(error); 
+    },
   });
 
-  return result.toDataStreamResponse();
+  const response = result.toDataStreamResponse({
+    getErrorMessage: (error) => {
+      console.error('Error in streamText:', error);
+      return "error";
+    }
+  });
+
+  return response;
 }
