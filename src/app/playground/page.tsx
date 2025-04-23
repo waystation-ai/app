@@ -1,17 +1,15 @@
-"use client";
+import { Metadata } from 'next';
 
-import { AssistantRuntimeProvider } from "@assistant-ui/react";
-import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
-import { Thread } from "@/components/assistant-ui/thread";
 import Link from "next/link";
 import Image from "next/image";
-import { ThreadList } from "@/components/assistant-ui/thread-list";
+import Playground from "@/components/app/Playground";
 
-export default function Playground() {
-  const runtime = useChatRuntime({
-    api: "/api/chat",
-    maxSteps: 10
-  });
+export const metadata: Metadata = {
+  title: 'Playground',
+};
+
+
+export default async function PlaygroundPage() {
   
   return (
     <div className="flex flex-col relative">
@@ -29,16 +27,7 @@ export default function Playground() {
           {/* Right Column - Chat Demo */}
           <div className="flex items-start justify-start mt-4 lg:mt-0 lg:col-span-3">
             <div className="w-full">
-              <AssistantRuntimeProvider runtime={runtime}>
-                <div className="h-[60vh] sm:h-[70vh] w-full flex flex-row gap-4 p-4 bg-background rounded-2xl shadow-[0px_2px_16px_0px_rgba(0,0,0,0.08)]">
-                  <div className="w-1/4">
-                    <ThreadList/>
-                  </div>
-                  <div className="w-3/4">
-                    <Thread/>
-                  </div>
-                </div>
-              </AssistantRuntimeProvider>
+              <Playground/>
               <div className="flex items-center gap-4 mt-4">
                 <span className="text-sm font-medium text-gray-500">Also works with</span>
                 <Link href='/connect/chatgpt' className="app-link">

@@ -39,14 +39,12 @@ export function Menu() {
                 </NavigationMenuLink>
               </li>
               <li>
-                <NavigationMenuLink>
-                  <Link href="/marketplace/claude" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                    <div className="app-link text-sm font-medium leading-none">
-                      <Image src="/images/apps/claude.svg" width={20} height={20} alt="Claude" />
-                      <span>Marketplace for Claude</span>
-                    </div>
-                    <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Securely connect Claude Desktop to your favorite apps</p>
-                  </Link>
+                <NavigationMenuLink href="/marketplace/claude" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                  <div className="app-link text-sm font-medium leading-none">
+                    <Image src="/images/apps/claude.svg" width={20} height={20} alt="Claude" />
+                    <span>Marketplace for Claude</span>
+                  </div>
+                  <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Securely connect Claude Desktop to your favorite apps</p>
                 </NavigationMenuLink>
                 <NavigationMenuLink >
                   <Link href="/connect/chatgpt" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
@@ -81,11 +79,9 @@ export function Menu() {
         </NavigationMenuItem>
         */}
         <NavigationMenuItem>
-          <a href="https://www.linkedin.com/company/waystation-ai" target="_blank">
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              What&apos;s New
-            </NavigationMenuLink>
-          </a>
+          <NavigationMenuLink className={navigationMenuTriggerStyle()} href="https://www.linkedin.com/company/waystation-ai" target="_blank">
+            What&apos;s New
+          </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>

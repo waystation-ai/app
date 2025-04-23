@@ -1,5 +1,5 @@
 import { azure } from '@ai-sdk/azure';
-import { streamText, tool } from 'ai';
+import { streamText, tool, appendResponseMessages } from 'ai';
 import { auth } from '@clerk/nextjs/server';
 import { oauthService } from '@/lib/services/oauth-service';
 import { registry } from '@/marketplace';
@@ -20,7 +20,7 @@ const systemPrompt = `WayStation connects ChatGPT to popular productivity apps, 
 Convert formatted text to Slack message markup before posting it`;
 
 export async function POST(req: Request) {
-  const { messages } = await req.json();
+  const { messages, id } = await req.json();
   
   // Get the current user
   const session = await auth();
@@ -90,7 +90,21 @@ export async function POST(req: Request) {
     onError({ error }) {
       console.error(error); 
     },
+    async onFinish({ response }) {
+      if (id) {
+        await saveChat({
+          id,
+          messages: appendResponseMessages({
+            messages,
+            responseMessages: response.messages,
+          }),
+        });
+      }
+    },
   });
+
+  // Consume stream to ensure it runs to completion even if client disconnects
+  result.consumeStream();
 
   const response = result.toDataStreamResponse({
     getErrorMessage: (error) => {

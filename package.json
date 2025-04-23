@@ -9,15 +9,15 @@
     "lint": "next lint",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
-    "db:migrate": "tsx src/app/lib/db/migrate.ts"
+    "db:migrate": "tsx src/lib/db/migrate.ts"
   },
   "dependencies": {
     "@ai-sdk/azure": "^1.2.5",
     "@ai-sdk/openai": "^1.2.3",
     "@ai-sdk/react": "^1.1.22",
-    "@assistant-ui/react": "^0.9.1",
-    "@assistant-ui/react-ai-sdk": "^0.9.1",
-    "@assistant-ui/react-markdown": "^0.9.1",
+    "@assistant-ui/react": "^0.10.2",
+    "@assistant-ui/react-ai-sdk": "^0.10.3",
+    "@assistant-ui/react-markdown": "^0.10.2",
     "@clerk/nextjs": "^6.11.2",
     "@heroicons/react": "^2.2.0",
     "@linear/sdk": "^39.0.0",
