@@ -8,7 +8,6 @@ export const metadata: Metadata = {
   title: 'Playground',
 };
 
-
 export default async function PlaygroundPage() {
   
   return (
