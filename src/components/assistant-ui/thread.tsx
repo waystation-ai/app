@@ -27,9 +27,7 @@ export const Thread: FC = () => {
   return (
     <ThreadPrimitive.Root
       className="box-border flex h-full flex-col overflow-hidden"
-      style={{
-        ["--thread-max-width" as string]: "42rem",
-      }}
+      
     >
       <ThreadPrimitive.Viewport className="flex h-full flex-col items-center overflow-y-scroll scroll-smooth bg-inherit px-4 pt-8 scrollbar-hide -webkit-overflow-scrolling-touch">
         <ThreadWelcome />
@@ -159,7 +157,7 @@ const UserMessage: FC = () => {
     <MessagePrimitive.Root className="grid auto-rows-auto grid-cols-[minmax(72px,1fr)_auto] gap-y-2 [&:where(>*)]:col-start-2 w-full max-w-[var(--thread-max-width)] py-4">
       <UserActionBar />
 
-      <div className="bg-muted text-foreground max-w-[calc(var(--thread-max-width)*0.8)] break-words rounded-3xl px-5 py-2.5 col-start-2 row-start-2">
+      <div className="bg-muted text-foreground break-words rounded-3xl px-5 py-2.5 col-start-2 row-start-2">
         <MessagePrimitive.Content />
       </div>
 
@@ -204,7 +202,7 @@ const EditComposer: FC = () => {
 const AssistantMessage: FC = () => {
   return (
     <MessagePrimitive.Root className="grid grid-cols-[auto_auto_1fr] grid-rows-[auto_1fr] relative w-full max-w-[var(--thread-max-width)] py-4">
-      <div className="text-foreground max-w-[calc(var(--thread-max-width)*0.8)] break-words leading-7 col-span-2 col-start-2 row-start-1 my-1.5">
+      <div className="text-foreground break-words leading-7 col-span-2 col-start-2 row-start-1 my-1.5">
         <MessagePrimitive.Content components={{ Text: MarkdownText, tools: {Fallback: ToolFallback} }} />
       </div>
 
