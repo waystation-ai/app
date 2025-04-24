@@ -78,6 +78,14 @@ export function Menu() {
           </a>
         </NavigationMenuItem>
         */}
+        <SignedIn>
+        <NavigationMenuItem>
+          <NavigationMenuLink className={navigationMenuTriggerStyle()} href="/playground" target="_blank">
+            Playground
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+        </SignedIn>
+
         <NavigationMenuItem>
           <NavigationMenuLink className={navigationMenuTriggerStyle()} href="https://www.linkedin.com/company/waystation-ai" target="_blank">
             What&apos;s New
@@ -162,7 +170,7 @@ export default function Navigation() {
       </div>
       
       {/* Mobile Navigation Menu */}
-      <div className={`md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl shadow-lg transition-all duration-300 ease-in-out overflow-hidden ${mobileMenuOpen ? 'max-h-96 py-4' : 'max-h-0'}`}>
+      <nav className={`md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl shadow-lg transition-all duration-300 ease-in-out overflow-hidden ${mobileMenuOpen ? 'max-h-96 py-4' : 'max-h-0'}`}>
         <div className="flex flex-col gap-4 px-6">
           <Link href="/marketplace/claude" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>
             <Image src="/images/apps/claude.svg" width={20} height={20} alt="Claude" />
@@ -178,12 +186,9 @@ export default function Navigation() {
           </Link>
 
           <div className="border-t border-gray-200 mt-2 pt-4">
-            <Link href="https://github.com/waystation-ai/marketplace" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>
-              <span>Marketplace</span>
-            </Link>
-            <Link href="/connect/mcp-server" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>
-              <span>What&apos;s New</span>
-            </Link>
+
+            <Link href="/playground" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>Playground</Link>
+            <Link href="/connect/mcp-server" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>What&apos;s New</Link>
           </div>
 
           {/* User Profile in Mobile Menu */}
@@ -205,7 +210,7 @@ export default function Navigation() {
             </SignedIn>
           </div>
         </div>
-      </div>
+      </nav>
     </div>
   );
 }

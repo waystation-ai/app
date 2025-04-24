@@ -118,7 +118,7 @@ nav {
 
 nav  {
   .app-link:hover {
-    @apply text-blue-600 scale-100
+    @apply text-blue-600 scale-100 ml-2
   }
   
 }
