@@ -1,117 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
-import { JSONRPCMessage, JSONRPCMessageSchema, ListToolsRequestSchema, CallToolRequestSchema } from '@modelcontextprotocol/sdk/types.js';
+
+import { ListToolsRequestSchema, CallToolRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { authenticateRequest } from '@/lib/utils/authenticate-request';
 import { registry } from '@/marketplace';
 import { zodToJsonSchema } from 'zod-to-json-schema';
+import { NextJsSSETransport } from '@/lib/services/mcp';
 
 // Debug flag - set to false in production
 const DEBUG = false;
 
-// Next.js-compatible SSE transport implementation
-class NextJsSSETransport implements Transport {
-  private writer: WritableStreamDefaultWriter<Uint8Array>;
-  private encoder: TextEncoder;
-  private messageQueue: JSONRPCMessage[] = [];
-  private _sessionId: string;
-  private _endpoint: string;
-  private connected: boolean = false;
-  // Transport interface properties
-  onmessage?: (message: JSONRPCMessage) => void;
-  onclose?: () => void;
-  onerror?: (error: Error) => void;
 
-  constructor(writer: WritableStreamDefaultWriter<Uint8Array>, endpoint: string) {
-    this.writer = writer;
-    this.encoder = new TextEncoder();
-    this._sessionId = crypto.randomUUID();
-    this._endpoint = endpoint;
-  }
 
-  async start(): Promise<void> {
-    if (this.connected) {
-      throw new Error(
-        "NextJsSSETransport already started! If using Server class, note that connect() calls start() automatically."
-      );
-    }
-
-    try {
-      // Send the endpoint event (following the official SDK format)
-      await this.writer.write(
-        this.encoder.encode(`event: endpoint\ndata: ${encodeURI(this._endpoint)}?sessionId=${this._sessionId}\n\n`)
-      );
-      
-      this.connected = true;
-    } catch (error) {
-      if (this.onerror) {
-        this.onerror(error instanceof Error ? error : new Error(String(error)));
-      }
-      throw error;
-    }
-  }
-
-  async send(message: JSONRPCMessage): Promise<void> {
-    if (!this.connected) {
-      throw new Error("Not connected");
-    }
-
-    try {
-      // Use the named event format from the official SDK
-      const messageStr = JSON.stringify(message);
-      
-      await this.writer.write(
-        this.encoder.encode(`event: message\ndata: ${messageStr}\n\n`)
-      );
-    } catch (error) {
-      if (this.onerror) {
-        this.onerror(error instanceof Error ? error : new Error(String(error)));
-      }
-    }
-  }
-
-  async close(): Promise<void> {
-    try {
-      await this.writer.close();
-      this.connected = false;
-      
-      if (this.onclose) {
-        this.onclose();
-      }
-    } catch (error) {
-      if (this.onerror) {
-        this.onerror(error instanceof Error ? error : new Error(String(error)));
-      }
-    }
-  }
-
-  // Handle incoming messages with validation
-  async handleMessage(message: unknown): Promise<void> {
-    try {
-      const parsedMessage = JSONRPCMessageSchema.parse(message);
-      
-      if (this.onmessage) {
-        this.onmessage(parsedMessage);
-      } else {
-        // Queue the message if no handler is registered yet
-        this.messageQueue.push(parsedMessage);
-      }
-    } catch (error) {
-      if (this.onerror) {
-        this.onerror(error as Error);
-      }
-      throw error;
-    }
-  }
-
-  // Get the session ID
-  get sessionId(): string {
-    return this._sessionId;
-  }
-}
-
-// Store active transports with their session IDs
-const activeTransports = new Map<string, NextJsSSETransport>();
 
 export async function GET(request: NextRequest) {
   try {
@@ -170,7 +70,7 @@ export async function GET(request: NextRequest) {
           const transport = new NextJsSSETransport(writer, '/api/mcp/messages');
           
           // Store the transport for later use
-          activeTransports.set(transport.sessionId, transport);
+          NextJsSSETransport.setTransport(transport.sessionId, transport);
 
           // Create MCP server
           const server = new Server(
@@ -240,7 +140,7 @@ export async function GET(request: NextRequest) {
           
           // Clean up on close
           request.signal.addEventListener('abort', () => {
-            activeTransports.delete(transport.sessionId);
+            NextJsSSETransport.deleteTransport(transport.sessionId);
             server.close();
           });
 
@@ -256,7 +156,7 @@ export async function GET(request: NextRequest) {
           // Set up a periodic ping to help keep the connection alive
           if (DEBUG) {
             const pingInterval = setInterval(() => {
-              if (activeTransports.has(transport.sessionId)) {
+              if (NextJsSSETransport.hasTransport(transport.sessionId)) {
                 sendData("event: debug\ndata: {\"ping\":\"" + new Date().toISOString() + "\"}\n\n");
               } else {
                 clearInterval(pingInterval);
@@ -290,5 +190,4 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Export activeTransports and NextJsSSETransport for use in the messages route
-export { activeTransports, NextJsSSETransport };
+

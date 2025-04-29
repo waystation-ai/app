@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authenticateRequest } from '@/lib/utils/authenticate-request';
-import { activeTransports } from '../sse/route';
 import { JSONRPCMessageSchema } from '@modelcontextprotocol/sdk/types.js';
+import { NextJsSSETransport } from '@/lib/services/mcp';
 
 // Maximum message size (from official SDK)
 const MAXIMUM_MESSAGE_SIZE = 4 * 1024 * 1024; // 4MB
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing session ID' }, { status: 400 });
     }
     
-    if (!activeTransports.has(sessionId)) {
+    if (!NextJsSSETransport.hasTransport(sessionId)) {
       return NextResponse.json({ 
         error: 'Invalid session', 
         message: 'No active transport found for this session ID. The connection may have been closed or timed out.' 
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get transport
-    const transport = activeTransports.get(sessionId)!;
+    const transport = NextJsSSETransport.getTransport(sessionId)!;
     
     // Validate content type
     const contentType = request.headers.get('content-type');
