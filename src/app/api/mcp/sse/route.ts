@@ -6,8 +6,6 @@ import { authenticateRequest } from '@/lib/utils/authenticate-request';
 import { registry } from '@/marketplace';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 
-import { oauthService } from '@/lib/services/oauth-service';
-
 // Debug flag - set to false in production
 const DEBUG = false;
 
@@ -224,14 +222,7 @@ export async function GET(request: NextRequest) {
 
             // Execute the tool
             try {
-              const result = await tool.tool.handler({
-                context: { 
-                  getAccessToken: () => { 
-                    return oauthService.getValidAccessToken(tool.provider.id, userId);
-                  }
-                },
-                params: request.params.arguments
-              });
+              const result = await registry.executeTool(tool, userId, request.params.arguments);
               
               return {
                 content: [{type: "text", text: JSON.stringify(result)}]

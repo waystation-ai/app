@@ -3,7 +3,6 @@ import { authenticateRequest } from '@/lib/utils/authenticate-request';
 import { registry } from '@/marketplace';
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
-import { oauthService } from '@/lib/services/oauth-service';
 
 export async function POST(request: NextRequest) {
   try {
@@ -33,14 +32,7 @@ export async function POST(request: NextRequest) {
 
     // Execute the tool
     try {
-      const result = await tool.tool.handler({
-        context: { 
-          getAccessToken: () => { 
-            return oauthService.getValidAccessToken(tool.provider.id, userId);
-          }
-        },
-        params: params.arguments
-      });
+      const result = await registry.executeTool(tool, userId, params.arguments);
       
       return NextResponse.json({
         content: [{type: "text", text: JSON.stringify(result)}]

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { oauthService } from '@/lib/services/oauth-service';
 import { authenticateRequest } from '@/lib/utils/authenticate-request';
 import { registry } from '@/marketplace';
 
@@ -46,14 +45,7 @@ async function handleToolRequest({ request, params, method, getParams}: {
     const params = await getParams(request);
     
     // Execute tool with common error handling
-    const result = await toolObj.handler({
-      context: { 
-        getAccessToken: () => { 
-          return oauthService.getValidAccessToken(providerObj.id, userId);
-        }
-      },
-      params
-    });
+    const result = await registry.executeTool(toolObj.id, userId, params);
     
     // Handle binary responses (ArrayBuffer)
     if (result instanceof ArrayBuffer) {

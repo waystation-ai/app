@@ -1,7 +1,6 @@
 import { azure } from '@ai-sdk/azure';
 import { streamText, tool } from 'ai';
 import { auth } from '@clerk/nextjs/server';
-import { oauthService } from '@/lib/services/oauth-service';
 import { registry } from '@/marketplace';
 import { getValidConnections } from '@/lib/db';
 
@@ -55,22 +54,8 @@ export async function POST(req: Request) {
             description: providerTool.description || providerTool.summary,
             parameters: providerTool.parameters,
             execute: async (params) => {
-              try {
-                // Call the tool handler with the user context
-                const result = await providerTool.handler({
-                  context: { 
-                    getAccessToken: () => { 
-                      return oauthService.getValidAccessToken(provider.id, userId);
-                    }
-                  },
-                  params
-                });
-                
-                return result;
-              } catch (error) {
-                console.error(`Error executing tool ${providerTool.id}:`, error);
-                throw error;
-              }
+              // Call the centralized executeTool method
+              return registry.executeTool(providerTool.id, userId, params);
             }
           });
         }
