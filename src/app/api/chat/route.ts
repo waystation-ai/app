@@ -113,7 +113,13 @@ export async function POST(req: Request) {
     getErrorMessage: (error) => {
       console.error('Error in streamText:', error);
       return "error";
-    }
+    },
+    sendReasoning: true,
+    sendUsage: false,
+  });
+
+  result.usage.then((usage) => {
+    console.log('Usage:', usage);
   });
 
   return response;
