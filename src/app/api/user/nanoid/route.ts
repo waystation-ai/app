@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { generateNanoidForUser } from '@/lib/utils/generate-nanoid-for-user';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Authenticate user using Clerk
     const { userId } = await auth();
@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     // Authenticate user using Clerk
     const { userId } = await auth();
