@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { authenticateRequest } from '@/lib/utils/authenticate-request';
 import { JSONRPCMessageSchema } from '@modelcontextprotocol/sdk/types.js';
 import { NextJsSSETransport } from '@/lib/services/mcp';
 
@@ -8,11 +7,7 @@ const MAXIMUM_MESSAGE_SIZE = 4 * 1024 * 1024; // 4MB
 
 export async function POST(request: NextRequest) {
   try {
-    // Authentication
-    const userId = await authenticateRequest(request);
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    // We don't need to authenticate the request here, as the session ID is already validated in the transport
 
     // Get session ID from request
     const url = new URL(request.url);
@@ -22,7 +17,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing session ID' }, { status: 400 });
     }
     
-    if (!NextJsSSETransport.hasTransport(sessionId)) {
+    if (!NextJsSSETransport.hasTransport(sessionId)) { 
       return NextResponse.json({ 
         error: 'Invalid session', 
         message: 'No active transport found for this session ID. The connection may have been closed or timed out.' 

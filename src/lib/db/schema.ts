@@ -41,3 +41,12 @@ export const indexes = {
   userProviderIdx: 'CREATE INDEX IF NOT EXISTS user_provider_idx ON oauth_connections (user_id, provider)',
   expiresAtIdx: 'CREATE INDEX IF NOT EXISTS expires_at_idx ON oauth_connections (expires_at)'
 };
+
+// New table for nano IDs
+export const nanoIds = pgTable('nano_ids', {
+  id: serial('id').primaryKey(),
+  userId: text('user_id').notNull().unique(),
+  nanoId: varchar('nano_id', { length: 21 }).notNull().unique(), // Nano ID length is typically 21
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow()
+});
