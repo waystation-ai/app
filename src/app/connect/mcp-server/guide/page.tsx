@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { McpKey } from '@/components/app/McpKey';
+import NanoIdDisplay from '@/components/app/NanoIdDisplay'; // Import the new client component
 
-export default async function Page() {
+export default function Page() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex items-center gap-4 mb-8">
@@ -17,8 +18,18 @@ export default async function Page() {
       </section>
 
       {/* Instructions */}
+
       <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Step-by-Step Instructions</h2>
+        <h2 className="text-2xl font-semibold mb-4">Option A. Remote server</h2>
+        <p className="text-gray-700 mb-4">
+            Apps like Cline, WindSurf, and Cursor support remote MCP servers. You can connect to WayStation MCP from these apps using unique URL specific to your account.
+        </p>
+        <NanoIdDisplay /> 
+
+      </section>
+
+      <section className="mb-8">
+        <h2 className="text-2xl font-semibold mb-4">Option B. Local server</h2>
 
         {/* Step 1: Get WAY_KEY */}
         <div className="mb-8">
@@ -78,7 +89,7 @@ npx -y @waystation/mcp</code>
         <div className="space-y-4 text-gray-700">
           <p>If you encounter any issues:</p>
           <ul className="list-disc list-inside space-y-2">
-            <li>Ensure your WAY_KEY is correctly copied and not expired</li>
+            <li>Ensure your chosen authentication method (WAY_KEY or unique URL) is correctly copied and valid</li>
             <li>Check that the command was run from a terminal with internet access</li>
             <li>Verify that no other MCP server is running on the same port</li>
           </ul>

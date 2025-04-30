@@ -65,7 +65,7 @@ export async function SSE(request: NextRequest, nanoId?: string) {
           forwardMessages();
           
           // Create our custom transport with the endpoint for message posting
-          const transport = new NextJsSSETransport(writer, '/api/mcp/messages');
+          const transport = new NextJsSSETransport(writer, '/mcp/messages');
           
           // Store the transport for later use
           NextJsSSETransport.setTransport(transport.sessionId, transport);

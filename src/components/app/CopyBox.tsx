@@ -25,7 +25,7 @@ interface CopyBoxProps {
   text: string | null;
 }
 
-export function McpKeyDisplay({ text }: CopyBoxProps) {
+export function CopyBox({ text }: CopyBoxProps) {
   const [copied, setCopied] = useState(false);
 
   if (!text) {
