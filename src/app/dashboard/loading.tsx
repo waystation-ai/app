@@ -26,7 +26,7 @@ export default async function Page() {
         {/* Left Column - Connect your apps */}
         <div className="flex flex-col lg:w-2/3">
           <p className="text-3xl lg:text-4xl text-gray-900 font-bold">
-                Connect your apps...
+                Connect your apps first...
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 w-full my-3 sm:my-9">
             {providersToDisplay.map(([provider, config]) => (

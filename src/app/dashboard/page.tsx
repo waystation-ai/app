@@ -88,9 +88,9 @@ export default async function Page() {
       {/* Top section - Two columns */}
       <div className="flex flex-col lg:flex-row gap-8 mb-12">
         {/* Left Column - Connect your apps */}
-        <div className="flex flex-col lg:w-2/3">
+        <div className={`flex flex-col ${connectedProviderEntries.length > 0 ? 'lg:w-2/3' : 'w-full'}`}>
           <p className="text-3xl lg:text-4xl text-gray-900 font-bold">
-                Connect your apps...
+                Connect your apps first...
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 w-full my-3 sm:my-9">
             {providersToDisplay.map(([provider, config]) => (
@@ -105,14 +105,16 @@ export default async function Page() {
           </div>
         </div>
 
-        {/* Right Column - Launch section */}
-        <div className="flex flex-col lg:w-1/3 items-center justify-center h-full">
-          <p className="my-4 text-3xl lg:text-4xl text-gray-900 font-bold w-full text-center">
-                ...and get started!
-          </p>
-          <LaunchPad  />
-          <LaunchPadBasement gptId={process.env.GPT_ID}/>
-        </div>
+        {/* Right Column - Launch section - Only shown when at least one provider is connected */}
+        {connectedProviderEntries.length > 0 && (
+          <div className="flex flex-col lg:w-1/3 items-center justify-center h-full">
+            <p className="my-4 text-3xl lg:text-4xl text-gray-900 font-bold w-full text-center">
+                  ...and get started!
+            </p>
+            <LaunchPad  />
+            <LaunchPadBasement gptId={process.env.GPT_ID}/>
+          </div>
+        )}
       </div>
       
       {/* Bottom section - Full width */}
