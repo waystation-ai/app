@@ -1,6 +1,8 @@
 import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import { oauthService } from '@/lib/services/oauth-service';
+import { registry } from '@/marketplace';
+import { NativeProvider } from '@/marketplace/core/types';
 
 export async function GET() {
   try {
@@ -9,8 +11,10 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const provider = registry.getProvider('gdrive') as NativeProvider;
+
     // Get the access token
-    const accessToken = await oauthService.getValidAccessToken('gdrive', session.userId);
+    const accessToken = await oauthService.getValidAccessToken(provider, session.userId);
     
     // Get the API key
     const apiKey = process.env.GOOGLE_API_KEY || '';

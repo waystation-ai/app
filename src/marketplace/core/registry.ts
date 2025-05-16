@@ -1,47 +1,98 @@
-import { Provider, ProviderTool, Tool, ToolContext } from './types';
+import { JSONSchema7 } from 'json-schema';
+import { z } from 'zod';
+
+import { isFullProvider, isNativeProvider, isRemoteProvider, Provider, ProviderTool, RemoteProvider, Tool, ToolContext } from './types';
 import PostHogClient from '@/lib/utils/posthog-client'; // Using the existing PostHog client
 import { oauthService } from '@/lib/services/oauth-service'; // Assuming oauthService is accessible or passed
+import { getRemoteProviderTools, getValidConnections } from '@/lib/db';
+import { callToolFromRemoteProvider } from '@/lib/services/mcp';
 
 export class ProviderRegistry {
   private providers: Map<string, Provider> = new Map();
-  
+
   registerProvider(provider: Provider): Provider {
     this.providers.set(provider.id, provider);
     return provider;
   }
-  
+
   getProvider(id: string): Provider | undefined {
     return this.providers.get(id);
   }
-  
+
   getAllProviders(): Provider[] {
     return Array.from(this.providers.values());
   }
-  
-  getTool(toolId: string): ProviderTool | undefined {
-    for (const provider of this.providers.values()) {
-      const tool = provider.tools.find(t => t.id === toolId);
-      if (tool) return {provider, tool};
-    }
-    return undefined;
-  }
-  
-  getAllTools(): Tool[] {
-    return this.getAllProviders().flatMap(provider => provider.tools);
+
+  getVetoedProviders(): Provider[] {
+    // All providers except atlassian, linear-official, and asana-official
+    return this.getAllProviders().filter(provider => !['atlassian', 'linear-official', 'asana-official'].includes(provider.id));
   }
 
-  async executeTool(toolIdOrProviderTool: string | ProviderTool, userId: string, params: any): Promise<any> { //eslint-disable-line @typescript-eslint/no-explicit-any
-    let providerTool: ProviderTool | undefined;
-    if (typeof toolIdOrProviderTool === 'string') {
-      providerTool = this.getTool(toolIdOrProviderTool);
-      if (!providerTool) {
-        throw new Error(`Tool '${toolIdOrProviderTool}' not found`);
+  private async getRemoteProviderTools(provider: RemoteProvider, userId: string): Promise<Tool[]> {
+    const cache = await getRemoteProviderTools(userId, provider.id);
+
+    if (!cache)
+      return [];
+
+    return cache.tools.map(tool => ({
+      id: tool.name,
+      summary: tool.description || '',
+      description: tool.description,
+      path: `/tools/${provider.id}/{tool.name}`,
+      method: 'POST',
+      inputSchema: tool.inputSchema as JSONSchema7,
+      responses: {
+        '200': {
+          description: 'Successfully created task',
+          schema: z.any(), // Assuming you have a ZodType for the response
+        }
+      },
+      handler: async ({ params }) => {
+        return await callToolFromRemoteProvider(provider, userId, tool.name, params);
       }
-    } else {
-      providerTool = toolIdOrProviderTool;
+    }));
+  }
+
+  async getProviderTools(provider: Provider, userId?: string): Promise<Tool[]> {
+    if (isNativeProvider(provider))
+      return provider.tools;
+
+    if (isRemoteProvider(provider) && userId)
+      return this.getRemoteProviderTools(provider, userId);
+
+    return [];
+  }
+
+  async getAllTools(userId?: string): Promise<ProviderTool[]> {
+    let providers = this.getAllProviders();
+
+    if (userId) {
+      const connections = await getValidConnections(userId);
+      const providerIds = Array.from(connections.values()).map(conn => conn.provider);
+      providers = providers.filter(provider => providerIds.includes(provider.id));
     }
-    
+
+    const providerToolsArrays = await Promise.all(
+      providers.map(async provider => {
+        const tools = await this.getProviderTools(provider, userId);
+        return tools.map(tool => ({ provider, tool }));
+      })
+    );
+    return providerToolsArrays.flat();
+  }
+
+  async getTool(toolId: string, userId?: string): Promise<ProviderTool | undefined> {
+    const tools = await this.getAllTools(userId);
+
+    return tools.find(t => t.tool.id === toolId);
+  }
+
+  async executeTool(providerTool: ProviderTool, userId: string, params: unknown): Promise<unknown> {
     const { provider, tool } = providerTool;
+
+    if (!isFullProvider(provider)) {
+      throw new Error(`Provider '${provider.id}' is not supported yet`);
+    }
 
     const posthog = PostHogClient(); // Get the PostHog client instance
 
@@ -60,7 +111,7 @@ export class ProviderRegistry {
       // Create the context for the tool handler
       const context: ToolContext = {
         getAccessToken: () => {
-          return oauthService.getValidAccessToken(provider.id, userId);
+          return oauthService.getValidAccessToken(provider, userId);
         }
       };
 

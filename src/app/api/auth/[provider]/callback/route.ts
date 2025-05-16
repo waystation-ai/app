@@ -4,6 +4,9 @@ import { oauthService } from '@/lib/services/oauth-service';
 import { storeOAuthTokens } from '@/lib/db';
 import { getRequestOrigin } from '@/lib/utils/get-request-origin';
 import { stateStore } from '@/lib/services/state-store';
+import { isFullProvider, isRemoteProvider, RemoteProvider } from '@/marketplace/core/types';
+import { registry } from '@/marketplace';
+import { getToolsForRemoteProvider } from '@/lib/services/mcp';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ provider: string }> }) {
   try {
@@ -13,6 +16,12 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     const { provider } = await params;
+
+    const config = registry.getProvider(provider);
+    
+    if (!config || !isFullProvider(config)) {
+      return new NextResponse('Provider not found', { status: 404 });
+    }
 
     const url = new URL(request.url);
     const code = url.searchParams.get('code');
@@ -29,7 +38,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return new NextResponse('Missing code or state', { status: 400 });
     }
 
-
     // Validate state
     const storedState = await stateStore.getState(state);
     if (!storedState || storedState.provider !== provider || storedState.userId !== session.userId) {
@@ -37,13 +45,19 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     // Exchange code for tokens with PKCE for Airtable
-    const tokens = await oauthService.exchangeCodeForTokens(provider, code, storedState.codeVerifier);
+    const tokens = await oauthService.exchangeCodeForTokens(session.userId, config, code, storedState.codeVerifier);
 
     // Store tokens in database
     await storeOAuthTokens(session.userId, provider, tokens);
     
     // Clean up used state after successful token exchange and storage
     await stateStore.deleteState(state);
+
+
+    if (isRemoteProvider(config)) {
+      const toolCache = await getToolsForRemoteProvider(config as RemoteProvider, session.userId);
+      console.log(`Fetched ${toolCache?.tools.length} tools for provider "${provider}"`);
+    }
 
     // Always redirect to dashboard, but include redirect_uri as a query parameter if it exists
     const dashboardUrl = new URL('/dashboard', getRequestOrigin(request));

@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   // Get all providers from registry
-  const providers = registry.getAllProviders().map(provider => ({
+  const providers = registry.getVetoedProviders().map(provider => ({
     id: provider.id,
     name: provider.name,
     description: provider.description,

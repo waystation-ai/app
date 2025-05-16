@@ -1,17 +1,15 @@
 import { auth } from '@clerk/nextjs/server';
-import { eq } from 'drizzle-orm';
-
 import { Metadata } from 'next';
 import Link from 'next/link';
 
-import { db } from '@/lib/db';
-import { oauthConnections } from '@/lib/db/schema';
+import { getValidConnections } from '@/lib/db';
 import { registry } from '@/marketplace';
+import { isFullProvider, Provider } from '@/marketplace/core/types';
 
-import ProviderCard from '@/components/app/ProviderCard';
-import { ProviderIcon } from '@/components/app/ProviderIcon';
 import { LaunchPad } from '@/components/app/LaunchPad';
 import { LaunchPadBasement } from '@/components/app/LaunchPadBasement';
+import ProviderCard from '@/components/app/ProviderCard';
+import { ProviderIcon } from '@/components/app/ProviderIcon';
 import { RedirectHandler } from '@/components/app/RedirectHandler';
  
 export const metadata: Metadata = {
@@ -19,67 +17,71 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  let connectedProviders: Record<string, boolean> = {};
+  const session = await auth();
 
+  if (!session.userId) {
+    session.redirectToSignIn();
+    return null; // Early return to avoid unnecessary processing
+  }
+
+  // Get connected providers
+  let connectedProviderIds = new Set<string>();
   try {
-    const session = await auth();
-    
-    if (session?.userId) {
-      const connections = await db.select().from(oauthConnections)
-        .where(eq(oauthConnections.userId, session.userId));
-
-      connectedProviders = connections.reduce((acc, conn) => {
-        acc[conn.provider] = true;
-        return acc;
-      }, {} as Record<string, boolean>);
-    }
+    const connectionsMap = await getValidConnections(session.userId);
+    connectedProviderIds = new Set(connectionsMap.keys());
   } catch (error) {
     console.error('Error fetching connections:', error);
     // Continue with empty connections
   }
 
-  // Get all providers from registry
+  // Get all providers and organize them by type
   const allProviders = registry.getAllProviders();
   
-  // Get all providers with authorization URLs
-  const providersWithAuth = allProviders
-    .filter(provider => provider.authorizationUrl)
-    .map(provider => [provider.id, provider] as [string, typeof provider]);
+  // Create maps to store providers by category
+  type ProviderMap = Record<string, Provider>;
   
-  // Get providers without authorization URLs
-  const providersWithoutAuth = allProviders
-    .filter(provider => !provider.authorizationUrl)
-    .map(provider => [provider.id, provider] as [string, typeof provider]);
+  // Categorize providers by type and connection status
+  const providersData = allProviders.reduce((result, provider) => {
+    const hasAuth = isFullProvider(provider);
+    const isConnected = connectedProviderIds.has(provider.id);
+    
+    if (hasAuth) {
+      if (isConnected) {
+        result.connected[provider.id] = provider;
+      } else {
+        result.unconnected[provider.id] = provider;
+      }
+    } else {
+      result.noAuth[provider.id] = provider;
+    }
+    
+    return result;
+  }, {
+    connected: {} as ProviderMap,
+    unconnected: {} as ProviderMap,
+    noAuth: {} as ProviderMap
+  });
   
-  // Split into connected and unconnected providers
-  const connectedProviderEntries = providersWithAuth
-    .filter(([providerName]) => connectedProviders[providerName]);
-  const unconnectedProviderEntries = providersWithAuth
-    .filter(([providerName]) => !connectedProviders[providerName]);
+  // Get arrays of provider IDs for each category
+  const connectedIds = Object.keys(providersData.connected);
+  const unconnectedIds = Object.keys(providersData.unconnected);
   
-  // Determine which providers to display in "Connect your apps"
-  let providersToDisplay;
-  if (connectedProviderEntries.length > 4) {
-    // If more than 4 connected providers, show all connected
-    providersToDisplay = connectedProviderEntries;
-  } else {
-    // Show all connected + enough unconnected to reach 4 total
-    const unconnectedToShow = unconnectedProviderEntries
-      .slice(0, 4 - connectedProviderEntries.length);
-    providersToDisplay = [...connectedProviderEntries, ...unconnectedToShow];
-  }
+  // Determine which provider IDs to display in "Connect your apps"
+  const displayIds = connectedIds.length > 4
+    ? connectedIds
+    : [
+        ...connectedIds,
+        ...unconnectedIds.slice(0, 4 - connectedIds.length)
+      ];
   
   // Create a Set of provider IDs that are displayed in "Connect your apps"
-  const displayedProviderIds = new Set(
-    providersToDisplay.map(([providerName]) => providerName)
-  );
+  const displayedProviderIds = new Set(displayIds);
   
-  // Get providers with authorization URLs that weren't displayed
-  const remainingAuthProviders = providersWithAuth
-    .filter(([providerName]) => !displayedProviderIds.has(providerName));
-  
-  // Combine both for "More integrations"
-  const moreIntegrationsProviders = [...remainingAuthProviders, ...providersWithoutAuth];
+  // Get remaining provider IDs for "More integrations"
+  const moreIntegrationIds = [
+    ...unconnectedIds.filter(id => !displayedProviderIds.has(id)),
+    ...Object.keys(providersData.noAuth)
+  ];
 
   return (
     <div className="mt-4 sm:mt-8 px-4 sm:px-6 lg:px-8  mx-auto">
@@ -88,25 +90,28 @@ export default async function Page() {
       {/* Top section - Two columns */}
       <div className="flex flex-col lg:flex-row gap-8 mb-12">
         {/* Left Column - Connect your apps */}
-        <div className={`flex flex-col ${connectedProviderEntries.length > 0 ? 'lg:w-2/3' : 'w-full'}`}>
+        <div className={`flex flex-col ${connectedIds.length > 0 ? 'lg:w-2/3' : 'w-full'}`}>
           <p className="text-3xl lg:text-4xl text-gray-900 font-bold">
                 Connect your apps first...
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 w-full my-3 sm:my-9">
-            {providersToDisplay.map(([provider, config]) => (
-              <ProviderCard
-                key={provider}
-                provider={provider}
-                name={config.name}
-                description={config.description}
-                isConnected={!!connectedProviders[provider]}
-              />
-            ))}
+            {displayIds.map(providerId => {
+              const provider = providersData.connected[providerId] || providersData.unconnected[providerId];
+              return (
+                <ProviderCard
+                  key={providerId}
+                  provider={providerId}
+                  name={provider.name}
+                  description={provider.description}
+                  isConnected={connectedProviderIds.has(providerId)}
+                />
+              );
+            })}
           </div>
         </div>
 
         {/* Right Column - Launch section - Only shown when at least one provider is connected */}
-        {connectedProviderEntries.length > 0 && (
+        {connectedIds.length > 0 && (
           <div className="flex flex-col lg:w-1/3 items-center justify-center h-full">
             <p className="my-4 text-3xl lg:text-4xl text-gray-900 font-bold w-full text-center">
                   ...and get started!
@@ -123,12 +128,19 @@ export default async function Page() {
           More Integrations
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-8 gap-6 w-full my-6">
-          {moreIntegrationsProviders.map(([provider, config]) => (
-            <Link key={provider} href={config.authorizationUrl ? `/connect/${provider}` : `/waitlist/${provider}`} className="provider-card flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
-              <ProviderIcon provider={provider} />
-              <p className="mt-2 text-sm text-gray-600 text-center">{config.name}</p>
-            </Link>
-          ))}
+          {moreIntegrationIds.map(providerId => {
+            const provider = providersData.unconnected[providerId] || providersData.noAuth[providerId];
+            return (
+              <Link 
+                key={providerId} 
+                href={isFullProvider(provider) ? `/connect/${providerId}` : `/waitlist/${providerId}`} 
+                className="provider-card flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+              >
+                <ProviderIcon provider={providerId} />
+                <p className="mt-2 text-sm text-gray-600 text-center">{provider.name}</p>
+              </Link>
+            );
+          })}
         </div>
       </div>
 

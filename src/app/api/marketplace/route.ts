@@ -3,25 +3,23 @@ import { registry } from '@/marketplace';
 import { getValidConnections } from '@/lib/db';
 import { getRequestOrigin } from '@/lib/utils/get-request-origin';
 
-import { authenticateRequest } from '@/lib/utils/authenticate-request';
+import { authUserId } from '@/lib/utils/auth-userid';
 
 export async function GET(request: NextRequest) {
   try {
-    const userId = await authenticateRequest(request);
+    const userId = await authUserId();
     
     // Get all providers from the registry
     const providers = registry.getAllProviders();
     
     // Get connection status for authenticated users
-    const connections = userId 
-      ? await getValidConnections(userId)
-      : new Map();
+    const connections = userId ? await getValidConnections(userId) : new Map();
     
     // Get request origin for constructing full URLs
     const origin = getRequestOrigin(request);
     
     // Format the response
-    const formattedProviders = providers.map(provider => {
+    const formattedProviders = providers.map(async provider => {
       return {
         id: provider.id,
         name: provider.name,
@@ -30,7 +28,7 @@ export async function GET(request: NextRequest) {
         isConnected: userId ? connections.has(provider.id) : false,
         bullets: provider.bullets || [],
         chat: provider.chat || [],
-        tools: provider.tools.map(tool => ({
+        tools: (await registry.getProviderTools(provider, userId ?? undefined)).map(tool => ({
           name: tool.id,
           summary: tool.summary,
           description: tool.description || ''

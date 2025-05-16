@@ -4,6 +4,7 @@ import { getProviderConfig } from "@/lib/services/provider-config";
 import Providers from "@/components/app/Providers";
 import AlternativeApps from "./AlternativeApps";
 import { AppType } from "./metadata";
+import { isFullProvider } from "@/marketplace/core/types";
 
 interface AppInfo {
   type: AppType;
@@ -68,7 +69,7 @@ export default async function ConnectPage({ params, appType, redirectUri }: Conn
             )}
 
             <Link
-              href={config.authorizationUrl 
+              href={isFullProvider(config) 
                 ? `/api/auth/${provider}/connect${redirectUri ? `?redirect_uri=${encodeURIComponent(redirectUri)}` : ''}`
                 : `/dashboard?provider=${provider}${redirectUri ? `&redirect_uri=${encodeURIComponent(redirectUri)}` : ''}`
               }

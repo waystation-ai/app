@@ -25,6 +25,8 @@ import './gmeet';
 import './salesforce';
 import './smartsheet';
 
+import './remote-mcps';
+
 export {registry} from './core/registry';
 export type { Provider } from '@/marketplace/core/types';
 

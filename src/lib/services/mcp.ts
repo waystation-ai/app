@@ -1,123 +1,113 @@
-import { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
-import { JSONRPCMessage, JSONRPCMessageSchema } from '@modelcontextprotocol/sdk/types.js';
+import { Client } from '@modelcontextprotocol/sdk/client/index.js';
+import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js';
 
-// Next.js-compatible SSE transport implementation
+import { storeRemoteProviderTools, getRemoteProviderTools} from '@/lib/db';
+import { RemoteOAuthClientProvider } from './oauth-service';
+import { RemoteProvider } from '@/marketplace/core/types';
+import { ListToolsResult } from '@modelcontextprotocol/sdk/types.js';
 
-export class NextJsSSETransport implements Transport {
-  private writer: WritableStreamDefaultWriter<Uint8Array>;
-  private encoder: TextEncoder;
-  private messageQueue: JSONRPCMessage[] = [];
-  private _sessionId: string;
-  private _endpoint: string;
-  private connected: boolean = false;
-  // Transport interface properties
-  onmessage?: (message: JSONRPCMessage) => void;
-  onclose?: () => void;
-  onerror?: (error: Error) => void;
+class RemoteProviderClient extends Client {
+  private provider: RemoteProvider;
+  private userId: string;
+  
+  constructor(provider: RemoteProvider, userId: string) {
+    super({
+      name: 'WayStation',
+      version: '1.0.0'
+    });
 
-  private static _activeTransports = new Map<string, NextJsSSETransport>();
-
-  constructor(writer: WritableStreamDefaultWriter<Uint8Array>, endpoint: string) {
-    this.writer = writer;
-    this.encoder = new TextEncoder();
-    this._sessionId = crypto.randomUUID();
-    this._endpoint = endpoint;
+    this.provider = provider;
+    this.userId = userId;  
   }
 
-  async start(): Promise<void> {
-    if (this.connected) {
-      throw new Error(
-        "NextJsSSETransport already started! If using Server class, note that connect() calls start() automatically."
-      );
+  public async connect(){
+    await super.connect(new SSEClientTransport(new URL(this.provider.serverUrl), {
+        authProvider: new RemoteOAuthClientProvider(this.provider, this.userId),
+    }));
+  }
+}
+
+export async function fetchToolsFromRemoteProvider(provider: RemoteProvider, userId: string): Promise<ListToolsResult> {
+  try {
+    console.log(`Fetching tools from remote provider "${provider.id}" at ${provider.serverUrl}`);
+    
+    const client = new RemoteProviderClient(provider, userId);
+              
+    // Connect to the MCP server
+    await client.connect();
+    
+    // List tools
+    const toolsList = await client.listTools();
+    
+    // Close the connection
+    await client.close();
+    
+    console.log(`Successfully fetched ${toolsList.tools.length} tools from provider "${provider.id}"`);
+    
+    // Convert to our Tool type
+    return toolsList;
+  } catch (error) {
+    console.error(`Error fetching tools from provider "${provider.id}":`, error);
+    return { tools: []};
+  }
+}
+
+export async function callToolFromRemoteProvider(provider: RemoteProvider, userId: string, toolName: string, params: any): Promise<unknown> { //eslint-disable-line @typescript-eslint/no-explicit-any
+  try {
+    console.log(`Calling tool for remote provider "${provider.id}" at ${provider.serverUrl}`);
+    
+    const client = new RemoteProviderClient(provider, userId);
+              
+    // Connect to the MCP server
+    await client.connect();
+    
+    // List tools
+    const response = await client.callTool({
+      name: toolName,
+      arguments: params
+    });
+
+    // Close the connection
+    await client.close();
+    
+    console.log(`Successfully called ${toolName} from provider "${provider.id}"`);
+
+    const result = (response.content as any)[0]?.text;  // eslint-disable-line @typescript-eslint/no-explicit-any
+    
+    if (response.error) {
+      console.error(`Error calling tool "${toolName}" from provider "${provider.id}":`, result.content);
+      throw new Error(`Error calling tool "${toolName}": ${result}`);
     }
+    
+    return JSON.parse(result);
+  } catch (error) {
+    console.error(`Error fetching tools from provider "${provider.id}":`, error);
+    return [];
+  }
+}
 
-    try {
-      // Send the endpoint event (following the official SDK format)
-      await this.writer.write(
-        this.encoder.encode(`event: endpoint\ndata: ${encodeURI(this._endpoint)}?sessionId=${this._sessionId}\n\n`)
-      );
-      
-      this.connected = true;
-    } catch (error) {
-      if (this.onerror) {
-        this.onerror(error instanceof Error ? error : new Error(String(error)));
-      }
-      throw error;
+export async function getToolsForRemoteProvider(provider: RemoteProvider, userId: string): Promise<ListToolsResult | undefined> {
+  // Try to get cached tools
+  const cachedTools = await getRemoteProviderTools(userId, provider.id);
+  
+  if (cachedTools) {
+    console.log(`Using cached tools for provider "${provider}" for user "${userId}"`);
+    return cachedTools;
+  }
+  
+  // No cached tools, fetch them
+  try {
+    const result = await fetchToolsFromRemoteProvider(provider, userId);
+    
+    if (result.tools.length > 0) {
+      // Cache the tools
+      await storeRemoteProviderTools(userId, provider.id, result);
+      console.log(`Cached tools for provider "${provider}" for user "${userId}"`);
     }
-  }
-
-  async send(message: JSONRPCMessage): Promise<void> {
-    if (!this.connected) {
-      throw new Error("Not connected");
-    }
-
-    try {
-      // Use the named event format from the official SDK
-      const messageStr = JSON.stringify(message);
-      
-      await this.writer.write(
-        this.encoder.encode(`event: message\ndata: ${messageStr}\n\n`)
-      );
-    } catch (error) {
-      if (this.onerror) {
-        this.onerror(error instanceof Error ? error : new Error(String(error)));
-      }
-    }
-  }
-
-  async close(): Promise<void> {
-    try {
-      await this.writer.close();
-      this.connected = false;
-      
-      if (this.onclose) {
-        this.onclose();
-      }
-    } catch (error) {
-      if (this.onerror) {
-        this.onerror(error instanceof Error ? error : new Error(String(error)));
-      }
-    }
-  }
-
-  // Handle incoming messages with validation
-  async handleMessage(message: unknown): Promise<void> {
-    try {
-      const parsedMessage = JSONRPCMessageSchema.parse(message);
-      
-      if (this.onmessage) {
-        this.onmessage(parsedMessage);
-      } else {
-        // Queue the message if no handler is registered yet
-        this.messageQueue.push(parsedMessage);
-      }
-    } catch (error) {
-      if (this.onerror) {
-        this.onerror(error as Error);
-      }
-      throw error;
-    }
-  }
-
-  // Get the session ID
-  get sessionId(): string {
-    return this._sessionId;
-  }
-
-  public static getTransport(sessionId: string): NextJsSSETransport | undefined {
-    return this._activeTransports.get(sessionId);
-  }
-  public static setTransport(sessionId: string, transport: NextJsSSETransport): void {
-    this._activeTransports.set(sessionId, transport);
-  }
-  public static deleteTransport(sessionId: string): void {
-    this._activeTransports.delete(sessionId);
-  }
-  public static clearTransports(): void { 
-    this._activeTransports.clear();
-  }
-
-  public static hasTransport(sessionId: string): boolean {  
-    return this._activeTransports.has(sessionId);
+    
+    return result;
+  } catch (error) {
+    console.error(`Error getting tools for provider "${provider}":`, error);
+    return undefined;
   }
 }

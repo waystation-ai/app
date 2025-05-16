@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
 import { ListToolsResult } from '@modelcontextprotocol/sdk/types.js';
 import { registry } from '@/marketplace';
-import { zodToJsonSchema } from 'zod-to-json-schema';
 
 export async function GET() {
   const tools = [];
   
-  for (const tool of registry.getAllTools()) {
-    const schema = zodToJsonSchema(tool.parameters);
+  for (const {tool} of await registry.getAllTools()) {
+    const schema = tool.inputSchema;
     const schemaObj = schema as Record<string, unknown>;
     
     // Ensure we have a valid properties object that satisfies { [x: string]: unknown }

@@ -43,6 +43,13 @@
       "when": 1746001183030,
       "tag": "0005_last_adam_warlock",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1747320986748,
+      "tag": "0006_nostalgic_metal_master",
+      "breakpoints": true
     }
   ]
 }

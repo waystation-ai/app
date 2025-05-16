@@ -69,15 +69,11 @@ export function Menu() {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-        {/*
         <NavigationMenuItem>
-          <a href="https://github.com/waystation-ai/marketplace" target="_blank">
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Marketplace
-            </NavigationMenuLink>
-          </a>
+          <NavigationMenuLink className={navigationMenuTriggerStyle()} href="/marketplace">
+            Marketplace
+          </NavigationMenuLink>
         </NavigationMenuItem>
-        */}
         <SignedIn>
         <NavigationMenuItem>
           <NavigationMenuLink className={navigationMenuTriggerStyle()} href="/playground" target="_blank">
@@ -85,12 +81,13 @@ export function Menu() {
           </NavigationMenuLink>
         </NavigationMenuItem>
         </SignedIn>
-
+        {/*
         <NavigationMenuItem>
           <NavigationMenuLink className={navigationMenuTriggerStyle()} href="https://www.linkedin.com/company/waystation-ai" target="_blank">
             What&apos;s New
           </NavigationMenuLink>
         </NavigationMenuItem>
+        */}
       </NavigationMenuList>
     </NavigationMenu>
   )
@@ -186,9 +183,8 @@ export default function Navigation() {
           </Link>
 
           <div className="border-t border-gray-200 mt-2 pt-4">
-
+            <Link href="/marketplace" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>Marketplace</Link>
             <Link href="/playground" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>Playground</Link>
-            <Link href="/connect/mcp-server" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>What&apos;s New</Link>
           </div>
 
           {/* User Profile in Mobile Menu */}

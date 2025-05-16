@@ -1,4 +1,6 @@
+import { JSONSchema7 } from 'json-schema';
 import { z } from 'zod';
+import { zodToJsonSchema } from 'zod-to-json-schema';
 
 export interface ToolContext {
   getAccessToken: () => Promise<string>;
@@ -19,7 +21,7 @@ export interface Tool<T = unknown, R = unknown> {
   description?: string;
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   path: string;
-  parameters: z.ZodType<T>;
+  inputSchema?: JSONSchema7; 
   responses: Record<string, {
     description: string;
     schema: z.ZodType<R>;
@@ -28,19 +30,14 @@ export interface Tool<T = unknown, R = unknown> {
   handler: ToolHandler<T, R>;
 }
 
-export interface Provider {
+export interface NativeTool<T, R> extends Tool<T, R> {
+  parameters: z.ZodType<T>;
+}
+
+export interface BaseProvider {
   id: string;
   name: string;
   description: string;
-  tools: Tool<any, any>[]; // eslint-disable-line @typescript-eslint/no-explicit-any
-  
-  // OAuth fields (optional for providers without OAuth)
-  clientId?: string;
-  clientSecret?: string;
-  authorizationUrl?: string;
-  tokenUrl?: string;
-  scopes?: string[];
-  group?: string;
   
   // Marketing fields
   bullets?: string[];
@@ -50,13 +47,41 @@ export interface Provider {
   }>;
 }
 
+export interface NativeProvider extends BaseProvider {
+  tools: Tool<any, any>[]; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+  // OAuth fields (optional for providers without OAuth)
+  clientId: string;
+  clientSecret?: string;
+  authorizationUrl?: string;
+  tokenUrl?: string;
+  scopes: string[];
+  group?: string;
+}
+
+export interface RemoteProvider extends BaseProvider {
+  serverUrl: string; // URL for the remote MCP server
+}
+
+export type Provider = BaseProvider | NativeProvider | RemoteProvider;
+
+export type FullProvider = NativeProvider | RemoteProvider;
+
+export function isNativeProvider(provider: Provider): provider is NativeProvider { return 'authorizationUrl' in provider; } 
+
+export function isRemoteProvider(provider: Provider): provider is RemoteProvider { return 'serverUrl' in provider; }
+
+export function isFullProvider(provider: Provider): provider is FullProvider {
+  return 'authorizationUrl' in provider || 'serverUrl' in provider; 
+} 
 export interface ProviderTool {
   provider: Provider;
   tool: Tool;
 }
 
-
-
-export function defineTool<T, R>(tool: Tool<T, R>): Tool<T, R> {
-  return tool;
+export function defineTool<T, R>(tool: NativeTool<T, R>): Tool<T, R> {
+  return {
+    ...tool,
+    inputSchema: zodToJsonSchema(tool.parameters) as JSONSchema7,
+  };
 }

@@ -11,7 +11,7 @@ interface ProvidersProps {
 export default function Providers({ className, app = undefined, width, height }: ProvidersProps) {
   return (
     <div className={className}>
-      {registry.getAllProviders().map((provider) => (
+      {registry.getVetoedProviders().map((provider) => (
         <ProviderIconLink 
           key={provider.id}
           app={app} 

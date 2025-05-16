@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { authenticateRequest } from '@/lib/utils/authenticate-request';
+import { authUserId } from '@/lib/utils/auth-userid';
 import { registry } from '@/marketplace';
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
@@ -7,7 +7,7 @@ import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 export async function POST(request: NextRequest) {
   try {
     // Authenticate request
-    const userId = await authenticateRequest(request);
+    const userId = await authUserId();
     if (!userId) {
       const result: CallToolResult = {error: true, content: [{type: "text", text: 'Unauthorized' }]};
       return NextResponse.json(result, { status: 401 });
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Find the tool
-    const tool = registry.getTool(params.name);
+    const tool = await registry.getTool(params.name, userId);
     if (!tool) {
       const result: CallToolResult = {
         error: true, 

@@ -1,9 +1,6 @@
 import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { oauthConnections } from '@/lib/db/schema';
-import { removeOAuthConnection } from '@/lib/db';
-import { eq } from 'drizzle-orm';
+import { getValidConnections, removeOAuthConnection } from '@/lib/db';
 
 export async function GET() {
   try {
@@ -12,11 +9,10 @@ export async function GET() {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
-    const connections = await db.select().from(oauthConnections)
-      .where(eq(oauthConnections.userId, session.userId));
-
+    const connectionsMap = await getValidConnections(session.userId);
+    
     // Don't expose sensitive data
-    const safeConnections = connections.map(conn => ({
+    const safeConnections = Array.from(connectionsMap.values()).map(conn => ({
       provider: conn.provider,
       connectedAt: conn.createdAt,
       lastUsed: conn.updatedAt

@@ -2,19 +2,73 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 
 import { ListToolsRequestSchema, CallToolRequestSchema } from '@modelcontextprotocol/sdk/types.js';
-import { authenticateRequest } from '@/lib/utils/authenticate-request';
+import { authUserId } from '@/lib/utils/auth-userid';
 import { registry } from '@/marketplace';
-import { zodToJsonSchema } from 'zod-to-json-schema';
-import { NextJsSSETransport } from '@/lib/services/mcp';
+import { NextJsSSETransport } from '@/lib/services/next-sse-transport';
 
 // Debug flag - set to false in production
 const DEBUG = false;
 
-export async function SSE(request: NextRequest, nanoId?: string) {
+export async function configureMcpServer(server: Server, userId: string) {
+    // Set up request handlers
+    server.setRequestHandler(ListToolsRequestSchema, async () => {
+      const tools = [];
+      
+      for (const {tool} of await registry.getAllTools(userId)) {
+        const schema = tool.inputSchema;
+        const schemaObj = schema as Record<string, unknown>;
+        
+        // Ensure we have a valid properties object that satisfies { [x: string]: unknown }
+        const properties = schemaObj.properties as Record<string, unknown> || {};
+        
+        tools.push({
+          name: tool.id,
+          description: tool.description || tool.summary,
+          inputSchema: {
+            type: "object" as const,
+            properties,
+            ...(Array.isArray(schemaObj.required) && {
+              required: schemaObj.required as string[]
+            })
+          }
+        });
+      }
+
+      return { tools };
+    });
+
+    server.setRequestHandler(CallToolRequestSchema, async (request) => {
+      // Find the tool
+      const tool = await registry.getTool(request.params.name, userId);
+      if (!tool) {
+        return {
+          error: true, 
+          content: [{type: "text", text: `Tool '${request.params.name}' not found`}]
+        };
+      }
+
+      // Execute the tool
+      try {
+        const result = await registry.executeTool(tool, userId, request.params.arguments);
+        
+        return {
+          content: [{type: "text", text: JSON.stringify(result)}]
+        };
+      } catch (error) {
+        return {
+          error: true,
+          content: [{type: "text", text: error instanceof Error ? error.message : 'Unknown error occurred'}]
+        };
+      }
+    });
+    
+}
+
+export async function SSE(request: NextRequest) {
   try {
     
     // Authentication
-    const userId = await authenticateRequest(request, nanoId);
+    const userId = await authUserId();
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -81,58 +135,8 @@ export async function SSE(request: NextRequest, nanoId?: string) {
             console.error('[SSE] MCP Server error:', error);
           };
 
-          // Set up request handlers
-          server.setRequestHandler(ListToolsRequestSchema, async () => {
-            const tools = [];
-            
-            for (const tool of registry.getAllTools()) {
-              const schema = zodToJsonSchema(tool.parameters);
-              const schemaObj = schema as Record<string, unknown>;
-              
-              // Ensure we have a valid properties object that satisfies { [x: string]: unknown }
-              const properties = schemaObj.properties as Record<string, unknown> || {};
-              
-              tools.push({
-                name: tool.id,
-                description: tool.description || tool.summary,
-                inputSchema: {
-                  type: "object" as const,
-                  properties,
-                  ...(Array.isArray(schemaObj.required) && {
-                    required: schemaObj.required as string[]
-                  })
-                }
-              });
-            }
+          configureMcpServer(server, userId);
 
-            return { tools };
-          });
-
-          server.setRequestHandler(CallToolRequestSchema, async (request) => {
-            // Find the tool
-            const tool = registry.getTool(request.params.name);
-            if (!tool) {
-              return {
-                error: true, 
-                content: [{type: "text", text: `Tool '${request.params.name}' not found`}]
-              };
-            }
-
-            // Execute the tool
-            try {
-              const result = await registry.executeTool(tool, userId, request.params.arguments);
-              
-              return {
-                content: [{type: "text", text: JSON.stringify(result)}]
-              };
-            } catch (error) {
-              return {
-                error: true,
-                content: [{type: "text", text: error instanceof Error ? error.message : 'Unknown error occurred'}]
-              };
-            }
-          });
-          
           // Connect transport to server
           await server.connect(transport);
           

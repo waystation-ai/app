@@ -8,7 +8,7 @@ export function RedirectHandler() {
   const searchParams = useSearchParams();
   
   useEffect(() => {
-    const redirectUri = searchParams.get('redirect_uri');
+    const redirectUri = searchParams?.get('redirect_uri');
     
     if (redirectUri) {
       // Small delay to ensure the dashboard is visible first

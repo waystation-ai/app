@@ -1,5 +1,23 @@
 import { pgTable, serial, text, timestamp, varchar, jsonb, unique } from 'drizzle-orm/pg-core';
 
+// New unified table for remote provider metadata
+export const remoteProviders = pgTable('remote_providers', {
+  id: serial('id').primaryKey(),
+  userId: text('user_id').notNull(),
+  provider: varchar('provider', { length: 50 }).notNull(),
+  serverUrl: text('server_url'),
+  oauthMetadata: jsonb('oauth_metadata'),
+  clientRegistration: jsonb('client_registration'),
+  providerMetadata: jsonb('provider_metadata'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow()
+}, (table) => {
+  return {
+    // Create a unique constraint to prevent duplicate entries
+    userProviderIdx: unique().on(table.userId, table.provider)
+  };
+});
+
 export const waitlistEntries = pgTable('waitlist_entries', {
   id: serial('id').primaryKey(),
   userId: text('user_id').notNull(),
@@ -41,6 +59,7 @@ export const indexes = {
   userProviderIdx: 'CREATE INDEX IF NOT EXISTS user_provider_idx ON oauth_connections (user_id, provider)',
   expiresAtIdx: 'CREATE INDEX IF NOT EXISTS expires_at_idx ON oauth_connections (expires_at)'
 };
+
 
 // New table for nano IDs
 export const nanoIds = pgTable('nano_ids', {

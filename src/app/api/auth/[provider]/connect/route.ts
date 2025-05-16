@@ -24,7 +24,7 @@ export async function GET(
     }
 
     // Generate authorization URL with state and PKCE for Airtable
-    const { url, state, codeVerifier } = await oauthService.buildAuthorizationUrl(provider);
+    const { url, state, codeVerifier } = await oauthService.buildAuthorizationUrl(session.userId, provider);
 
     // Extract redirect_uri from request URL
     const requestUrl = new URL(request.url);

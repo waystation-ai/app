@@ -5,6 +5,14 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
+        source: "/mcp",
+        destination: "/api/mcp",
+      },
+      {
+        source: "/mcp/:nanoid",
+        destination: "/api/mcp/:nanoid",
+      },
+      {
         source: "/ingest/static/:path*",
         destination: "https://us-assets.i.posthog.com/static/:path*",
       },

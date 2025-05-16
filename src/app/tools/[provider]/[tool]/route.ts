@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { authenticateRequest } from '@/lib/utils/authenticate-request';
+import { authUserId } from '@/lib/utils/auth-userid';
 import { registry } from '@/marketplace';
 
 type RequestParams = Promise<{ provider: string; tool: string }>;
@@ -15,7 +15,7 @@ async function handleToolRequest({ request, params, method, getParams}: {
   getParams: (request: NextRequest) => Promise<ToolParams>;
 }) {
   // Common authentication
-  const userId = await authenticateRequest(request);
+  const userId = await authUserId();
   if (!userId) {
     return new Response('Unauthorized', { status: 401 });
   }
@@ -32,7 +32,9 @@ async function handleToolRequest({ request, params, method, getParams}: {
   }
 
   // Common tool lookup with method validation
-  const toolObj = providerObj.tools.find(t => t.id === tool || t.path.endsWith(`/${provider}/${tool}`));
+  const tools = await registry.getProviderTools(providerObj, userId);
+
+  const toolObj = tools.find(t => t.id === tool || t.path.endsWith(`/${provider}/${tool}`));
   if (!toolObj || toolObj.method !== method) {
     return NextResponse.json(
       { error: true, content: `Tool '${tool}' not found or method not allowed` },
@@ -45,7 +47,7 @@ async function handleToolRequest({ request, params, method, getParams}: {
     const params = await getParams(request);
     
     // Execute tool with common error handling
-    const result = await registry.executeTool(toolObj.id, userId, params);
+    const result = await registry.executeTool({provider: providerObj, tool: toolObj}, userId, params);
     
     // Handle binary responses (ArrayBuffer)
     if (result instanceof ArrayBuffer) {

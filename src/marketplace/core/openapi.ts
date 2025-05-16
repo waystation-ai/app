@@ -2,17 +2,15 @@ import { zodToJsonSchema } from 'zod-to-json-schema';
 import { ProviderRegistry } from './registry';
 import { Tool } from './types';
 
-export function generateOpenApiSpec(registry: ProviderRegistry) {
+export async function generateOpenApiSpec(registry: ProviderRegistry) {
   const paths: Record<string, Record<string, unknown>> = {};
   
-  for (const provider of registry.getAllProviders()) {
-    for (const tool of provider.tools) {
-      // Add path to OpenAPI spec
-      if (!paths[tool.path]) {
-        paths[tool.path] = {};
-      }
-      paths[tool.path][tool.method.toLowerCase()] = toolToOpenApiOperation(tool);
+  for (const {tool} of await registry.getAllTools()) {
+    // Add path to OpenAPI spec
+    if (!paths[tool.path]) {
+      paths[tool.path] = {};
     }
+    paths[tool.path][tool.method.toLowerCase()] = toolToOpenApiOperation(tool);
   }
   
   return {
@@ -32,7 +30,7 @@ export function generateOpenApiSpec(registry: ProviderRegistry) {
 
 function toolToOpenApiOperation(tool: Tool) {
   // Convert Zod schemas to OpenAPI schemas
-  const requestSchema = zodToJsonSchema(tool.parameters) as Record<string, unknown>;
+  const requestSchema = tool.inputSchema as Record<string, unknown>;
   
   const operation: Record<string, unknown> = {
     operationId: tool.id,

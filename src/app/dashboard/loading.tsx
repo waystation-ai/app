@@ -1,5 +1,6 @@
 import ProviderCard from '@/components/app/ProviderCard';
 import { registry } from '@/marketplace';
+import { isFullProvider } from '@/marketplace/core/types';
 
 export default async function Page() {
   const connectedProviders: Record<string, boolean> = {};
@@ -9,13 +10,13 @@ export default async function Page() {
   
   // Get providers with authorization URLs for "Connect your apps" section
   const providersToDisplay = allProviders
-    .filter(provider => provider.authorizationUrl)
+    .filter(provider => isFullProvider(provider))
     .slice(0, 4)
     .map(provider => [provider.id, provider] as [string, typeof provider]);
   
   // Get providers without authorization URLs for "More integrations" section
   const moreIntegrationsProviders = allProviders
-    .filter(provider => !provider.authorizationUrl)
+    .filter(provider => !isFullProvider(provider))
     .slice(0, 8)
     .map(provider => [provider.id, provider] as [string, typeof provider]);
 

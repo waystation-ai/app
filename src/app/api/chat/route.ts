@@ -1,8 +1,9 @@
 import { azure } from '@ai-sdk/azure';
-import { streamText, tool } from 'ai';
+import { jsonSchema, streamText, tool } from 'ai';
 import { auth } from '@clerk/nextjs/server';
 import { registry } from '@/marketplace';
 import { getValidConnections } from '@/lib/db';
+import { z } from 'zod';
 
 const systemPrompt = `WayStation connects ChatGPT to popular productivity apps, such as Google Drive, Monday, Slack, and Gmail. It makes it possible for ChatGPT to find and read files, work with projects and tasks, engage in conversation on Slack, and communicate over email on behalf of users.
 
@@ -47,15 +48,15 @@ export async function POST(req: Request) {
 
         if (!connection)
           continue;
-        
+
         // User is connected to this provider, add its tools
-        for (const providerTool of provider.tools) {
+        for (const providerTool of await registry.getProviderTools(provider, userId)) {
           allTools[providerTool.id] = tool({    
             description: providerTool.description || providerTool.summary,
-            parameters: providerTool.parameters,
+            parameters: providerTool.inputSchema ? jsonSchema(providerTool.inputSchema) : z.any(),
             execute: async (params) => {
               // Call the centralized executeTool method
-              return registry.executeTool(providerTool.id, userId, params);
+              return registry.executeTool({provider, tool: providerTool}, userId, params);
             }
           });
         }
@@ -67,7 +68,7 @@ export async function POST(req: Request) {
   }
 
   const result = streamText({
-    model: azure('o4-mini', {
+    model: azure('gpt-4.1-mini', {
       structuredOutputs: false
     }),
     system: systemPrompt,

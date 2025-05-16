@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { JSONRPCMessageSchema } from '@modelcontextprotocol/sdk/types.js';
-import { NextJsSSETransport } from '@/lib/services/mcp';
+import { NextJsSSETransport } from '@/lib/services/next-sse-transport';
 
 // Maximum message size (from official SDK)
 const MAXIMUM_MESSAGE_SIZE = 4 * 1024 * 1024; // 4MB
