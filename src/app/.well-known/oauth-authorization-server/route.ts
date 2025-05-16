@@ -1,11 +1,19 @@
+import { NextResponse } from 'next/server';
+import { oauthServerService } from '../../../lib/services/oauth-server-service';
+
 export async function GET() {
-  const response = await fetch(`https://clerk.${process.env.APP_DOMAIN}/.well-known/openid-configuration`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  return Response.json(await response.json());
+  try {
+    const metadata = oauthServerService.getServerMetadata();
+    return NextResponse.json(metadata);
+  } catch (error) {
+    console.error('Error in metadata endpoint:', error);
+    
+    return NextResponse.json(
+      { 
+        error: 'server_error',
+        error_description: error instanceof Error ? error.message : 'Unknown error'
+      }, 
+      { status: 500 }
+    );
+  }
 }
-

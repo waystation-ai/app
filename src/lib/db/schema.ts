@@ -1,4 +1,26 @@
 import { pgTable, serial, text, timestamp, varchar, jsonb, unique } from 'drizzle-orm/pg-core';
+import { OAuthClientMetadata } from '@modelcontextprotocol/sdk/shared/auth.js';
+
+// Table for storing OAuth clients registered via dynamic client registration
+export const oauthClients = pgTable('oauth_clients', {
+  id: serial('id').primaryKey(),
+  clientId: text('client_id').notNull().unique(),
+  clientSecret: text('client_secret').notNull(),
+  clientMetadata: jsonb('client_metadata').$type<OAuthClientMetadata>(),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow()
+});
+
+// Table for storing the mapping between client redirect URIs and our internal state
+export const oauthRedirectMappings = pgTable('oauth_redirect_mappings', {
+  id: serial('id').primaryKey(),
+  state: text('state').notNull().unique(),
+  clientId: text('client_id').notNull(),
+  originalRedirectUri: text('original_redirect_uri').notNull(),
+  originalState: text('original_state'),
+  codeVerifier: text('code_verifier'),
+  expiresAt: timestamp('expires_at').notNull()
+});
 
 // New unified table for remote provider metadata
 export const remoteProviders = pgTable('remote_providers', {

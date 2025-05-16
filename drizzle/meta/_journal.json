@@ -50,6 +50,13 @@
       "when": 1747320986748,
       "tag": "0006_nostalgic_metal_master",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1747410788826,
+      "tag": "0007_lethal_psynapse",
+      "breakpoints": true
     }
   ]
 }
