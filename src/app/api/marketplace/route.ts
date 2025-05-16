@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     const origin = getRequestOrigin(request);
     
     // Format the response
-    const formattedProviders = providers.map(async provider => {
+    const formattedProviders = await Promise.all(providers.map(async provider => {
       return {
         id: provider.id,
         name: provider.name,
@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
           description: tool.description || ''
         }))
       };
-    });
+    }));
     
     return NextResponse.json(formattedProviders);
   } catch (error) {
