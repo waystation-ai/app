@@ -46,23 +46,19 @@ export function Menu() {
                   </div>
                   <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Securely connect Claude Desktop to your favorite apps</p>
                 </NavigationMenuLink>
-                <NavigationMenuLink >
-                  <Link href="/connect/chatgpt" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                    <div className="app-link text-sm font-medium leading-none">
-                      <Image src="/images/apps/chatgpt.svg" width={20} height={20} alt="Claude" />
-                      <span>WayStation GPT</span>
-                    </div>
-                    <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">ChatGPT empowered to take actions in your apps</p>
-                  </Link>
+                <NavigationMenuLink href="/connect/chatgpt" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                  <div className="app-link text-sm font-medium leading-none">
+                    <Image src="/images/apps/chatgpt.svg" width={20} height={20} alt="Claude" />
+                    <span>WayStation GPT</span>
+                  </div>
+                  <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">ChatGPT empowered to take actions in your apps</p>
                 </NavigationMenuLink>
-                <NavigationMenuLink >
-                  <Link href="/connect/mcp-server" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                    <div className="app-link text-sm font-medium leading-none">
-                      <Image src="/images/apps/mcp.svg" width={20} height={20} alt="Claude" />
-                      <span>Universal MCP</span>
-                    </div>
-                    <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">The only MCP server you need to connect your apps</p>
-                  </Link>
+                <NavigationMenuLink href="/connect/mcp-server" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                  <div className="app-link text-sm font-medium leading-none">
+                    <Image src="/images/apps/mcp.svg" width={20} height={20} alt="Claude" />
+                    <span>Universal MCP</span>
+                  </div>
+                  <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">The only MCP server you need to connect your apps</p>
                 </NavigationMenuLink>
               </li>
  
@@ -145,7 +141,7 @@ export default function Navigation() {
         <Menu />
       </div>
       <a className="ml-5 hidden md:block" href="https://www.producthunt.com/posts/marketplace-for-claude?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-marketplace&#0045;for&#0045;claude" target="_blank">
-          <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=945095&theme=light&t=1743150993435" alt="Marketplace&#0032;for&#0032;Claude - Effortlessly&#0032;connect&#0032;AI&#0032;to&#0032;your&#0032;everyday&#0032;apps | Product Hunt" style={{width: "200px", height: "27"}} width="200" height="27" />
+          <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=945095&theme=light&t=1743150993435" alt="Marketplace&#0032;for&#0032;Claude - Effortlessly&#0032;connect&#0032;AI&#0032;to&#0032;your&#0032;everyday&#0032;apps | Product Hunt" style={{width: "200px", height: "27"}} width="200" height="27" /> {/* eslint-disable-line @next/next/no-img-element */}
       </a>
 
       <div id="profile" className="hidden md:block md:ml-auto">
