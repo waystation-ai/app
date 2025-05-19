@@ -95,7 +95,7 @@ export async function SSE(request: NextRequest) {
         // Send an initial comment and data event to establish the connection
         console.log('[SSE] Sending initial connection messages');
         sendData(": connection initializing\n\n");
-        sendData("data: {\"status\":\"connecting\"}\n\n");
+        //sendData("data: {\"status\":\"connecting\"}\n\n");
         
         // Send a test event to help with debugging
         sendData("event: debug\ndata: {\"message\":\"SSE connection test\"}\n\n");
