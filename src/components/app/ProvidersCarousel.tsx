@@ -37,7 +37,7 @@ export function ProvidersCarousel({ providers, app }: ProvidersCarouselProps) {
       >
         <CarouselContent>
           {providers.map((provider) => (
-            <CarouselItem key={provider.id} className="basis-1/2 sm:basis-1/3 md:basis-1/6 lg:basis-1/8 pl-4">
+            <CarouselItem key={provider.id} className="basis-1/2 sm:basis-1/3 md:basis-1/5 lg:basis-1/8 pl-4">
               <Link 
                 href={`/connect/${app ? app + "/": ""}${provider.id}`} 
                 className="flex flex-col p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 h-full"
@@ -51,9 +51,14 @@ export function ProvidersCarousel({ providers, app }: ProvidersCarouselProps) {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <div className="flex items-center justify-end gap-2 mt-4">
-          <CarouselPrevious className="static translate-y-0 h-8 w-8" />
-          <CarouselNext className="static translate-y-0 h-8 w-8" />
+        <div className="flex items-center justify-between gap-2 mt-4">
+          <Link href="/marketplace" className="text-sm text-blue-600 hover:text-blue-800 hover:underline">
+            See all apps in the Marketplace
+          </Link>
+          <div className="flex items-center gap-2">
+            <CarouselPrevious className="static translate-y-0 h-8 w-8" />
+            <CarouselNext className="static translate-y-0 h-8 w-8" />
+          </div>
         </div>
       </Carousel>
     </div>
