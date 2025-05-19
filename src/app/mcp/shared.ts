@@ -6,9 +6,6 @@ import { authUserId } from '@/lib/utils/auth-userid';
 import { registry } from '@/marketplace';
 import { NextJsSSETransport } from '@/lib/services/next-sse-transport';
 
-// Debug flag - set to false in production
-const DEBUG = false;
-
 export async function configureMcpServer(server: Server, userId: string) {
     // Set up request handlers
     server.setRequestHandler(ListToolsRequestSchema, async () => {
@@ -94,9 +91,7 @@ export async function SSE(request: NextRequest) {
         sendData("data: {\"status\":\"connecting\"}\n\n");
         
         // Send a test event to help with debugging
-        if (DEBUG) {
-          sendData("event: debug\ndata: {\"message\":\"SSE connection test\"}\n\n");
-        }
+        sendData("event: debug\ndata: {\"message\":\"SSE connection test\"}\n\n");
         
         try {
           // Create a TransformStream for the transport to write to
@@ -156,21 +151,20 @@ export async function SSE(request: NextRequest) {
           });
           
           // Set up a periodic ping to help keep the connection alive
-          if (DEBUG) {
-            const pingInterval = setInterval(() => {
-              if (NextJsSSETransport.hasTransport(transport.sessionId)) {
-                sendData("event: debug\ndata: {\"ping\":\"" + new Date().toISOString() + "\"}\n\n");
-              } else {
-                clearInterval(pingInterval);
-              }
-            }, 10000); // Send a ping every 10 seconds
-            
-            // Clean up ping interval on abort
-            request.signal.addEventListener('abort', () => {
+          const pingInterval = setInterval(() => {
+            if (NextJsSSETransport.hasTransport(transport.sessionId)) {
+              sendData("event: debug\ndata: {\"ping\":\"" + new Date().toISOString() + "\"}\n\n");
+            } else {
               clearInterval(pingInterval);
-              controller.close();
-            });
-          }
+            }
+          }, 10000); // Send a ping every 10 seconds
+          
+          // Clean up ping interval on abort
+          request.signal.addEventListener('abort', () => {
+            clearInterval(pingInterval);
+            controller.close();
+          });
+
         } catch (error) {
           // Send error to client
           sendData(`event: error\ndata: ${JSON.stringify({
