@@ -1,11 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 
-import { configureMcpServer } from '@/lib/services/mcp-server';
 import { db } from '@/lib/db';
 import { nanoIds } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
+
+import { configureMcpServer } from '@/lib/services/mcp-server';
+import { transports } from '../sse';
 
 // Add this at the top of the file
 export const config = {
@@ -14,13 +16,10 @@ export const config = {
   },
 };
 
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const {nanoid} = req.query;
 
-  if (req.method !== 'POST') {
-    return res.redirect(`/mcp/sse/${nanoid}`);
-  }
-  
   const nanoIdEntry = await db.query.nanoIds.findFirst({
     where: eq(nanoIds.nanoId, nanoid as string),
   });
@@ -31,9 +30,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(401).json({ error: 'Unauthorized' }); // Invalid nano ID, immediately return unauthorized  
   }
 
-  const transport = new StreamableHTTPServerTransport({
-    sessionIdGenerator: undefined,
-  });
+  const transport = new SSEServerTransport("/mcp/messages", res);
+
+  // Store the transport by session ID
+  const sessionId = transport.sessionId;
+  transports[sessionId] = transport;
+
+  // Set up onclose handler to clean up transport when closed
+  transport.onclose = () => {
+    console.log(`SSE transport closed for session ${sessionId}`);
+    delete transports[sessionId];
+  };  
     
   // Create MCP server
   const server = new Server(
@@ -45,6 +52,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   
   // Connect transport to server
   await server.connect(transport);
-
-  return transport.handleRequest(req, res);
 }

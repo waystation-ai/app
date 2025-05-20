@@ -5,12 +5,8 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: "/mcp",
-        destination: "/api/mcp",
-      },
-      {
-        source: "/mcp/:nanoid",
-        destination: "/api/mcp/:nanoid",
+        source: "/mcp/:path*",
+        destination: "/api/mcp/:path*",
       },
       {
         source: "/ingest/static/:path*",

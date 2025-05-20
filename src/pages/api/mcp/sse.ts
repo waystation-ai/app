@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 
 import { getAuth } from '@clerk/nextjs/server';
 import { configureMcpServer } from '@/lib/services/mcp-server';
@@ -11,6 +11,13 @@ export const config = {
     bodyParser: false,
   },
 };
+
+// Store transports by session ID
+export const transports: Record<string, SSEServerTransport> = {};
+
+export function getTransport(sessionId: string) {
+  return transports[sessionId];
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const session = getAuth(req);
@@ -40,9 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     userId = data.user_id;
   }
 
-  const transport = new StreamableHTTPServerTransport({
-    sessionIdGenerator: undefined,
-  });
+  const transport = new SSEServerTransport("/mcp/messages", res);
     
   // Create MCP server
   const server = new Server(
@@ -54,6 +59,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   
   // Connect transport to server
   await server.connect(transport);
-
-  return transport.handleRequest(req, res);
 }
