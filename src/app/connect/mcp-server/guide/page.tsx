@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { McpKey } from '@/components/app/McpKey';
 import NanoIdDisplay from '@/components/app/NanoIdDisplay'; // Import the new client component
 
 export default function Page() {
@@ -31,52 +30,52 @@ export default function Page() {
       <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Option B. Local server</h2>
 
-        {/* Step 1: Get WAY_KEY */}
         <div className="mb-8">
-          <h3 className="text-xl font-medium mb-2">Step 1: Get your WAY_KEY</h3>
           <p className="text-gray-700 mb-4">
-            Your WAY_KEY is required to authenticate with the WayStation MCP server. Here&apos;s your key:
-          </p>
-          <McpKey />
-          <p className="text-sm text-gray-600 mt-2">
-            Copy this key as you&apos;ll need it in the next step.
-          </p>
-        </div>
-
-        {/* Step 2: Run MCP Server */}
-        <div className="mb-8">
-          <h3 className="text-xl font-medium mb-2">Step 2: Run the MCP Server</h3>
-          <p className="text-gray-700 mb-4">
-            Run the WayStation MCP server using one of these methods:
+            Run the WayStation MCP server using the command below:
           </p>
           <div className="space-y-4">
             <div>
-              <p className="font-medium mb-2">Option 1: Single command</p>
               <pre className="bg-gray-50 p-6 rounded-lg border border-gray-200 overflow-x-auto">
-                <code>WAY_KEY=&lt;your_way_key&gt; npx -y @waystation/mcp</code>
-              </pre>
-            </div>
-            <div>
-              <p className="font-medium mb-2">Option 2: Set environment variable</p>
-              <pre className="bg-gray-50 p-6 rounded-lg border border-gray-200 overflow-x-auto">
-                <code>export WAY_KEY=&lt;your_way_key&gt;
-npx -y @waystation/mcp</code>
+                <code>npx -y mcp-remote@latest https://waystation.ai/mcp</code>
               </pre>
             </div>
           </div>
-          <p className="text-sm text-gray-600 mt-4">
-            Replace &lt;your_way_key&gt; with the key from Step 1.
-          </p>
         </div>
 
-        {/* Step 3: Verify Connection */}
         <div className="mb-8">
-          <h3 className="text-xl font-medium mb-2">Step 3: Verify the Connection</h3>
+          <p className="text-gray-700 mb-4">
+            The typical config will look like the one below:
+          </p>
+          <div className="space-y-4">
+            <div>
+              <pre className="bg-gray-50 p-6 rounded-lg border border-gray-200 overflow-x-auto">
+                <code>
+                  {JSON.stringify(
+                    {
+                      mcpServers: {
+                        WayStation: {
+                          command: "npx",
+                          args: ["-y", "mcp-remote@latest", "https://waystation.ai/mcp"]
+                        }
+                      }
+                    },
+                    null,
+                    2
+                  )}
+                </code>
+              </pre>
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-8">
+          <h3 className="text-xl font-medium mb-2">Verify the Connection</h3>
           <p className="text-gray-700 mb-4">
             After starting the MCP server:
           </p>
           <ol className="list-decimal list-inside space-y-2 text-gray-700">
-            <li>You should see a success message in the terminal</li>
+            <li>You will be redirected to the browser to log in</li>
             <li>The server will be ready to accept connections</li>
             <li>Your AI assistant can now use the available tools and resources</li>
           </ol>
@@ -85,11 +84,11 @@ npx -y @waystation/mcp</code>
 
       {/* Troubleshooting */}
       <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Troubleshooting</h2>
+        <h3 className="text-xl font-medium mb-2">Troubleshooting</h3>
         <div className="space-y-4 text-gray-700">
           <p>If you encounter any issues:</p>
           <ul className="list-disc list-inside space-y-2">
-            <li>Ensure your chosen authentication method (WAY_KEY or unique URL) is correctly copied and valid</li>
+            <li>Ensure your chosen authentication method (unique URL) is correctly copied and valid</li>
             <li>Check that the command was run from a terminal with internet access</li>
             <li>Verify that no other MCP server is running on the same port</li>
           </ul>
