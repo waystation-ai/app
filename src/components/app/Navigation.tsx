@@ -39,10 +39,10 @@ export function Menu() {
                 </NavigationMenuLink>
               </li>
               <li>
-                <NavigationMenuLink href="/marketplace/claude" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                <NavigationMenuLink href="/integrations/claude" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                   <div className="app-link text-sm font-medium leading-none">
                     <Image src="/images/apps/claude.svg" width={20} height={20} alt="Claude" />
-                    <span>Marketplace for Claude</span>
+                    <span>Integrations for Claude</span>
                   </div>
                   <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Securely connect Claude Desktop to your favorite apps</p>
                 </NavigationMenuLink>
@@ -165,9 +165,9 @@ export default function Navigation() {
       {/* Mobile Navigation Menu */}
       <nav className={`md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl shadow-lg transition-all duration-300 ease-in-out overflow-hidden ${mobileMenuOpen ? 'max-h-96 py-4' : 'max-h-0'}`}>
         <div className="flex flex-col gap-4 px-6">
-          <Link href="/marketplace/claude" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>
+          <Link href="/integrations/claude" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>
             <Image src="/images/apps/claude.svg" width={20} height={20} alt="Claude" />
-            <span>Marketplace for Claude</span>
+            <span>Integrations for Claude</span>
           </Link>
           <Link href="/connect/chatgpt" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>
             <Image src="/images/apps/chatgpt.svg" width={20} height={20} alt="WayStation GPT" />

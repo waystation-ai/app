@@ -7,11 +7,11 @@ import { DownloadButton } from "@/components/app/DownloadButton";
 import { registry } from "@/marketplace";
 
 export const metadata: Metadata = {
-    title: `Marketplace for Claude | Effortlessly connect AI to your everyday apps`,
+    title: `Integrations for Claude | Effortlessly connect AI to your everyday apps`,
     description: `Connect Claude to your favorite apps (Slack, Monday, Airtable) with zero code. Automate routine tasks, streamline workflows, and unlock AI's full potential—no complexity, no vendor lock-in. Secure by design.`,
     openGraph: {
       type: 'article',
-      title: `Marketplace for Claude | Powered by WayStation`,
+      title: `Integrations for Claude | Powered by WayStation`,
       description: `Effortlessly connect AI to your everyday apps.`,
       siteName: "WayStation",
       url: `/claude/marketplace`,
@@ -37,7 +37,7 @@ export default function Page() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 px-4 sm:px-8 py-8 max-w-7xl mx-auto">
           {/* Left Column - Pitch */}
           <div className="flex flex-col justify-center text-left space-y-4 lg:space-y-6">
-            <h1 className="text-3xl lg:text-4xl font-bold">Marketplace for Claude</h1>
+            <h1 className="text-3xl lg:text-4xl font-bold">Integrations for Claude</h1>
             <h2 className="!mt-2 text-lg lg:text-xl leading-snug">Effortlessly connect AI to your everyday apps</h2>
             <ul className="my-2">
               <li>Securely connect Claude Desktop to your favorite apps (Notion, Slack, Monday, Airtable, etc.)</li>

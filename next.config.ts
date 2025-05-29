@@ -2,6 +2,15 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ['pdf-parse'],
+  async redirects() {
+    return [
+      {
+        source: '/marketplace/claude/:path*',
+        destination: '/integrations/claude/:path*',
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     return [
       {
