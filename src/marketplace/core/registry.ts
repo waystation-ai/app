@@ -1,11 +1,13 @@
 import { JSONSchema7 } from 'json-schema';
 import { z } from 'zod';
 
-import { isFullProvider, isNativeProvider, isRemoteProvider, Provider, ProviderTool, RemoteProvider, Tool, ToolContext } from './types';
+import { isFullProvider, isNativeProvider, isRemoteProvider, NativeProvider, Provider, ProviderResource, ProviderResourceContent, ProviderTool, RemoteProvider, Resource, ResourceContent, Tool, ToolContext } from './types';
 import PostHogClient from '@/lib/utils/posthog-client'; // Using the existing PostHog client
 import { oauthService } from '@/lib/services/oauth-service'; // Assuming oauthService is accessible or passed
-import { getRemoteProviderTools, getValidConnections } from '@/lib/db';
-import { callToolFromRemoteProvider } from '@/lib/services/mcp';
+import { getRemoteProviderMetadata, getValidConnections } from '@/lib/db';
+import { callToolFromRemoteProvider, readResourceContentFromRemoteProvider } from '@/lib/services/mcp-remote';
+import { generateText } from 'ai';
+import { azure } from '@ai-sdk/azure';
 
 export class ProviderRegistry {
   private providers: Map<string, Provider> = new Map();
@@ -29,7 +31,7 @@ export class ProviderRegistry {
   }
 
   private async getRemoteProviderTools(provider: RemoteProvider, userId: string): Promise<Tool[]> {
-    const cache = await getRemoteProviderTools(userId, provider.id);
+    const cache = await getRemoteProviderMetadata(userId, provider.id);
 
     if (!cache)
       return [];
@@ -51,6 +53,35 @@ export class ProviderRegistry {
         return await callToolFromRemoteProvider(provider, userId, tool.name, params);
       }
     }));
+  }
+
+  private async getRemoteProviderResources(provider: RemoteProvider, userId: string): Promise<Resource[]> {
+    const cache = await getRemoteProviderMetadata(userId, provider.id);
+
+    if (!cache || !cache.resources)
+      return [];
+
+    return cache.resources.map(resource => ({
+      id: resource.uri,
+      name: resource.name,
+      url: resource.uri
+    }));
+  }
+
+  private async getRemoteProviderResourceContent(provider: RemoteProvider, userId: string, resource: Resource): Promise<ResourceContent> {
+    try {
+      const result = await readResourceContentFromRemoteProvider(provider, userId, resource.url);
+      
+      if (!result) {
+        throw new Error(`No content found for resource ${resource.id}`);
+      }
+
+      return result.contents[0] as ResourceContent; // Assuming contents is an array and we take the first one
+      
+    } catch (error) {
+      console.error(`Error reading resource content from provider "${provider.id}":`, error);
+      throw new Error(`Failed to read resource content: ${error}`);
+    }
   }
 
   async getProviderTools(provider: Provider, userId?: string): Promise<Tool[]> {
@@ -129,6 +160,86 @@ export class ProviderRegistry {
         await posthog.shutdown(); // Shutdown the client after capturing
       }
     }
+  }
+
+  async getProviderResources(provider: Provider, userId: string): Promise<Resource[]> {
+    if (isNativeProvider(provider)) {
+      if (!provider.getResources)
+        return [];
+
+      return await provider.getResources({ getAccessToken: () => oauthService.getValidAccessToken(provider, userId) });
+    }
+    
+    if (isRemoteProvider(provider)) 
+      return await this.getRemoteProviderResources(provider, userId);
+    
+    return [];
+  }
+    
+  async getResources(userId: string): Promise<ProviderResource[]> {
+   let providers = this.getAllProviders();
+
+    const connections = await getValidConnections(userId);
+    const providerIds = Array.from(connections.values()).map(conn => conn.provider);
+    providers = providers.filter(provider => providerIds.includes(provider.id));
+
+    const providerResourceArrays = await Promise.all(
+      providers.map(async provider => {
+        const resources = await this.getProviderResources(provider, userId);
+        return resources.map(resource => ({
+          ...resource,
+          provider
+        }));
+    }));
+
+    return providerResourceArrays.flat();  
+  }
+
+  async getResourceContent(userId: string, resource: ProviderResource): Promise<ProviderResourceContent[]> {
+    if (isNativeProvider(resource.provider)) {
+      const provider = resource.provider as NativeProvider;
+
+      const content = await provider.getResourceContent?.({ getAccessToken: () => oauthService.getValidAccessToken(provider, userId) }, resource);
+
+      if (!content) {
+        throw new Error(`No content found for resource ${resource.id}`);
+      };
+
+      const result: ProviderResourceContent[] = [];
+      
+      if (content.mimeType === 'application/json') {
+        const { text } = await generateText({
+          model: azure.responses("gpt-4.1-nano"),
+          prompt: `Please convert JSON output below into the readable markdown. Respond only with the converted markdown. Making it human-digestible avoiding ids etc.\n\n${content.text}`,
+        });
+
+        result.push({
+          ...resource,
+          text,
+          mimeType: 'text/markdown',
+        });
+      }
+
+      result.push({
+        ...resource,
+        ...content,
+      });
+
+      return result;
+    }
+
+    if (isRemoteProvider(resource.provider)) {
+      const provider = resource.provider as RemoteProvider;
+      
+      const content = await this.getRemoteProviderResourceContent(provider, userId, resource);
+
+      return [{
+        ...resource,
+        ...content,
+      }];
+    } 
+
+    return [];
   }
 }
 

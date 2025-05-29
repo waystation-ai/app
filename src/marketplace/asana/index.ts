@@ -7,6 +7,7 @@ import { createAsanaTask } from './create-task';
 import { updateAsanaTask } from './update-task';
 import { createAsanaComment } from './create-comment';
 import { searchAsanaTasks } from './search-tasks';
+import { getAsanaFavorites } from './get-favorites';
 
 export const asanaProvider = registerProvider({
   id: 'asana',
@@ -48,6 +49,29 @@ export const asanaProvider = registerProvider({
     createAsanaTask,
     updateAsanaTask,
     createAsanaComment,
-    searchAsanaTasks
-  ]
+    searchAsanaTasks,
+    getAsanaFavorites
+  ],
+
+  getResources: async (context) => {
+    const favorites = await getAsanaFavorites.handler({ context, params: {} });
+    return favorites;
+  },
+
+  getResourceContent: async (context, resource) => {
+    // Extract project ID from the resource url
+    const url = new URL(resource.url);
+    const projectId = url.pathname.split('/').pop();
+
+    if (!projectId) {
+      throw new Error('Invalid project URL');
+    }
+    
+    const result = await readAsanaProject.handler({ context, params: {projectId} });
+
+    return {
+      text: JSON.stringify(result),
+      mimeType: 'application/json'
+    }
+  }
 });

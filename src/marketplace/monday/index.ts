@@ -43,6 +43,6 @@ export const mondayProvider = registerProvider({
     readMondayBoard,
     createMondayItem,
     updateMondayItem,
-    createMondayUpdate
+    createMondayUpdate,
   ]
 });

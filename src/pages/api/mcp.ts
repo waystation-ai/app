@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 
 import { getAuth } from '@clerk/nextjs/server';
@@ -45,12 +44,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   });
     
   // Create MCP server
-  const server = new Server(
-    { name: "waystation", version: "0.2.0" },
-    { capabilities: { tools: {} } }
-  );
 
-  configureMcpServer(server, userId as string);
+  const server = await configureMcpServer(userId as string);
   
   // Connect transport to server
   await server.connect(transport);

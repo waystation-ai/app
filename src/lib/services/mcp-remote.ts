@@ -1,10 +1,10 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js';
 
-import { storeRemoteProviderTools, getRemoteProviderTools} from '@/lib/db';
+import { getRemoteProviderMetadata, storeRemoteProviderMetadata, RemoteProviderMetadata} from '@/lib/db';
 import { RemoteOAuthClientProvider } from './oauth-service';
 import { RemoteProvider } from '@/marketplace/core/types';
-import { ListToolsResult } from '@modelcontextprotocol/sdk/types.js';
+import { ListResourcesResult, ListToolsResult, ReadResourceResult } from '@modelcontextprotocol/sdk/types.js';
 
 class RemoteProviderClient extends Client {
   private provider: RemoteProvider;
@@ -86,22 +86,77 @@ export async function callToolFromRemoteProvider(provider: RemoteProvider, userI
   }
 }
 
-export async function getToolsForRemoteProvider(provider: RemoteProvider, userId: string): Promise<ListToolsResult | undefined> {
+export async function fetchResourcesFromRemoteProvider(provider: RemoteProvider, userId: string): Promise<ListResourcesResult> {
+  try {
+    console.log(`Fetching resources from remote provider "${provider.id}" at ${provider.serverUrl}`);
+    
+    const client = new RemoteProviderClient(provider, userId);
+              
+    // Connect to the MCP server
+    await client.connect();
+    
+    // List tools
+    const resourcesList = await client.listResources();
+    
+    // Close the connection
+    await client.close();
+    
+    console.log(`Successfully fetched ${resourcesList.resources.length} tools from provider "${provider.id}"`);
+    
+    // Convert to our Tool type
+    return resourcesList;
+  } catch (error) {
+    console.error(`Error fetching tools from provider "${provider.id}":`, error);
+    return { resources: []};
+  }
+}
+
+export async function readResourceContentFromRemoteProvider(provider: RemoteProvider, userId: string, uri: string): Promise<ReadResourceResult|undefined> { 
+  try {
+    console.log(`Reading resource for remote provider "${provider.id}" at ${provider.serverUrl}`);
+    
+    const client = new RemoteProviderClient(provider, userId);
+              
+    // Connect to the MCP server
+    await client.connect();
+    
+    // List tools
+    const response: ReadResourceResult = await client.readResource({ uri });
+
+    // Close the connection
+    await client.close();
+    
+    console.log(`Successfully read resource ${uri} from provider "${provider.id}"`);
+    
+    return response;
+  } catch (error) {
+    console.error(`Error reading resource from provider "${provider.id}":`, error);
+    return undefined;
+  }
+}
+
+export async function getMetadataForRemoteProvider(provider: RemoteProvider, userId: string): Promise<RemoteProviderMetadata | undefined> {
   // Try to get cached tools
-  const cachedTools = await getRemoteProviderTools(userId, provider.id);
+  const cachedMetadata = await getRemoteProviderMetadata(userId, provider.id);
   
-  if (cachedTools) {
-    console.log(`Using cached tools for provider "${provider}" for user "${userId}"`);
-    return cachedTools;
+  if (cachedMetadata) {
+    console.log(`Using cached metadata for provider "${provider}" for user "${userId}"`);
+    return cachedMetadata;
   }
   
   // No cached tools, fetch them
   try {
-    const result = await fetchToolsFromRemoteProvider(provider, userId);
-    
-    if (result.tools.length > 0) {
+    const tools = await fetchToolsFromRemoteProvider(provider, userId);
+    const resources = await fetchResourcesFromRemoteProvider(provider, userId);
+
+    const result = {
+      ...tools,
+      ...resources
+    };
+
+    if (tools.tools.length > 0) {
       // Cache the tools
-      await storeRemoteProviderTools(userId, provider.id, result);
+      await storeRemoteProviderMetadata(userId, provider.id, result);
       console.log(`Cached tools for provider "${provider}" for user "${userId}"`);
     }
     

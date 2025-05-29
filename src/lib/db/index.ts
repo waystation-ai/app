@@ -3,7 +3,7 @@ import { Pool } from '@neondatabase/serverless';
 import { and, eq, lt } from 'drizzle-orm';
 import * as schema from './schema';
 import { OAuthClientInformationFull, OAuthMetadata, OAuthTokens } from '@modelcontextprotocol/sdk/shared/auth.js';
-import { ListToolsResult } from '@modelcontextprotocol/sdk/types.js';
+import { ListToolsResult, ListResourcesResult } from '@modelcontextprotocol/sdk/types.js';
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL environment variable is not set');
@@ -332,8 +332,10 @@ export async function storeClientRegistration(userId: string, provider: string, 
   });
 }
 
+export type RemoteProviderMetadata = ListToolsResult & ListResourcesResult;
+
 // Helper function to get provider metadata for a remote provider
-export async function getRemoteProviderMetadata(userId: string, provider: string): Promise<ListToolsResult | undefined> {
+export async function getRemoteProviderMetadata(userId: string, provider: string): Promise<RemoteProviderMetadata | undefined> {
   const result = await db.select().from(schema.remoteProviders)
     .where(and(
       eq(schema.remoteProviders.userId, userId),
@@ -344,22 +346,32 @@ export async function getRemoteProviderMetadata(userId: string, provider: string
     return undefined;
   }
 
-  return result[0].providerMetadata as ListToolsResult;
+  return result[0].providerMetadata as RemoteProviderMetadata;
 }
 
 // Helper function to store provider metadata for a remote provider
-export async function storeRemoteProviderMetadata(userId: string, provider: string, metadata: ListToolsResult) {
+export async function storeRemoteProviderMetadata(userId: string, provider: string, metadata: Partial<RemoteProviderMetadata>) {
   const existing = await db.select().from(schema.remoteProviders)
     .where(and(
       eq(schema.remoteProviders.userId, userId),
       eq(schema.remoteProviders.provider, provider)
     ));
 
+  let mergedMetadata: RemoteProviderMetadata;
+  
   if (existing.length) {
+    // Merge with existing metadata
+    const currentMetadata = (existing[0].providerMetadata as RemoteProviderMetadata) || { tools: [], resources: [] };
+    
+    mergedMetadata = {
+      tools: metadata.tools !== undefined ? metadata.tools : currentMetadata.tools || [],
+      resources: metadata.resources !== undefined ? metadata.resources : currentMetadata.resources || []
+    };
+    
     // Update existing entry
     return db.update(schema.remoteProviders)
       .set({
-        providerMetadata: metadata,
+        providerMetadata: mergedMetadata,
         updatedAt: new Date()
       })
       .where(and(
@@ -368,14 +380,16 @@ export async function storeRemoteProviderMetadata(userId: string, provider: stri
       ));
   }
 
-  // Create new entry
+  // Create new entry with provided metadata
+  mergedMetadata = {
+    tools: metadata.tools || [],
+    resources: metadata.resources || []
+  };
+  
   return db.insert(schema.remoteProviders).values({
     userId,
     provider,
-    providerMetadata: metadata
+    providerMetadata: mergedMetadata
   });
 }
 
-// For backward compatibility
-export const getRemoteProviderTools = getRemoteProviderMetadata;
-export const storeRemoteProviderTools = storeRemoteProviderMetadata;

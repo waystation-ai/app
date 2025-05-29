@@ -1,15 +1,10 @@
 import { z } from 'zod';
 import { defineTool } from '../core/types';
 import { queryAsanaApi } from './utils';
+import { AsanaTask } from './types';
 
 // Define the response type
-type TasksResponse = Array<{
-  id: string;
-  name: string;
-  completed: boolean;
-  due_on?: string;
-  assignee?: Record<string, unknown>;
-}>;
+type TasksResponse = Array<AsanaTask>;
 
 export const searchAsanaTasks = defineTool({
   id: 'searchAsanaTasks',

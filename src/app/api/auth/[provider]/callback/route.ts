@@ -6,7 +6,7 @@ import { getRequestOrigin } from '@/lib/utils/get-request-origin';
 import { stateStore } from '@/lib/services/state-store';
 import { isFullProvider, isRemoteProvider, RemoteProvider } from '@/marketplace/core/types';
 import { registry } from '@/marketplace';
-import { getToolsForRemoteProvider } from '@/lib/services/mcp';
+import { getMetadataForRemoteProvider } from '@/lib/services/mcp-remote';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ provider: string }> }) {
   try {
@@ -55,8 +55,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
 
     if (isRemoteProvider(config)) {
-      const toolCache = await getToolsForRemoteProvider(config as RemoteProvider, session.userId);
-      console.log(`Fetched ${toolCache?.tools.length} tools for provider "${provider}"`);
+      const metadata = await getMetadataForRemoteProvider(config as RemoteProvider, session.userId);
+      console.log(`Fetched ${metadata?.tools.length} tools for provider "${provider}"`);
+      console.log(`Fetched ${metadata?.resources.length} resources for provider "${provider}"`);
     }
 
     // Always redirect to dashboard, but include redirect_uri as a query parameter if it exists

@@ -57,10 +57,16 @@ export interface NativeProvider extends BaseProvider {
   tokenUrl?: string;
   scopes: string[];
   group?: string;
+
+  getResources?: (context: ToolContext) => Promise<Resource[]>;
+  getResourceContent?: (context: ToolContext, resource: Resource) => Promise<ResourceContent>;
 }
 
 export interface RemoteProvider extends BaseProvider {
   serverUrl: string; // URL for the remote MCP server
+
+  getResources?: (context: ToolContext) => Promise<Resource[]>;
+  getResourceContent?: (context: ToolContext, resource: Resource) => Promise<ResourceContent>;
 }
 
 export type Provider = BaseProvider | NativeProvider | RemoteProvider;
@@ -85,3 +91,20 @@ export function defineTool<T, R>(tool: NativeTool<T, R>): Tool<T, R> {
     inputSchema: zodToJsonSchema(tool.parameters) as JSONSchema7,
   };
 }
+
+export type Resource = {
+  id: string;
+  name: string;
+  url: string;
+};
+
+export type ProviderResource = Resource & {
+  provider: Provider;
+};
+
+export type ResourceContent = { 
+  text: string;
+  mimeType?: string; 
+}
+
+export type ProviderResourceContent = ProviderResource & ResourceContent;

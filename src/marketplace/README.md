@@ -7,30 +7,30 @@ This directory contains the tools implementation for WayStation, which allows LL
 The tools architecture follows a provider-based approach:
 
 ```
-src/app/tools
-├── [provider]/            # Dynamic route handler
-│   └── [tool]/
-│       └── route.ts
-├── {provider}/            # Provider-specific implementations
-│   ├── index.ts           # Provider registration
-│   ├── utils.ts           # Shared utilities
-│   └── {tool-name}.ts     # Individual tool implementations
-src/marketplace
-├── main.ts                # Main entry point
-├── core/                  # Core infrastructure
-│   ├── types.ts           # Type definitions
-│   ├── registry.ts        # Provider and tool registry
-│   └── openapi.ts         # OpenAPI generation
+src/app/tools/
 ├── [provider]/            # Dynamic route handler
 │   └── [tool]/
 │       └── route.ts
 ├── call/                  # MCP tool call endpoint
 │   └── route.ts
-├── list/                  # MCP tool listing endpoint
-│   └── route.ts
+└── list/                  # MCP tool listing endpoint
+    └── route.ts
+
+src/marketplace/
+├── index.ts               # Main entry point
+├── core/                  # Core infrastructure
+│   ├── types.ts           # Type definitions
+│   ├── registry.ts        # Provider and tool registry
+│   ├── openapi.ts         # OpenAPI generation
+│   └── remote.ts          # Remote MCP provider support
+├── remote-mcps/           # Remote MCP provider definitions
+│   ├── index.ts
+│   └── {provider}.ts
+├── shared/                # Shared utilities across providers
+│   └── {utility}.ts
 └── {provider}/            # Provider-specific implementations
     ├── index.ts           # Provider registration
-    ├── utils.ts           # Shared utilities
+    ├── utils.ts           # Shared utilities for the provider
     └── {tool-name}.ts     # Individual tool implementations
 ```
 
@@ -46,7 +46,7 @@ src/marketplace
 1. Create a new file for your tool in the appropriate provider directory:
 
 ```typescript
-// src/app/tools/example-provider/my-new-tool.ts
+// src/marketplace/example-provider/my-new-tool.ts
 import { z } from 'zod';
 import { defineTool } from '../core/types';
 
@@ -85,14 +85,20 @@ export const myNewTool = defineTool({
 2. Register the tool in the provider's index.ts file:
 
 ```typescript
-// src/app/tools/example-provider/index.ts
+// src/marketplace/example-provider/index.ts
 import { registerProvider } from '../core/registry';
 import { myNewTool } from './my-new-tool';
 import { otherTool } from './other-tool';
 
 export const exampleProvider = registerProvider({
-  name: 'example-provider',
+  id: 'example-provider',
+  name: 'Example Provider',
   description: 'Description of the provider',
+  clientId: process.env.EXAMPLE_CLIENT_ID || '',
+  clientSecret: process.env.EXAMPLE_CLIENT_SECRET || '',
+  authorizationUrl: 'https://example.com/oauth/authorize',
+  tokenUrl: 'https://example.com/oauth/token',
+  scopes: ['read', 'write'],
   tools: [
     myNewTool,
     otherTool
@@ -101,10 +107,10 @@ export const exampleProvider = registerProvider({
 
 ```
 
-3. Import the provider in main.ts:
+3. Import the provider in index.ts:
 
 ```typescript
-// src/app/tools/main.ts
+// src/marketplace/index.ts
 import './monday';
 import './example-provider'; // Add your new provider
 // import other providers
