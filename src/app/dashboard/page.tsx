@@ -34,14 +34,22 @@ export default async function Page() {
     // Continue with empty connections
   }
 
-  // Get all providers and organize them by type
+  // Get vetoed providers (main set we want to show) and handle unvetoed connected providers
+  const vetoedProviders = registry.getVetoedProviders();
   const allProviders = registry.getAllProviders();
+  const unvetoedProviders = allProviders.filter(p => !vetoedProviders.some(vp => vp.id === p.id));
+  
+  // Filter unvetoed providers to only those that are connected
+  const connectedUnvetoedProviders = unvetoedProviders.filter(p => connectedProviderIds.has(p.id));
+  
+  // Combine vetoed providers with connected unvetoed providers
+  const displayableProviders = [...vetoedProviders, ...connectedUnvetoedProviders];
   
   // Create maps to store providers by category
   type ProviderMap = Record<string, Provider>;
   
   // Categorize providers by type and connection status
-  const providersData = allProviders.reduce((result, provider) => {
+  const providersData = displayableProviders.reduce((result, provider) => {
     const hasAuth = isFullProvider(provider);
     const isConnected = connectedProviderIds.has(provider.id);
     
