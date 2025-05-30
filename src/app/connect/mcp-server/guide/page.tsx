@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import NanoIdDisplay from '@/components/app/NanoIdDisplay'; // Import the new client component
+import { CopyBox } from '@/components/app/CopyBox';
 
 export default function Page() {
   return (
@@ -34,39 +35,21 @@ export default function Page() {
           <p className="text-gray-700 mb-4">
             Run the WayStation MCP server using the command below:
           </p>
-          <div className="space-y-4">
-            <div>
-              <pre className="bg-gray-50 p-6 rounded-lg border border-gray-200 overflow-x-auto">
-                <code>npx -y mcp-remote@latest https://waystation.ai/mcp</code>
-              </pre>
-            </div>
-          </div>
+          <CopyBox text="npx -y mcp-remote@latest https://waystation.ai/mcp" />
         </div>
 
         <div className="mb-8">
           <p className="text-gray-700 mb-4">
             The typical config will look like the one below:
           </p>
-          <div className="space-y-4">
-            <div>
-              <pre className="bg-gray-50 p-6 rounded-lg border border-gray-200 overflow-x-auto">
-                <code>
-                  {JSON.stringify(
-                    {
-                      mcpServers: {
-                        WayStation: {
-                          command: "npx",
-                          args: ["-y", "mcp-remote@latest", "https://waystation.ai/mcp"]
-                        }
-                      }
-                    },
-                    null,
-                    2
-                  )}
-                </code>
-              </pre>
-            </div>
-          </div>
+          <CopyBox text={JSON.stringify({
+            mcpServers: {
+              WayStation: {
+                command: "npx",
+                args: ["-y", "mcp-remote@latest", "https://waystation.ai/mcp"]
+              }
+            }
+          }, null, 2)} />
         </div>
 
         <div className="mb-8">

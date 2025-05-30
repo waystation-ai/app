@@ -46,9 +46,10 @@ function ChatMessage({ role, displayedContent, showCursor, showTypingIndicator }
 
 interface ChatDemoProps {
   messages: ChatMessage[] | undefined;
+  className?: string;
 }
 
-export default function ChatDemo({ messages }: ChatDemoProps) {
+export default function ChatDemo({ messages, className }: ChatDemoProps) {
 
   if (!messages) {
     messages = [
@@ -161,7 +162,7 @@ export default function ChatDemo({ messages }: ChatDemoProps) {
   }, [currentMessageIndex, messages.length]);
 
   return (
-    <div className="h-[60vh] sm:h-[70vh] bg-white/80 w-full max-w-2xl mx-auto mt-0 sm:mt-12 p-4 sm:p-6 rounded-2xl shadow-[0px_2px_16px_0px_rgba(0,0,0,0.08)] flex flex-col ">
+    <div className={" bg-white/80 w-full max-w-2xl mx-auto p-4 sm:p-6 rounded-2xl shadow-[0px_2px_16px_0px_rgba(0,0,0,0.08)] flex flex-col mb-2 " + (className || "sm:h-[70vh] h-[60vh] mt-0 sm:mt-12")}>
       <div ref={messagesContainerRef} className="flex-1 overflow-y-auto scrollbar-hide space-y-3 sm:space-y-4 mb-4 px-1 sm:px-2 -webkit-overflow-scrolling-touch">
         {messages.slice(0, currentMessageIndex + 1).map((msg, idx) => (
           <ChatMessage 

@@ -22,23 +22,18 @@ function CopyIcon() {
 }
 
 interface CopyBoxProps {
-  text: string | null;
+  text?: string;
+  className?: string;
+  icon?: React.ReactNode;
 }
 
-export function CopyBox({ text }: CopyBoxProps) {
+export function CopyBox({ text, className, icon }: CopyBoxProps) {
   const [copied, setCopied] = useState(false);
 
-  if (!text) {
-    return (
-      <div className="text-sm text-red-600 bg-red-50 p-4 rounded-lg border border-red-200">
-        Unable to generate WAY_KEY. Please try again later.
-      </div>
-    );
-  }
 
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText(text || '');
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -47,13 +42,21 @@ export function CopyBox({ text }: CopyBoxProps) {
   };
 
   return (
-    <div className="relative">
-      <div className="font-mono text-sm bg-gray-50 p-4 pr-20 rounded-lg border border-gray-200 break-all">
-        {text}
-      </div>
+    <div className={"relative shadow-[0px_2px_16px_0px_rgba(0,0,0,0.08)]" + (className ? ` ${className}` : ' text-sm')}>
+      <pre className={clsx("font-mono bg-gray-50 pr-20 rounded-lg border border-gray-200 break-all", {
+        "p-4": !icon,
+        "p-3 pl-3 flex items-start gap-3": icon
+      })}>
+        {icon && (
+          <span className="flex-shrink-0 mt-0.5 text-gray-600">
+            {icon}
+          </span>
+        )}
+        <code className={icon ? "flex-1" : ""}>{text}</code>
+      </pre>
       <button
         type="button"
-        className={clsx("absolute top-2 right-2 p-2 rounded-md transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400", {
+        className={clsx("absolute top-1/2 -translate-y-1/2 right-2 p-2 rounded-md transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400", {
           "text-green-600": copied,
           "text-gray-500": !copied,
         })}

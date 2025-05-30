@@ -1,10 +1,15 @@
-import ChatDemo from "@/components/app/ChatDemo";
 import Link from "next/link";
+import Image from 'next/image';
+
+import { isFullProvider } from "@/marketplace/core/types";
 import { getProviderConfig } from "@/lib/services/provider-config";
+
+import { CopyBox } from "@/components/app/CopyBox";
+import ChatDemo from "@/components/app/ChatDemo";
 import Providers from "@/components/app/Providers";
 import AlternativeApps from "./AlternativeApps";
+
 import { AppType } from "./metadata";
-import { isFullProvider } from "@/marketplace/core/types";
 
 interface AppInfo {
   type: AppType;
@@ -51,6 +56,9 @@ export default async function ConnectPage({ params, appType, redirectUri }: Conn
     <div className="flex flex-col relative">
       {/* Hero Section */}
       <main className="flex-1 flex flex-col">
+        { (appType === "mcp-server") &&
+          <CopyBox text={"https://waystation.ai/mcp"} className="text-lg my-8 max-w-7xl mx-auto font-bold" icon={<Image src="/images/apps/mcp.svg" width={20} height={20} alt="MCP Host"  />}></CopyBox>
+        }
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 px-4 sm:px-8 py-8 max-w-7xl mx-auto">
           {/* Left Column - Branding */}
           <div className="flex flex-col justify-center text-left">
@@ -80,7 +88,7 @@ export default async function ConnectPage({ params, appType, redirectUri }: Conn
 
             <AlternativeApps provider={provider} currentApp={appType} />
 
-            <div className="sm:mt-8">
+            <div className="sm:mt-4">
               <p>And make it even more powerful with other providers we support</p>
               <div>
                 <Providers 
@@ -95,7 +103,7 @@ export default async function ConnectPage({ params, appType, redirectUri }: Conn
 
           {/* Right Column - Chat Demo */}
           <div className="flex items-center justify-center mt-4 lg:mt-0">
-            <ChatDemo messages={config.chat} />
+            <ChatDemo messages={config.chat}  className={appType === "mcp-server" ? "h-[100vh] sm:h-[60vh] mt-0" : undefined}/>
           </div>
         </div>
       </main>

@@ -1,9 +1,13 @@
+import Link from "next/link";
+import Image from "next/image";
+
 import ChatDemo, { ChatMessage } from "@/components/app/ChatDemo";
 import Providers from "@/components/app/Providers";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
-import Link from "next/link";
+
 import AlternativeApps from "./AlternativeApps";
 import { AppType, getAppMetadata } from "./metadata";
+import { CopyBox } from "../CopyBox";
 
 interface LandingPageProps {
   appType: AppType;
@@ -26,7 +30,11 @@ export default function LandingPage({ appType }: LandingPageProps) {
     <div className="flex flex-col relative">
       {/* Hero Section */}
       <main className="flex-1 flex flex-col">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 px-4 sm:px-8 py-8 max-w-7xl mx-auto">
+        { (appType === "mcp-server") &&
+          <CopyBox text={"https://waystation.ai/mcp"} className="text-lg my-8 max-w-7xl mx-auto font-bold" icon={<Image src="/images/apps/mcp.svg" width={20} height={20} alt="MCP Host"  />}></CopyBox>
+        }
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 px-4 sm:px-8 max-w-7xl mx-auto">
           {/* Left Column - Branding */}
           <div className="flex flex-col justify-center text-left space-y-4 lg:space-y-6">
             <h1 className="text-3xl lg:text-4xl font-bold">{metadata.displayTitle}</h1>
@@ -53,8 +61,8 @@ export default function LandingPage({ appType }: LandingPageProps) {
           </div>
 
           {/* Right Column - Chat Demo */}
-          <div className="flex items-center justify-center mt-4 lg:mt-0">
-            <ChatDemo messages={messages}/>
+          <div className="flex items-center justify-center lg:mt-0">
+            <ChatDemo messages={messages} className={appType === "mcp-server" ? "h-[60vh] mt-0" : undefined}/>
           </div>
         </div>
       </main>
