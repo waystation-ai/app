@@ -19,6 +19,11 @@ export  function LaunchPadBasement({ gptId }: LaunchPadProps) {
         <Image src="/images/apps/chatgpt.svg" width={20} height={20} alt="MCP Host" />
         <span>Launch WayStation GPT</span>
       </Link>
+      <span className="flex text-sm font-medium text-gray-500">or</span>
+      <Link href='/connect/mcp-server/guide' className="app-link" onClick={() => trackEvent('launch', {'app': "MCP"})}>
+        <Image src="/images/apps/mcp.svg" width={20} height={20} alt="MCP Host" />
+        <span>Connect to any MCP host</span>
+      </Link>
     </div>
 )
 }
