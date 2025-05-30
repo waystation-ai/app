@@ -6,7 +6,7 @@ import { nanoIds } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 
 import { configureMcpServer } from '@/lib/services/mcp-server';
-import { transports } from '../sse';
+import { createPubSub } from '@/lib/services/pubsub';
 
 // Add this at the top of the file
 export const config = {
@@ -31,19 +31,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const transport = new SSEServerTransport("/mcp/messages", res);
 
-  // Store the transport by session ID
   const sessionId = transport.sessionId;
-  transports[sessionId] = transport;
+
+  const pubSub = await createPubSub();  
+  await pubSub.listen(`mcp_messages_${sessionId.replaceAll('-', '_')}`, async (message) => {
+    if (!message) 
+      return;
+
+    await transport.handleMessage(JSON.parse(message));   
+  });
 
   // Set up onclose handler to clean up transport when closed
   transport.onclose = () => {
     console.log(`SSE transport closed for session ${sessionId}`);
-    delete transports[sessionId];
-  };  
-    
+    pubSub.disconnect();
+  };
+  
   // Create MCP server
   const server = await configureMcpServer(userId);
   
   // Connect transport to server
   await server.connect(transport);
+
 }

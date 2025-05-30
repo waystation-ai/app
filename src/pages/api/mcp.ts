@@ -12,6 +12,11 @@ export const config = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'POST') {
+    return res.redirect('/mcp/sse');
+    //return res.status(405).json({ error: 'Method Not Allowed' });
+  }
+  
   const session = getAuth(req);
   let userId = session.userId;
 

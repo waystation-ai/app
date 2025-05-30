@@ -3,6 +3,7 @@ import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 
 import { getAuth } from '@clerk/nextjs/server';
 import { configureMcpServer } from '@/lib/services/mcp-server';
+import { createPubSub } from '@/lib/services/pubsub';
 
 // Add this at the top of the file
 export const config = {
@@ -10,13 +11,6 @@ export const config = {
     bodyParser: false,
   },
 };
-
-// Store transports by session ID
-export const transports: Record<string, SSEServerTransport> = {};
-
-export function getTransport(sessionId: string) {
-  return transports[sessionId];
-}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const session = getAuth(req);
@@ -48,7 +42,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const transport = new SSEServerTransport("/mcp/messages", res);
     
-  const server = await configureMcpServer(userId as string);
+  const sessionId = transport.sessionId;
+
+  const pubSub = await createPubSub();  
+  await pubSub.listen(`mcp_messages_${sessionId.replaceAll('-', '_')}`, async (message) => {
+    if (!message) 
+      return;
+
+    await transport.handleMessage(JSON.parse(message));   
+  });
+
+  // Set up onclose handler to clean up transport when closed
+  transport.onclose = () => {
+    console.log(`SSE transport closed for session ${sessionId}`);
+    pubSub.disconnect();
+  };
+  
+  // Create MCP server
+  const server = await configureMcpServer(userId as string) ;
   
   // Connect transport to server
   await server.connect(transport);

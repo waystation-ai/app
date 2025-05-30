@@ -1,13 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { transports } from './sse';
+import { publishToSession } from '@/lib/services/pubsub';
 
 // Add this at the top of the file
+/*
 export const config = {
   api: {
     bodyParser: false,
   },
 };
+*/
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log('Received POST request to /messages');
@@ -21,23 +23,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(400).send('Missing sessionId parameter');
     return;
   }
+  
+  await publishToSession(`mcp_messages_${sessionId.replaceAll('-', '_')}`, JSON.stringify(req.body));
 
-  const transport = transports[sessionId];
-  if (!transport) {
-    console.error(`No active transport found for session ID: ${sessionId}`);
-    res.status(404).send('Session not found');
-    return;
-  }
-
-  try {
-    // Handle the POST message with the transport
-    await transport.handlePostMessage(req, res, req.body);
-  } catch (error) {
-    console.error('Error handling request:', error);
-    if (!res.headersSent) {
-      res.status(500).send('Error handling request');
-    }
-  }
-
+  res.writeHead(202).end("Accepted");
 }
 
