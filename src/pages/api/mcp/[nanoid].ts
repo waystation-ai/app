@@ -50,5 +50,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // Connect transport to server
   await server.connect(transport);
 
-  return transport.handleRequest(req, res);
+  await transport.handleRequest(req, res);
 }
