@@ -21,11 +21,10 @@ src/marketplace/
 ├── core/                  # Core infrastructure
 │   ├── types.ts           # Type definitions
 │   ├── registry.ts        # Provider and tool registry
-│   ├── openapi.ts         # OpenAPI generation
-│   └── remote.ts          # Remote MCP provider support
+│   └── openapi.ts         # OpenAPI generation
 ├── remote-mcps/           # Remote MCP provider definitions
-│   ├── index.ts
-│   └── {provider}.ts
+│   ├── index.ts           # Imports all remote providers
+│   └── {provider}.ts      # Individual remote provider configurations
 ├── shared/                # Shared utilities across providers
 │   └── {utility}.ts
 └── {provider}/            # Provider-specific implementations
@@ -40,6 +39,9 @@ src/marketplace/
 - **Tool**: A specific operation like listMondayBoards, postSlackMessage, etc.
 - **Registry**: Central registry for all providers and tools
 - **Dynamic Routes**: Routes that handle requests to tool endpoints
+- **Native Provider**: A provider implemented directly within WayStation using OAuth for authentication
+- **Remote Provider**: A provider hosted on a remote server and accessed via a serverUrl
+- **Resource**: A data source that can be accessed (e.g., documents, boards, files)
 
 ## Adding a New Tool
 
@@ -104,7 +106,6 @@ export const exampleProvider = registerProvider({
     otherTool
   ]
 });
-
 ```
 
 3. Import the provider in index.ts:
@@ -116,6 +117,46 @@ import './example-provider'; // Add your new provider
 // import other providers
 ```
 
+## Adding a Remote Provider
+
+Remote providers allow you to connect to external MCP servers that provide their own tools and resources.
+
+1. Create a new file for your remote provider in the remote-mcps directory:
+
+```typescript
+// src/marketplace/remote-mcps/example-remote.ts
+import { registerProvider } from '../core/registry';
+
+export const exampleRemoteProvider = registerProvider({
+  id: 'example-remote',
+  name: 'Example Remote Provider',
+  description: 'Description of the remote provider',
+  
+  // The URL of the remote MCP server
+  serverUrl: 'https://example.com/mcp',
+    
+  // Marketing information
+  bullets: [
+    "Feature 1 of the remote provider",
+    "Feature 2 of the remote provider",
+    "Feature 3 of the remote provider"
+  ],
+  chat: [
+    { role: 'user', content: "Example user message" },
+    { role: 'agent', content: "Example agent response" }
+  ]
+});
+```
+
+2. Import the remote provider in the remote-mcps/index.ts file:
+
+```typescript
+// src/marketplace/remote-mcps/index.ts
+import './asana';
+import './example-remote'; // Add your new remote provider
+// import other remote providers
+```
+
 ## Benefits of This Architecture
 
 1. **Unified Definition**: Each tool has its metadata and implementation in one place
@@ -124,3 +165,5 @@ import './example-provider'; // Add your new provider
 4. **Dynamic Discovery**: Tools are registered in a central registry
 5. **Simplified Routing**: Dynamic route handlers reduce code duplication
 6. **Better Developer Experience**: Easier to add new tools and operations
+7. **Extensibility**: Support for both native and remote providers allows for a wide range of integrations
+8. **Resource Access**: Ability to access data sources from both native and remote providers
