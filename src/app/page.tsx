@@ -10,6 +10,9 @@ import AlternativeApps from "@/components/app/connect/AlternativeApps";
  
 export const metadata: Metadata = {
   title: 'WayStation - Empowering LLMs to take real-world actions',
+  icons: {
+    icon: "/images/icon.ico",
+  },
   openGraph: {
     type: 'website',
     title: "WayStation",
