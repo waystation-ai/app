@@ -1,4 +1,5 @@
 import { registry } from '@/marketplace';
+import useCases from '../ai/use-cases.json';
 
 export async function GET() {
   // Get current date for lastmod
@@ -18,6 +19,7 @@ export async function GET() {
   const staticRoutes = [
     '',                    // Homepage
     '/marketplace',
+    '/ai',                 // Main AI page
     '/integrations/claude',
     '/connect/chatgpt',
     '/connect/claude',
@@ -62,6 +64,17 @@ export async function GET() {
     <priority>0.6</priority>
   </url>`;
     }
+  }
+
+  // Add AI use case routes
+  for (const useCase of useCases) {
+    xml += `
+  <url>
+    <loc>${domain}/ai/${useCase.id}</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>`;
   }
 
   // Close XML

@@ -66,8 +66,13 @@ export function Menu() {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
+          <NavigationMenuLink className={navigationMenuTriggerStyle()} href="/ai">
+            Use Cases
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
           <NavigationMenuLink className={navigationMenuTriggerStyle()} href="/marketplace">
-            Marketplace
+            Integrations
           </NavigationMenuLink>
         </NavigationMenuItem>
         <SignedIn>
@@ -179,6 +184,7 @@ export default function Navigation() {
           </Link>
 
           <div className="border-t border-gray-200 mt-2 pt-4">
+            <Link href="/ai" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>AI Use Cases</Link>
             <Link href="/marketplace" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>Marketplace</Link>
             <Link href="/playground" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>Playground</Link>
           </div>

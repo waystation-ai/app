@@ -1,0 +1,262 @@
+[
+  {
+    "id": "project-management",
+    "title": "AI Project Management",
+    "summary": "Bring an intelligent co-pilot into every project. With AI embedded in platforms like [app:monday](Monday.com) or [app:asana](Asana), you gain real-time oversight across planning, execution, and delivery. The assistant analyzes project data to surface insights and recommendations—flagging delays, suggesting next steps, and keeping everyone aligned. Team members simply ask the AI for status or guidance and get instant answers instead of digging through boards and reports.",
+    "call_to_action": "Ready to elevate your project execution with an AI co-pilot guiding the way?",
+    "bullet_points": [
+      "360° visibility in chat: Ask about status, timelines, or blockers and get up-to-the-second answers.",
+      "Proactive risk alerts: AI detects schedule slips or scope creep early and notifies the team.",
+      "Smarter planning: Generates task breakdowns and timelines from historical performance.",
+      "Decision support: Recommends reprioritizations or resource shifts to keep goals on track."
+    ],
+    "integration_recipe": "Connect the AI assistant with [app:wrike](Wrike) and [app:slack](Slack) to summarize daily updates in [app:wrike](Wrike) and post a morning briefing that highlights tasks at risk of delay or over-capacity."
+  },
+  {
+    "id": "task-automation",
+    "title": "AI Task Automation",
+    "summary": "Supercharge task management by letting AI turn discussions and ideas into actionable items. The assistant listens to team chats or email threads and drafts tasks—complete with assignees and due dates—so nothing slips through the cracks. Routine updates happen via natural language: say \"create a task for QA testing next week,\" and it's logged in seconds.",
+    "call_to_action": "Spend less time on admin and more on real work—let AI handle task creation for you.",
+    "bullet_points": [
+      "Instant task capture: Generates tasks from conversations or notes, auto-filling details.",
+      "Auto-assignment: Routes repetitive tasks to the right teammates based on workload.",
+      "Natural-language commands: Create or update tasks just by chatting with the assistant.",
+      "Consistent follow-through: Ensures every idea becomes a trackable work item."
+    ],
+    "integration_recipe": "Link AI to a [app:teams](Teams) channel and [app:asana](Asana); when someone types an action item, the assistant creates the corresponding task in [app:asana](Asana) and assigns the design lead."
+  },
+  {
+    "id": "meeting-summaries",
+    "title": "AI Meeting Summaries & Action Items",
+    "summary": "Turn every meeting into immediate action. AI reviews call transcripts and produces concise summaries plus follow-up tasks. After each session, it posts a digest of decisions and action items directly into [app:clickup](ClickUp) or [app:monday](Monday) with owners and deadlines—no manual note-taking required.",
+    "call_to_action": "Don't let critical details vanish—let AI capture and organize them for you.",
+    "bullet_points": [
+      "Automatic note-taking: Generates bullet-point summaries right after the call.",
+      "Action-item extraction: Converts decisions into tasks with assignees and due dates.",
+      "Quick alignment: Absent team members read one summary instead of watching recordings.",
+      "Contextual reminders: Ask later, \"What were my takeaways?\" and get an instant recap."
+    ],
+    "integration_recipe": "After a [app:zoom](Zoom) meeting, AI generates a summary and tasks in [app:asana](Asana), then posts both to a [app:teams](Teams) channel for rapid alignment."
+  },
+  {
+    "id": "workflow-automation",
+    "title": "AI Workflow Automation & Process Optimization",
+    "summary": "Streamline complex workflows by letting AI orchestrate every step. When a sales deal closes, for example, the assistant updates a [app:monday](Monday.com) project and kicks off an onboarding checklist automatically. Define rules in plain language—\"If a bug is critical, notify ops and create a fix task\"—and AI enforces them without fail.",
+    "call_to_action": "Automate the busywork; free your team for innovation.",
+    "bullet_points": [
+      "Cross-platform hand-offs: Moves data between email, [app:wrike](Wrike), and [app:slack](Slack) seamlessly.",
+      "Trigger-based actions: Executes multi-step processes the moment conditions are met.",
+      "Fewer errors: Ensures SOPs are followed every time.",
+      "Continuous improvement: Analyses workflow metrics and suggests optimizations."
+    ],
+    "integration_recipe": "If a high-severity bug lands in [app:jira](Jira), AI creates a linked task in [app:monday](Monday), assigns the on-call engineer, and posts details in [app:slack](Slack)—all within seconds."
+  },
+  {
+    "id": "resource-capacity-planning",
+    "title": "AI Resource & Capacity Planning",
+    "summary": "Optimize workloads with AI insights. The assistant scans team capacity across [app:monday](Monday), [app:asana](Asana), or [app:wrike](Wrike) and recommends who should tackle new tasks, preventing burnout and understaffing.",
+    "call_to_action": "Assign the right people to the right work—every time.",
+    "bullet_points": [
+      "Smart task assignment: Matches tasks to teammates based on skills and availability.",
+      "Load balancing: Flags overloads and suggests redistributions or timeline shifts.",
+      "Capacity forecasting: Simulates resource impacts before you commit.",
+      "Skills awareness: Remembers past work to recommend the best expert for each job."
+    ],
+    "integration_recipe": "When a ServiceNow ticket arrives, AI checks [app:wrike](Wrike) workloads and assigns the task to the engineer with the lightest load, updating [app:wrike](Wrike) and notifying [app:teams](Teams)."
+  },
+  {
+    "id": "risk-issue-management",
+    "title": "AI Risk & Issue Management",
+    "summary": "Stay ahead of trouble with an AI risk manager that never sleeps. It scans status changes, deadlines, and sentiment to flag emerging issues across your portfolio and recommends mitigations before minor hiccups become crises.",
+    "call_to_action": "Mitigate risks before they bite—let AI safeguard your initiatives.",
+    "bullet_points": [
+      "Automated detection: Identifies timeline slips and scope creep early.",
+      "Impact assessment: Outlines potential schedule and budget effects.",
+      "Suggestive mitigation: Recommends actions like resource shifts or scope cuts.",
+      "Real-time alerts: Notifies stakeholders instantly via chat."
+    ],
+    "integration_recipe": "If any [app:monday](Monday.com) task turns \"Stuck,\" AI adds the issue to a Risk Register board and pings [app:slack](Slack) with a mitigation proposal."
+  },
+  {
+    "id": "reporting-insights",
+    "title": "AI Reporting & Insights",
+    "summary": "End report-writing drudgery. Ask, \"What did we accomplish this sprint?\" and AI generates a polished update—pulling metrics from [app:clickup](ClickUp) or [app:asana](Asana) and explaining trends in plain English.",
+    "call_to_action": "Turn raw project data into actionable stories—instantly.",
+    "bullet_points": [
+      "On-demand status reports: Weekly or monthly summaries with one prompt.",
+      "Data-driven storytelling: Explains why numbers moved, not just what moved.",
+      "Custom dashboards: Ask for any slice of data; AI serves it up.",
+      "Stakeholder-ready output: Drafts slides or emails tailored to execs or teams."
+    ],
+    "integration_recipe": "Each Friday, AI scans [app:clickup](ClickUp), builds a progress report, and emails it to leadership with charts attached."
+  },
+  {
+    "id": "portfolio-management",
+    "title": "AI Portfolio Management",
+    "summary": "Give PMO leaders an always-on analyst. AI aggregates data from [app:monday](Monday), [app:wrike](Wrike), or [app:asana](Asana) portfolios, highlights outliers, and prioritizes where you need to focus—so nothing slips through the cracks.",
+    "call_to_action": "Oversee every initiative with confidence—AI delivers portfolio clarity at scale.",
+    "bullet_points": [
+      "Unified health view: Tracks hundreds of projects in one dashboard.",
+      "Cross-project risk analysis: Spots resource conflicts and dependencies.",
+      "Strategic alignment: Flags work that drifts from company OKRs.",
+      "What-if scenarios: Forecasts impacts before you add or delay projects."
+    ],
+    "integration_recipe": "AI scans [app:asana](Asana) Portfolios nightly, posts a [app:atlassian](Confluence) summary of at-risk projects, and sends a [app:teams](Teams) alert to the PMO lead."
+  },
+  {
+    "id": "team-collaboration-assistant",
+    "title": "AI Team Collaboration Assistant",
+    "summary": "Put an AI teammate in every chat. Instead of hunting for info, ask \"Who owns the campaign asset?\" and the assistant fetches the answer from [app:monday](Monday) or [app:clickup](ClickUp) instantly.",
+    "call_to_action": "Make collaboration effortless—AI keeps everyone informed and in sync.",
+    "bullet_points": [
+      "Instant Q&A: Answers project questions on demand.",
+      "Thread summarization: Distills long chat discussions into key points.",
+      "Message drafting: Writes clear, professional updates or announcements.",
+      "Task hand-offs: Converts chat promises into tracked tasks automatically."
+    ],
+    "integration_recipe": "In [app:teams](Teams), AI summarizes yesterday's marketing chat and creates tasks in [app:monday](Monday) for any commitments it detects."
+  },
+  {
+    "id": "creative-production-management",
+    "title": "AI Creative Production Management",
+    "summary": "Accelerate content and design work. AI drafts blog outlines, social copy, or storyboards directly within [app:clickup](ClickUp) or [app:monday](Monday) tasks, tracks feedback, and manages versioning—freeing your creatives for big ideas.",
+    "call_to_action": "Unleash creativity—let AI handle drafts and logistics.",
+    "bullet_points": [
+      "Content generation: Produces first-pass copy or concepts in seconds.",
+      "Brief breakdown: Turns requests into checklists so nothing's missed.",
+      "Feedback summarization: Captures change requests and updates tasks.",
+      "Multimedia support: Integrates with AI image/video tools for draft visuals."
+    ],
+    "integration_recipe": "A content request triggers AI to create a [app:gdrive](Google Doc) draft, attach it to a [app:clickup](ClickUp) task, and assign the copywriter—all automatically."
+  },
+  {
+    "id": "campaign-management",
+    "title": "AI Campaign Management",
+    "summary": "Run marketing campaigns that adapt in real time. AI plans projects, coordinates tasks across channels, monitors performance, and recommends budget shifts—all within your work-management stack.",
+    "call_to_action": "Drive smarter, faster campaigns—AI does the coordination and analysis.",
+    "bullet_points": [
+      "Auto campaign plans: Generates milestones and assignments from objectives.",
+      "Multichannel tracking: Keeps every launch perfectly sequenced.",
+      "Live performance insights: Suggests tweaks as metrics roll in.",
+      "Stakeholder updates: Sends concise, data-rich reports automatically."
+    ],
+    "integration_recipe": "As a [app:monday](Monday.com) campaign runs, AI pulls Google Analytics data and posts daily insights in the campaign board—adjusting task priorities if engagement spikes."
+  },
+  {
+    "id": "product-management-roadmapping",
+    "title": "AI Product Management & Roadmapping",
+    "summary": "Transform feedback into features. AI analyzes user input, creates backlog items, drafts specs, and prioritizes by impact vs. effort, letting product teams focus on strategy.",
+    "call_to_action": "Build better products faster—AI turns raw insights into a clear roadmap.",
+    "bullet_points": [
+      "Backlog generation: Converts support tickets into user stories.",
+      "Priority scoring: Ranks items by strategic value and effort.",
+      "Spec drafting: Writes acceptance criteria from conversations.",
+      "Sprint guidance: Suggests tickets that fit team velocity."
+    ],
+    "integration_recipe": "New [app:jira](Jira) feature requests are evaluated by AI, structured in [app:asana](Asana), and proposed for the next sprint based on capacity."
+  },
+  {
+    "id": "product-launch-coordination",
+    "title": "AI Product Launch Coordination",
+    "summary": "Coordinate every launch detail with military precision. AI builds the plan, tracks progress, drafts communications, and provides real-time checklist updates on launch day.",
+    "call_to_action": "Launch confidently—AI keeps every team and task perfectly aligned.",
+    "bullet_points": [
+      "Launch-plan templates: Auto-generates tasks across departments.",
+      "Timeline management: Adjusts schedules if upstream tasks slip.",
+      "Cross-team notifications: Ensures Marketing, Support, and Sales stay synced.",
+      "Live status feed: Real-time checklist updates during the go-live window."
+    ],
+    "integration_recipe": "AI creates a [app:monday](Monday.com) launch board, drafts the press release, schedules tasks on calendars, and posts live status updates in [app:slack](Slack) as checklist items turn \"Done.\""
+  },
+  {
+    "id": "operations-management",
+    "title": "AI Operations Management",
+    "summary": "Let AI be your tireless operations analyst. It documents processes, triggers recurring tasks, spots bottlenecks, and keeps audit trails—driving continuous improvement.",
+    "call_to_action": "Make operations leaner—AI automates routine work and surfaces insights.",
+    "bullet_points": [
+      "Process documentation: Generates SOPs from observed task patterns.",
+      "Routine task automation: Executes scheduled checks and reports.",
+      "Bottleneck detection: Highlights slow steps and suggests fixes.",
+      "Audit-ready logs: Maintains detailed activity records automatically."
+    ],
+    "integration_recipe": "Monthly close tasks are generated in [app:monday](Monday); AI pulls data, marks steps complete, pings owners for delays, and compiles an audit summary."
+  },
+  {
+    "id": "it-project-coordination",
+    "title": "AI IT Project Coordination",
+    "summary": "Speed up IT and DevOps work. AI triages tickets, recommends sprint loads, drafts release notes, and coordinates incident response—all integrated with [app:jira](Jira), [app:clickup](ClickUp), or [app:asana](Asana).",
+    "call_to_action": "Keep your tech projects humming—AI handles the data and busywork.",
+    "bullet_points": [
+      "Intelligent triage: Classifies severity and routes tickets automatically.",
+      "Sprint optimization: Suggests backlog items that fit velocity.",
+      "DevOps alerts: Updates tasks when builds fail or monitors trigger.",
+      "Knowledge base answers: Retrieves past fixes on demand."
+    ],
+    "integration_recipe": "A [app:jira](Jira) ticket triggers AI to create an [app:asana](Asana) task, set priority, and alert the on-call engineer on [app:slack](Slack) with relevant historical fixes."
+  },
+  {
+    "id": "project-intake-triage",
+    "title": "AI Project Intake & Triage",
+    "summary": "Turn every incoming request into organized work—in seconds. AI parses emails and forms, creates projects in [app:monday](Monday.com) or [app:clickup](ClickUp), fills in details, and seeks clarifications if needed.",
+    "call_to_action": "Say goodbye to manual triage—AI is your front-line coordinator.",
+    "bullet_points": [
+      "Email/form parsing: Extracts dates, requirements, urgency automatically.",
+      "Auto-prioritization: Scores and queues requests by impact.",
+      "Smart routing: Sends work to the right board or owner instantly.",
+      "Interactive intake: Chats with requesters to fill information gaps."
+    ],
+    "integration_recipe": "A website form submission becomes a [app:clickup](ClickUp) project with pre-populated tasks, assigned PM, and a confirmation email sent—all driven by AI."
+  },
+  {
+    "id": "knowledge-management-integration",
+    "title": "AI Knowledge Management Integration",
+    "summary": "Turn project data into a living knowledge base. AI captures lessons learned, links related docs, and answers questions by pulling exact snippets from past projects.",
+    "call_to_action": "Never reinvent the wheel—AI puts organizational memory at your fingertips.",
+    "bullet_points": [
+      "Auto summaries: Writes project recaps and stores them in [app:atlassian](Confluence).",
+      "Contextual suggestions: Surfaces relevant docs while you work.",
+      "Enterprise search: Answers questions with precise, cited references.",
+      "Continuous learning: Expands the knowledge base with every project."
+    ],
+    "integration_recipe": "When an [app:asana](Asana) project closes, AI creates a [app:atlassian](Confluence) recap and, on similar new projects, posts the link and key lessons automatically."
+  },
+  {
+    "id": "goal-tracking-okr-alignment",
+    "title": "AI Goal Tracking & OKR Alignment",
+    "summary": "Bridge daily tasks to big-picture goals. AI maps projects to OKRs, updates progress automatically, and nudges teams when key results lag.",
+    "call_to_action": "Keep eyes on the prize—AI aligns work with strategy in real time.",
+    "bullet_points": [
+      "Real-time updates: Syncs task completion to OKR dashboards.",
+      "Focus reminders: Flags work that doesn't tie to goals.",
+      "Cross-team alignment: Highlights departments ahead or behind.",
+      "Adaptive coaching: Suggests actions to rescue at-risk KPIs."
+    ],
+    "integration_recipe": "AI monitors [app:asana](Asana) tasks linked to Weekdone OKRs, updates a [app:gsheets](Google Sheets) dashboard, creates improvement tasks when KPIs slip, and emails owners with next steps."
+  },
+  {
+    "id": "compliance-audit-trail",
+    "title": "AI Compliance & Audit Trail Management",
+    "summary": "Stay audit-ready 24/7. AI cross-checks tasks against regulatory requirements, maintains evidence, and drafts compliance reports—so you're always prepared.",
+    "call_to_action": "Work smarter and stay compliant—AI monitors, documents, and reports automatically.",
+    "bullet_points": [
+      "Policy checks: Tags tasks missing required approvals or evidence.",
+      "Audit-ready logs: Records who did what, when, with human-readable explanations.",
+      "Continuous monitoring: Alerts teams before deadlines or gaps occur.",
+      "Automated reports: Drafts filings or certifications from live data."
+    ],
+    "integration_recipe": "As [app:wrike](Wrike) tasks close, AI verifies required documents, updates a [app:office](SharePoint) compliance log, and reopens tasks lacking evidence—then drafts the quarterly report."
+  },
+  {
+    "id": "timeline-deadline-optimization",
+    "title": "AI Timeline & Deadline Optimization",
+    "summary": "Set realistic schedules and keep them. AI forecasts durations, recalculates deadlines when slips occur, and notifies everyone of new dates—so timelines stay truthful.",
+    "call_to_action": "Take the stress out of scheduling—AI keeps plans accurate and adaptive.",
+    "bullet_points": [
+      "Predictive timelines: Estimates durations from historical data.",
+      "Automatic adjustments: Cascades new dates when tasks slip.",
+      "What-if analysis: Simulates impacts of resource or date changes.",
+      "Smart buffers & reminders: Builds slack where risk is high and nudges owners before deadlines."
+    ],
+    "integration_recipe": "AI reviews a [app:smartsheet](Smartsheet) plan, adjusts task durations, populates calendars, and when delays arise, shifts dependent dates and posts updates in [app:slack](Slack)."
+  }
+]
