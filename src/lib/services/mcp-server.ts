@@ -22,7 +22,7 @@ export async function configureMcpServer(userId: string): Promise<Server> {
   // Create MCP server
   const server = new Server(
     { name: "waystation", version: "0.2.0" },
-    { capabilities: { tools: {}, resources: {}, prompts: {} },
+    { capabilities: { tools: {}, resources: {} },
       instructions,
     }
   );  
