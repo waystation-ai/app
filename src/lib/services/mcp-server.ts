@@ -1,13 +1,30 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-
-import { ListToolsRequestSchema, CallToolRequestSchema, ListResourcesRequestSchema, ReadResourceRequestSchema } from '@modelcontextprotocol/sdk/types.js';
+import { promises as fs } from 'fs';
+import path from 'path';
+import { ListToolsRequestSchema, CallToolRequestSchema, ListResourcesRequestSchema, ReadResourceRequestSchema, ListPromptsRequestSchema, GetPromptRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { registry } from '@/marketplace';
 
+// Function to read the markdown file
+async function readInstructionsFile() {
+  try {
+    const filePath = path.join(process.cwd(), 'src/lib/services/mcp-server.MD');
+    return await fs.readFile(filePath, 'utf8');
+  } catch (error) {
+    console.error('Error reading instructions file:', error);
+    return ''; // Return empty string if file cannot be read
+  }
+}
+
 export async function configureMcpServer(userId: string): Promise<Server> {
+  // Read instructions from file
+  const instructions = await readInstructionsFile();
+  
   // Create MCP server
   const server = new Server(
     { name: "waystation", version: "0.2.0" },
-    { capabilities: { tools: {}, resources: {} } }
+    { capabilities: { tools: {}, resources: {}, prompts: {} },
+      instructions,
+    }
   );  
   
   // Set up request handlers
@@ -93,8 +110,21 @@ export async function configureMcpServer(userId: string): Promise<Server> {
     }
 
     throw new Error("Resource not found");
-  });  
+  });
+  
+  server.setRequestHandler(ListPromptsRequestSchema, async () => {
+    return {
+      prompts: [{
+        id: "hello_waystation",
+        name: "Hello Waystation",
+        description: "A simple prompt to greet Waystation",
+        inputSchema: {
+          type: "object",
+          properties: {}, 
+        },
+      }]
+    };
+  });
     
   return server;
 }
-
