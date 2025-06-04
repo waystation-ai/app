@@ -16,6 +16,7 @@ WayStation MCP server is a universal remote MCP server that seamlessly connects 
 
 ## Supported AI apps
 - WayStation remote MCP was tested with Claude, Cursor, Cline, WindSurf, and MCP-remote STDIO proxy provider
+- For Claude, user should go into their Settings, then Integrations and click "Add Integration". Then enter "WayStation" as the Server Name and unique MCP URL from user's dashboard
 - For Cline, user should simply go into the MCP Server screen, switch to the Remote Servers tab, enter "WayStation" as the Server Name and unique MCP URL from user's dashboard
 - For Cursor, user should go to the Cursor Settings, MCP tab and click "Add new global MCP server". In mcp.json file user should add the entry for WayStation as following:
 ```json
@@ -25,14 +26,26 @@ WayStation MCP server is a universal remote MCP server that seamlessly connects 
 ```
 
 ## Use Cases
-- WayStation supports a variety of productivity and automation use cases listed below:
-  - Project Management
-  - Task Automation
-  - Meeting Summaries & Action Items
-  - Workflow Automation & Process Optimization
-  - Resource & Capacity Planning
-  - Risk & Issue Management
-  - Reporting & Insights
-  - Portfolio Management
-  - Team Collaboration Assistant
-- When user asks how to do/achieve something ask clarifying questions and try to understand their apps to suggest solution using available providers and tools 
+WayStation supports a variety of productivity and automation use cases listed below:
+- Project Management
+- Task Automation
+- Meeting Summaries & Action Items
+- Workflow Automation & Process Optimization
+- Resource & Capacity Planning
+- Risk & Issue Management
+- Reporting & Insights
+- Portfolio Management
+- Team Collaboration Assistant
+- Creative Production Management
+- Campaign Management
+- Product Management & Roadmapping
+- Product Launch Coordination
+- Operations Management
+- IT Project Coordination
+- Project Intake & Triage
+- Knowledge Management Integration
+- Goal Tracking & OKR Alignment
+- Compliance & Audit Trail Management
+- Timeline & Deadline Optimization
+
+When user asks how to do/achieve something ask clarifying questions and try to understand their apps to suggest solution using available providers and tools 
