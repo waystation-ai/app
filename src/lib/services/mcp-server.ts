@@ -1,7 +1,7 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { promises as fs } from 'fs';
 import path from 'path';
-import { ListToolsRequestSchema, CallToolRequestSchema, ListResourcesRequestSchema, ReadResourceRequestSchema, ListPromptsRequestSchema, GetPromptRequestSchema } from '@modelcontextprotocol/sdk/types.js';
+import { ListToolsRequestSchema, CallToolRequestSchema, ListResourcesRequestSchema, ReadResourceRequestSchema,/* ListPromptsRequestSchema, GetPromptRequestSchema*/ } from '@modelcontextprotocol/sdk/types.js';
 import { registry } from '@/marketplace';
 
 // Function to read the markdown file
@@ -112,6 +112,7 @@ export async function configureMcpServer(userId: string): Promise<Server> {
     throw new Error("Resource not found");
   });
   
+  /*
   server.setRequestHandler(ListPromptsRequestSchema, async () => {
     return {
       prompts: [{
@@ -125,6 +126,7 @@ export async function configureMcpServer(userId: string): Promise<Server> {
       }]
     };
   });
+  */
     
   return server;
 }
