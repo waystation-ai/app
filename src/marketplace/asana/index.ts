@@ -2,12 +2,14 @@ import { registerProvider } from '../core/registry';
 import { listAsanaWorkspaces } from './list-workspaces';
 import { listAsanaProjects } from './list-projects';
 import { readAsanaProject } from './read-project';
+import { readAsanaTask } from './read-task';
 import { listAsanaTasks } from './list-tasks';
 import { createAsanaTask } from './create-task';
 import { updateAsanaTask } from './update-task';
 import { createAsanaComment } from './create-comment';
 import { searchAsanaTasks } from './search-tasks';
 import { getAsanaFavorites } from './get-favorites';
+import { ToolContext } from '../core/types';
 
 export const asanaProvider = registerProvider({
   id: 'asana',
@@ -45,6 +47,7 @@ export const asanaProvider = registerProvider({
     listAsanaWorkspaces,
     listAsanaProjects,
     readAsanaProject,
+    readAsanaTask,
     listAsanaTasks,
     createAsanaTask,
     updateAsanaTask,
@@ -59,19 +62,50 @@ export const asanaProvider = registerProvider({
   },
 
   getResourceContent: async (context, resource) => {
-    // Extract project ID from the resource url
     const url = new URL(resource.url);
-    const projectId = url.pathname.split('/').pop();
+    const resourceId = url.pathname.split('/').pop();
 
-    if (!projectId) {
-      throw new Error('Invalid project URL');
+    if (!resourceId) {
+      throw new Error('Invalid resource URL');
     }
+
+    // Check if this is a task resource by looking for "task" in the URL
+    if (url.pathname.includes('task')) {
+      const result = await readAsanaTask.handler({ context, params: { taskId: resource.id } });
+      return {
+        text: JSON.stringify(result),
+        mimeType: 'application/json'
+      };
+    } else {
+      // Default to project resource
+      const result = await readAsanaProject.handler({ context, params: { projectId: resourceId } });
+      return {
+        text: JSON.stringify(result),
+        mimeType: 'application/json'
+      };
+    }
+  },
+
+  search: async (context: ToolContext, query: string) => {
+    // Get all workspaces first
+    const workspaces = await listAsanaWorkspaces.handler({ context, params: {} });
     
-    const result = await readAsanaProject.handler({ context, params: {projectId} });
+    // Search across all workspaces in parallel
+    const searchPromises = workspaces.map(workspace => 
+      searchAsanaTasks.handler({ 
+        context, 
+        params: { 
+          workspaceId: workspace.id, 
+          query 
+        } 
+      }).catch(() => []) // Return empty array if search fails for a workspace
+    );
+    
+    const searchResults = await Promise.all(searchPromises);
+    
+    // Flatten and deduplicate results
+    const allTasks = searchResults.flat();
 
-    return {
-      text: JSON.stringify(result),
-      mimeType: 'application/json'
-    }
+    return allTasks;
   }
 });

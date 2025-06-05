@@ -49,12 +49,104 @@ export async function configureMcpServer(userId: string): Promise<Server> {
           })
         }
       });
+
     }
+
+    tools.push({
+      name: "search",
+      description: "Search across all connected apps",
+      inputSchema: {
+        type: "object" as const,
+        properties: {
+          query: { type: "string", description: "Search query" },
+        },
+        required: ["query"]
+      }
+    });
+
+    tools.push({
+      name: "fetch",
+      description: "Search across all connected apps",
+      inputSchema: {
+        type: "object" as const,
+        properties: {
+          id: { type: "string", description: "The id of the document to fetch" },
+        },
+        required: ["id"]
+      }
+    });
 
     return { tools };
   });
 
   server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    if (request.params.name === "search") {
+      // Handle search tool separately
+       const query = request.params.arguments?.query as string;
+
+       if(!query) {
+         return {
+           content: [{type: "text", text: `No query provided`}],
+           error: true
+         };
+       }
+
+      const results = await registry.search(userId, query);
+
+      const response = results.map(result => `${result.provider.id}:${result.id}:${result.url}`);
+
+      return {
+        content: [
+          {type: "text", text: JSON.stringify(response)},
+        ]
+      };
+    }
+    
+    if (request.params.name === "fetch") {
+      // Handle search tool separately
+       const resId = request.params.arguments?.id as string;
+
+       if(!resId) {
+         return {
+           content: [{type: "text", text: `No ID provided`}],
+           error: true
+         };
+       }
+
+      // Parse ID to extract provider and resource ID
+      const [providerId, id, url, tail] = resId.split(':'); 
+
+      const provider = registry.getProvider(providerId);
+      if (!provider) {
+        return {
+          error: true, 
+          content: [{type: "text", text: `Provider '${providerId}' not found`}]
+        };
+      }; 
+
+      const result = await registry.getResourceContent(userId, {
+        provider,
+        id,
+        url: url + ':' + tail,
+        name: ''
+      });
+
+      const item = result[0];
+      
+      const content = {
+        id: item.id,
+        title: item.name,
+        text: item.text,
+        url: item.url,
+      };
+
+      return {
+        content: [
+          {type: "text", text: JSON.stringify(content)},
+        ]
+      };
+    }
+
     // Find the tool
     const tool = await registry.getTool(request.params.name, userId);
     if (!tool) {

@@ -241,6 +241,35 @@ export class ProviderRegistry {
 
     return [];
   }
+  async searchProvider(provider: Provider, userId: string, query: string): Promise<Resource[]> {
+    if (isNativeProvider(provider)) {
+      if (!provider.search)
+        return [];
+
+      return await provider.search({ getAccessToken: () => oauthService.getValidAccessToken(provider, userId) }, query);
+    }
+    
+    return [];
+  }
+    
+  async search(userId: string, query: string): Promise<ProviderResource[]> {
+   let providers = this.getAllProviders();
+
+    const connections = await getValidConnections(userId);
+    const providerIds = Array.from(connections.values()).map(conn => conn.provider);
+    providers = providers.filter(provider => providerIds.includes(provider.id));
+
+    const providerResourceArrays = await Promise.all(
+      providers.map(async provider => {
+        const resources = await this.searchProvider(provider, userId, query);
+        return resources.map(resource => ({
+          ...resource,
+          provider
+        }));
+    }));
+
+    return providerResourceArrays.flat();  
+  }
 }
 
 export const registry = new ProviderRegistry();

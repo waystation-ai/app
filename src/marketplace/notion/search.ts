@@ -40,7 +40,7 @@ export const searchNotion = defineTool({
     }
     
     // Add sort if provided
-    if (params.sort) {
+    if (params.sort && Object.keys(params.sort).length > 0) {
       searchRequest.sort = params.sort;
     }
     

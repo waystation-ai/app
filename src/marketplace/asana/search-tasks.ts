@@ -14,7 +14,7 @@ export const searchAsanaTasks = defineTool({
   path: '/tools/asana/search_tasks',
   parameters: z.object({
     workspaceId: z.string().describe('The workspace ID to search within'),
-    searchTerm: z.string().describe('The term to search for in task names and descriptions'),
+    query: z.string().describe('The query text to search for in task names and descriptions'),
     projectId: z.string().optional().describe('Filter tasks to a specific project ID')
   }),
   responses: {
@@ -23,6 +23,7 @@ export const searchAsanaTasks = defineTool({
       schema: z.array(z.object({
         id: z.string().describe('Unique identifier for the task'),
         name: z.string().describe('Name of the task'),
+        url: z.string().describe('URL of the task'),
         completed: z.boolean().describe('Whether the task is completed'),
         due_on: z.string().optional().describe('Due date of the task'),
         assignee: z.record(z.unknown()).optional().describe('Assignee information')
@@ -34,10 +35,10 @@ export const searchAsanaTasks = defineTool({
     const queryParams = new URLSearchParams();
     
     // Add opt_fields for detailed task information
-    queryParams.append('opt_fields', 'gid,name,completed,due_on,assignee');
+    queryParams.append('opt_fields', 'gid,name,completed,due_on,assignee,permalink_url');
     
     // Add the search term
-    queryParams.append('text', params.searchTerm);
+    queryParams.append('text', params.query);
     
     // Add project filter if provided
     if (params.projectId) {
@@ -62,7 +63,8 @@ export const searchAsanaTasks = defineTool({
       name: task.name as string,
       completed: task.completed as boolean,
       due_on: task.due_on as string | undefined,
-      assignee: task.assignee as Record<string, unknown> | undefined
+      assignee: task.assignee as Record<string, unknown> | undefined,
+      url: task.permalink_url as string
     })) as TasksResponse;
   }
 });

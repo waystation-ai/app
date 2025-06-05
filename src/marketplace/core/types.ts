@@ -60,6 +60,8 @@ export interface NativeProvider extends BaseProvider {
 
   getResources?: (context: ToolContext) => Promise<Resource[]>;
   getResourceContent?: (context: ToolContext, resource: Resource) => Promise<ResourceContent>;
+
+  search?: (context: ToolContext, query: string) => Promise<Resource[]>;
 }
 
 export interface RemoteProvider extends BaseProvider {

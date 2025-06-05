@@ -6,6 +6,7 @@ import { readNotionPage } from './read-page';
 import { createNotionPage } from './create-page';
 import { createNotionComment } from './create-comment';
 import { searchNotion } from './search';
+import { Resource, ResourceContent, ToolContext } from '../core/types';
 
 /*
 import { createNotionDatabaseItem } from './create-database-item';
@@ -57,5 +58,26 @@ export const notionProvider = registerProvider({
     createNotionPage,
     createNotionComment,
     searchNotion
-  ]
+  ],
+
+  getResourceContent: async (context: ToolContext, resource: Resource) => {
+    const page = await readNotionPage.handler({ context, params: { pageId: resource.id } });
+
+    const content: ResourceContent = {
+      text: page.content || '',
+      mimeType: 'text/markdown',
+    }
+
+    return content;
+  },
+  search: async (context: ToolContext, query: string) => {
+    const params = { query }
+    const response = await searchNotion.handler({context, params });
+
+    return response.results.map((item: any) => ({   // eslint-disable-line @typescript-eslint/no-explicit-any
+      id: item.id,
+      name: item.title || item.properties?.title?.title[0]?.plain_text || 'Untitled',
+      url: item.url
+    }));
+  }
 });
