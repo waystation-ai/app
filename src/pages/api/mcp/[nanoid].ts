@@ -17,7 +17,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const {nanoid} = req.query;
 
   if (req.method !== 'POST') {
-    //return res.redirect(`/mcp/sse/${nanoid}`);
+    return res.redirect(`/mcp/sse/${nanoid}`);
+    /*
     res.writeHead(405).end(JSON.stringify({
       jsonrpc: "2.0",
       error: {
@@ -28,6 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }));
 
     return;
+    */
   }
   
   const nanoIdEntry = await db.query.nanoIds.findFirst({
