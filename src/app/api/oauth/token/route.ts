@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
       
       // Exchange code for tokens
       try {
-        if (!codeVerifier) {
+        if (!clientSecret && !codeVerifier) {
           console.error('Missing code_verifier in token request');
           return NextResponse.json(
             { error: 'invalid_request', error_description: 'code_verifier is required for PKCE' },

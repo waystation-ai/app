@@ -222,7 +222,7 @@ export class OAuthServerService {
   }
 
   // Exchange code for tokens with Clerk
-  async exchangeCodeForTokens(code: string, codeVerifier: string): Promise<OAuthTokens> {
+  async exchangeCodeForTokens(code: string, codeVerifier: string|null): Promise<OAuthTokens> {
     if (!process.env.CLERK_OAUTH_CLIENT_ID) {
       throw new Error('CLERK_OAUTH_CLIENT_ID environment variable is not set');
     }
@@ -237,8 +237,10 @@ export class OAuthServerService {
       code,
       redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL}/api/oauth/callback`,
       grant_type: 'authorization_code',
-      code_verifier: codeVerifier
     });
+
+    if (codeVerifier)
+      params.append('code_verifier', codeVerifier);
 
     console.log('Token request URL:', this.getClerkTokenUrl());
     console.log('Token request params:', params.toString());
