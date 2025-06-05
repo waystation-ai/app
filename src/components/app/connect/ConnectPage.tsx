@@ -10,6 +10,9 @@ import Providers from "@/components/app/Providers";
 import AlternativeApps from "./AlternativeApps";
 
 import { AppType } from "./metadata";
+import { authUserId } from "@/lib/utils/auth-userid";
+import { getValidConnections } from "@/lib/db";
+import { generateNanoidForUser } from "@/lib/utils/generate-nanoid-for-user";
 
 interface AppInfo {
   type: AppType;
@@ -27,6 +30,11 @@ const APP_INFO: Record<AppType, AppInfo> = {
   "claude": {
     type: "claude",
     displayName: "Claude Desktop",
+    titlePrefix: "Connect"
+  },
+  "cursor": {
+    type: "cursor",
+    displayName: "Cursor",
     titlePrefix: "Connect"
   },
   "mcp-server": {
@@ -52,6 +60,16 @@ export default async function ConnectPage({ params, appType, redirectUri }: Conn
   const config = getProviderConfig(provider);
   const appInfo = APP_INFO[appType];
 
+  const userId = await authUserId();
+
+  const connected = userId ?  (await getValidConnections(userId)).has(provider) : false;
+
+  const nanoId = userId ? await generateNanoidForUser(userId) : undefined;
+
+  const cursorConfig = {
+      "url": `${process.env.NEXT_PUBLIC_APP_URL}/mcp` + (nanoId ? `/${nanoId}` : ""),
+  };  
+  
   return (
     <div className="flex flex-col relative">
       {/* Hero Section */}
@@ -63,7 +81,7 @@ export default async function ConnectPage({ params, appType, redirectUri }: Conn
           {/* Left Column - Branding */}
           <div className="flex flex-col justify-center text-left">
             <h1 className="text-3xl lg:text-4xl font-bold mb-4">
-              {appInfo.titlePrefix || "Connect"} {appInfo.displayName} with <span className="bg-yellow-100">{config.name}</span>
+              {appInfo.titlePrefix || "Connect"} {appInfo.displayName} to <span className="bg-yellow-100">{config.name}</span>
             </h1>
             <h2 className="text-lg lg:text-xl mb-2 leading-snug">
               {config.description}
@@ -76,15 +94,25 @@ export default async function ConnectPage({ params, appType, redirectUri }: Conn
               </ul>
             )}
 
+            { (connected && appType =="cursor") && 
+              <Link href={`cursor://anysphere.cursor-deeplink/mcp/install?name=WayStation&config=${Buffer.from(JSON.stringify(cursorConfig)).toString('base64')}`} 
+                className="cursor-btn flex items-center justify-center gap-2">
+                <Image src="/images/apps/cursor.svg" width={26} height={26} alt="Cursor Logo"></Image> Add to Cursor
+              </Link>
+            }
+            { !(connected && (appType == "cursor")) && 
             <Link
               href={isFullProvider(config) 
-                ? `/api/auth/${provider}/connect${redirectUri ? `?redirect_uri=${encodeURIComponent(redirectUri)}` : ''}`
-                : `/dashboard?provider=${provider}${redirectUri ? `&redirect_uri=${encodeURIComponent(redirectUri)}` : ''}`
+                ? `/api/auth/${provider}/connect${redirectUri ? 
+                    `?redirect_uri=${encodeURIComponent(redirectUri)}` 
+                    : (appType == "cursor"? `?redirect_uri=${encodeURIComponent('/connect/cursor/' + provider)}` : '')}`
+                : `/waitlist/${provider}` 
               }
               className="getstarted-btn"
             >
               Connect Now
             </Link>
+        }
 
             <AlternativeApps provider={provider} currentApp={appType} />
 

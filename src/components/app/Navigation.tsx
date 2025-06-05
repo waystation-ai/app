@@ -49,14 +49,21 @@ export function Menu() {
                 <NavigationMenuLink href="/connect/chatgpt" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                   <div className="app-link text-sm font-medium leading-none">
                     <Image src="/images/apps/chatgpt.svg" width={20} height={20} alt="Claude" />
-                    <span>WayStation GPT</span>
+                    <span>ChatGPT Connector</span>
                   </div>
                   <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">ChatGPT empowered to take actions in your apps</p>
+                </NavigationMenuLink>
+                <NavigationMenuLink href="/connect/cursor" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                  <div className="app-link text-sm font-medium leading-none">
+                    <Image src="/images/apps/cursor.svg" width={20} height={20} alt="Claude" />
+                    <span>Cursor MCP</span>
+                  </div>
+                  <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Cursor MCP to connect all your apps</p>
                 </NavigationMenuLink>
                 <NavigationMenuLink href="/connect/mcp-server" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                   <div className="app-link text-sm font-medium leading-none">
                     <Image src="/images/apps/mcp.svg" width={20} height={20} alt="Claude" />
-                    <span>Universal MCP</span>
+                    <span>Universal remote MCP</span>
                   </div>
                   <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">The only MCP server you need to connect your apps</p>
                 </NavigationMenuLink>

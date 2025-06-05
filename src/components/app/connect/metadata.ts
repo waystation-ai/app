@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { getProviderConfig } from "@/lib/services/provider-config";
 
-export type AppType = "chatgpt" | "claude" | "mcp-server" | "generic";
+export type AppType = "chatgpt" | "claude" | "mcp-server" | "cursor" | "generic";
 
 export interface AppMetadata {
   // Basic info
@@ -21,16 +21,23 @@ const APP_METADATA: Record<AppType, AppMetadata> = {
   "chatgpt": {
     name: "ChatGPT",
     displayName: "ChatGPT",
-    displayTitle: "The only ChatGPT action you need",
-    displayDescription: "Connect ChatGPT with the tools you use daily",
-    connectDescription: "With WayStation plugin for ChatGPT you can"
+    displayTitle: "The only ChatGPT connector you need",
+    displayDescription: "Connect ChatGPT to the tools you use daily",
+    connectDescription: "With WayStation connector for ChatGPT you can"
   },
   "claude": {
     name: "Claude Desktop",
     displayName: "Claude Desktop",
-    displayTitle: "The only Claude Desktop agent you need",
-    displayDescription: "Connect Claude Desktop with the tools you use daily",
-    connectDescription: "With WayStation plugin for Claude Desktop you can"
+    displayTitle: "The only Claude Desktop integration you need",
+    displayDescription: "Connect Claude Desktop to the tools you use daily",
+    connectDescription: "With WayStation integration for Claude Desktop you can"
+  },
+  "cursor": {
+    name: "Cursor",
+    displayName: "Cursor",
+    displayTitle: "The only Cursor MCP you need",
+    displayDescription: "Connect Cursor to the tools you use daily",
+    connectDescription: "With WayStation MCP for Cursor you can"
   },
   "mcp-server": {
     name: "MCP Server",
@@ -80,18 +87,13 @@ export function getLandingPageMetadata(appType: AppType): Metadata {
 /**
  * Generate metadata for provider-specific connect pages
  */
-export async function generateConnectMetadata(
-  params: Promise<{ provider: string }>,
-  appType: AppType
-): Promise<Metadata> {
+export async function generateConnectMetadata(params: Promise<{ provider: string }>, appType: AppType): Promise<Metadata> {
   const { provider } = await params;
   const config = getProviderConfig(provider);
   const appInfo = getAppMetadata(appType);
 
   // For generic app type, use a different URL format
-  const url = appType === "generic" 
-    ? `/connect/${provider}` 
-    : `/connect/${appType}/${provider}`;
+  const url = appType === "generic" ? `/connect/${provider}` : `/connect/${appType}/${provider}`;
 
   return {
     title: `Integrate ${appInfo.displayName} with ${config.name}`,

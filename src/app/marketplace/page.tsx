@@ -28,7 +28,7 @@ function ProviderSection({ title, providers }: {
 }
 
 export const metadata: Metadata = {
-  title: 'Marketplace',
+  title: 'Integrations Marketplace',
 };
 
 export default function MarketplacePage() {
@@ -40,7 +40,7 @@ export default function MarketplacePage() {
   return (
     <div className="mt-4 sm:mt-8 px-4 sm:px-6 lg:px-8 mx-auto">
       <h1 className="text-3xl lg:text-4xl text-gray-900 font-bold mb-8">
-        Marketplace
+        Integrations Marketplace
       </h1>
       
       <ProviderSection 

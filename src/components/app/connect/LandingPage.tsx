@@ -8,12 +8,14 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import AlternativeApps from "./AlternativeApps";
 import { AppType, getAppMetadata } from "./metadata";
 import { CopyBox } from "../CopyBox";
+import { authUserId } from "@/lib/utils/auth-userid";
+import { generateNanoidForUser } from "@/lib/utils/generate-nanoid-for-user";
 
 interface LandingPageProps {
   appType: AppType;
 }
 
-export default function LandingPage({ appType }: LandingPageProps) {
+export default async function LandingPage({ appType }: LandingPageProps) {
   // Get metadata for this app type
   const metadata = getAppMetadata(appType);
   
@@ -26,12 +28,20 @@ export default function LandingPage({ appType }: LandingPageProps) {
     { role: 'agent', content: "On it! We'll get back to you shortly." }
   ];
 
+  const userId = await authUserId();
+
+  const nanoId = userId ? await generateNanoidForUser(userId) : undefined;
+
+  const cursorConfig = {
+      "url": `${process.env.NEXT_PUBLIC_APP_URL}/mcp` + (nanoId ? `/${nanoId}` : ""),
+  };
+
   return (
     <div className="flex flex-col relative">
       {/* Hero Section */}
       <main className="flex-1 flex flex-col">
         { (appType === "mcp-server") &&
-          <CopyBox text={"https://waystation.ai/mcp"} className="text-lg my-8 max-w-7xl mx-auto font-bold" icon={<Image src="/images/apps/mcp.svg" width={20} height={20} alt="MCP Host"  />}></CopyBox>
+          <CopyBox text={`${process.env.NEXT_PUBLIC_APP_URL}/mcp`} className="text-lg my-8 max-w-7xl mx-auto font-bold" icon={<Image src="/images/apps/mcp.svg" width={20} height={20} alt="MCP Host"  />}></CopyBox>
         }
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 px-4 sm:px-8 max-w-7xl mx-auto">
@@ -43,12 +53,21 @@ export default function LandingPage({ appType }: LandingPageProps) {
               no-code, secure integration hub.
             </h2>
             <div className="mt-6">
-              <Providers app={appType === "chatgpt" ? undefined : appType} className="grid grid-cols-8 gap-4 lg:gap-3" />
+              <Providers app={appType === "generic" ? undefined : appType} className="grid grid-cols-8 gap-4 lg:gap-3" />
             </div>
             <SignedIn>
+              { (appType === "cursor") &&
+              <Link href={`cursor://anysphere.cursor-deeplink/mcp/install?name=WayStation&config=${Buffer.from(JSON.stringify(cursorConfig)).toString('base64')}`} 
+                className="cursor-btn flex items-center justify-center gap-2">
+                <Image src="/images/apps/cursor.svg" width={26} height={26} alt="Cursor Logo"></Image> Add to Cursor
+              </Link>
+              }
+              {
+                (appType != "cursor") &&
               <Link href="/dashboard" className="getstarted-btn">
                 Get Started
               </Link>
+              }
             </SignedIn>
             <SignedOut>
               <Link href="/sign-in" className="getstarted-btn">
