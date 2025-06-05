@@ -122,7 +122,7 @@ export class OAuthServerService {
   }
 
   // Store redirect mapping with client's code challenge
-  async storeRedirectMapping(clientId: string, originalRedirectUri: string, codeChallenge: string, codeChallengeMethod: string,
+  async storeRedirectMapping(clientId: string, originalRedirectUri: string, codeChallenge: string|null, codeChallengeMethod: string|null,
     expirationMinutes: number = 10,  originalState?: string | null): Promise<{ state: string }> {
     const state = this.generateState();
     const expiresAt = new Date(Date.now() + expirationMinutes * 60 * 1000);
@@ -200,7 +200,7 @@ export class OAuthServerService {
   }
   
   // Build authorization URL for Clerk using client's code challenge
-  async buildClerkAuthorizationUrl(state: string, codeChallenge: string, codeChallengeMethod: string): Promise<string> {
+  async buildClerkAuthorizationUrl(state: string, codeChallenge: string|null, codeChallengeMethod: string|null): Promise<string> {
     if (!process.env.CLERK_OAUTH_CLIENT_ID) {
       throw new Error('CLERK_OAUTH_CLIENT_ID environment variable is not set');
     }
@@ -209,10 +209,14 @@ export class OAuthServerService {
       redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL}/api/oauth/callback`,
       response_type: 'code',
       state,
-      code_challenge: codeChallenge,
-      code_challenge_method: codeChallengeMethod,
       scope: 'openid profile email'
     });
+
+    if (codeChallenge)
+      params.append('code_challenge', codeChallenge);
+
+    if (codeChallengeMethod)
+      params.append('code_challenge_method', codeChallengeMethod);
 
     return `${this.getClerkAuthorizationUrl()}?${params.toString()}`;
   }

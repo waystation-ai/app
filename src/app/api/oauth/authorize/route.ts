@@ -38,29 +38,31 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    // Validate PKCE parameters
-    if (!codeChallenge) {
-      return NextResponse.json(
-        { error: 'invalid_request', error_description: 'code_challenge is required for PKCE' },
-        { status: 400 }
-      );
-    }
-    
-    if (codeChallengeMethod !== 'S256') {
-      return NextResponse.json(
-        { error: 'invalid_request', error_description: 'code_challenge_method must be S256' },
-        { status: 400 }
-      );
-    }
-    
     // Get client
     const client = await oauthServerService.getClient(clientId);
-    
+
     if (!client) {
       return NextResponse.json(
         { error: 'invalid_client', error_description: 'Client not found' },
         { status: 400 }
       );
+    }
+
+    if (!client.clientSecret) {
+      // Validate PKCE parameters
+      if (!codeChallenge) {
+        return NextResponse.json(
+          { error: 'invalid_request', error_description: 'code_challenge is required for PKCE' },
+          { status: 400 }
+        );
+      }
+      
+      if (codeChallengeMethod !== 'S256') {
+        return NextResponse.json(
+          { error: 'invalid_request', error_description: 'code_challenge_method must be S256' },
+          { status: 400 }
+        );
+      }
     }
     
     // Validate redirect URI
