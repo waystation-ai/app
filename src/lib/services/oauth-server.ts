@@ -19,7 +19,7 @@ function base64URLEncode(buffer: Uint8Array): string {
     .replace(/=/g, '');
 }
 
-export class OAuthServerService {
+export class OAuthServer {
   // Generate a secure random string for client_id
   private generateClientId(): string {
     return `waystation-${nanoid(16)}`;
@@ -384,4 +384,4 @@ export class OAuthServerService {
 }
 
 // Export singleton instance
-export const oauthServerService = new OAuthServerService();
+export const oauthServerService = new OAuthServer();

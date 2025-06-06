@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { oauthServerService } from '@/lib/services/oauth-server-service';
+import { oauthServerService } from '@/lib/services/oauth-server';
 import { OAuthClientMetadataSchema } from '@modelcontextprotocol/sdk/shared/auth.js';
 
 export async function POST(request: NextRequest) {

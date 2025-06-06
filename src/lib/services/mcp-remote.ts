@@ -2,7 +2,7 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js';
 
 import { getRemoteProviderMetadata, storeRemoteProviderMetadata, RemoteProviderMetadata} from '@/lib/db';
-import { RemoteOAuthClientProvider } from './oauth-service';
+import { RemoteOAuthClientProvider } from './oauth-client';
 import { RemoteProvider } from '@/marketplace/core/types';
 import { ListResourcesResult, ListToolsResult, ReadResourceResult } from '@modelcontextprotocol/sdk/types.js';
 

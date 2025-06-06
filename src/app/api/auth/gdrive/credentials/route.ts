@@ -1,6 +1,6 @@
 import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
-import { oauthService } from '@/lib/services/oauth-service';
+import { oauthService } from '@/lib/services/oauth-client';
 import { registry } from '@/marketplace';
 import { NativeProvider } from '@/marketplace/core/types';
 

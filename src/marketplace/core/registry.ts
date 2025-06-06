@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { isFullProvider, isNativeProvider, isRemoteProvider, NativeProvider, Provider, ProviderResource, ProviderResourceContent, ProviderTool, RemoteProvider, Resource, ResourceContent, Tool, ToolContext } from './types';
 import PostHogClient from '@/lib/utils/posthog-client'; // Using the existing PostHog client
-import { oauthService } from '@/lib/services/oauth-service'; // Assuming oauthService is accessible or passed
+import { oauthService } from '@/lib/services/oauth-client'; // Assuming oauthService is accessible or passed
 import { getRemoteProviderMetadata, getValidConnections } from '@/lib/db';
 import { callToolFromRemoteProvider, readResourceContentFromRemoteProvider } from '@/lib/services/mcp-remote';
 import { generateText } from 'ai';

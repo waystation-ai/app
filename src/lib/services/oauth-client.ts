@@ -22,7 +22,7 @@ function base64URLEncode(buffer: Uint8Array): string {
     .replace(/=/g, '');
 }
 
-export class OAuthService {
+export class OAuthClient {
   private generateState(): string {
     return Math.random().toString(36).substring(2) + Date.now().toString(36);
   }
@@ -331,7 +331,7 @@ export class OAuthService {
 }
 
 // Export singleton instance
-export const oauthService = new OAuthService();
+export const oauthService = new OAuthClient();
 
 export class RemoteOAuthClientProvider implements OAuthClientProvider {
   private provider: RemoteProvider;

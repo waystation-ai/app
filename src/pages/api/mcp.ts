@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 
-import { getAuth } from '@clerk/nextjs/server';
 import { configureMcpServer } from '@/lib/services/mcp-server';
+import { getAuthUserId } from '@/lib/utils/auth-userid';
 
 // Add this at the top of the file
 export const config = {
@@ -16,33 +16,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.redirect('/mcp/sse');
     //return res.status(405).json({ error: 'Method Not Allowed' });
   }
-  
-  const session = getAuth(req);
-  let userId = session.userId;
 
-  if (!userId) {
-    console.log('Session userId is missing');
-    const accessToken = req.headers.authorization;
+  const userId = await getAuthUserId(req);  
 
-    if (!accessToken)
-      return res.status(401).json({ error: 'Unauthorized' });
+  if (!userId)
+    return res.status(401).json({ error: 'Unauthorized' });
 
-    const response = await fetch(`https://clerk.${process.env.APP_DOMAIN}/oauth/userinfo`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': accessToken
-      }
-    });
-    console.log(response);
-
-    if (!response.ok) 
-      return res.status(401).json({ error: 'Unauthorized' });
-      
-    const data = await response.json();
-    console.log(data);
-    userId = data.user_id;
-  }
 
   const transport = new StreamableHTTPServerTransport({
     sessionIdGenerator: undefined,
@@ -50,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     
   // Create MCP server
 
-  const server = await configureMcpServer(userId as string);
+  const server = await configureMcpServer(userId);
   
   // Connect transport to server
   await server.connect(transport);

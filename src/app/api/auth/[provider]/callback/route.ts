@@ -1,6 +1,6 @@
 import { auth } from '@clerk/nextjs/server';
 import { NextRequest, NextResponse } from 'next/server';
-import { oauthService } from '@/lib/services/oauth-service';
+import { oauthService } from '@/lib/services/oauth-client';
 import { storeOAuthTokens } from '@/lib/db';
 import { getRequestOrigin } from '@/lib/utils/get-request-origin';
 import { stateStore } from '@/lib/services/state-store';
