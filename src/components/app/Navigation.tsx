@@ -73,7 +73,7 @@ export function Menu() {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuLink className={navigationMenuTriggerStyle()} href="/ai">
+          <NavigationMenuLink className={navigationMenuTriggerStyle()} href="/use-cases">
             Use Cases
           </NavigationMenuLink>
         </NavigationMenuItem>
@@ -183,7 +183,7 @@ export default function Navigation() {
           </Link>
           <Link href="/connect/chatgpt" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>
             <Image src="/images/apps/chatgpt.svg" width={20} height={20} alt="WayStation GPT" />
-            <span>WayStation GPT</span>
+            <span>ChatGPT Connector</span>
           </Link>
           <Link href="/connect/mcp-server" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>
             <Image src="/images/apps/mcp.svg" width={20} height={20} alt="MCP" />

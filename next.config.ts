@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
         destination: '/integrations/claude/:path*',
         permanent: true,
       },
+      {
+        source: '/ai/:path*',
+        destination: '/use-cases/:path*',
+        permanent: true,
+      },
     ];
   },
   async rewrites() {

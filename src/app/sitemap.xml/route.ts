@@ -1,5 +1,5 @@
 import { registry } from '@/marketplace';
-import useCases from '../ai/use-cases.json';
+import useCases from '../use-cases/use-cases.json';
 
 export async function GET() {
   // Get current date for lastmod
