@@ -1,4 +1,4 @@
-import UseCaseGrid from '@/components/app/ai/UseCaseGrid';
+import UseCaseGrid from '@/components/app/use-cases/UseCaseGrid';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {

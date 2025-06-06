@@ -84,7 +84,7 @@ export function processUseCaseAppLinks(useCase: { id: string; title: string; sum
     ...useCase,
     summary: processAppLinks(useCase.summary),
     call_to_action: [{ type: 'text', content: useCase.call_to_action }],
-    bullet_points: useCase.bullet_points.map((point: string) => [{ type: 'text', content: point }]),
+    bullet_points: useCase.bullet_points.map(point => processAppLinks(point)),
     integration_recipe: processAppLinks(useCase.integration_recipe)
   };
 }

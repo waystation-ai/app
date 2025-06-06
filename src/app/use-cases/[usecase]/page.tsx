@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import UseCasePage from '@/components/app/ai/UseCasePage';
+import UseCasePage from '@/components/app/use-cases/UseCasePage';
 import useCases from '../use-cases.json';
 
 export async function generateStaticParams() {
