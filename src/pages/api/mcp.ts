@@ -12,26 +12,21 @@ export const config = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
+  if (req.method !== 'POST') 
     return res.redirect('/mcp/sse');
-    //return res.status(405).json({ error: 'Method Not Allowed' });
-  }
 
   const userId = await getAuthUserId(req);  
 
   if (!userId)
     return res.status(401).json({ error: 'Unauthorized' });
 
-
-  const transport = new StreamableHTTPServerTransport({
-    sessionIdGenerator: undefined,
-  });
-    
   // Create MCP server
-
   const server = await configureMcpServer(userId);
   
   // Connect transport to server
+  const transport = new StreamableHTTPServerTransport({
+    sessionIdGenerator: undefined,
+  });    
   await server.connect(transport);
 
   await transport.handleRequest(req, res);

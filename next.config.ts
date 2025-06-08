@@ -23,16 +23,6 @@ const nextConfig: NextConfig = {
         destination: "/api/mcp/:path*",
       },
       {
-        source: '/:path*',
-        destination: '/api/mcp/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'mcp.waystation.ai',
-          },
-        ],
-      },      
-      {
         source: "/ingest/static/:path*",
         destination: "https://us-assets.i.posthog.com/static/:path*",
       },
