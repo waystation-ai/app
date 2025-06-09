@@ -32,10 +32,10 @@ export async function sseHandler(res: NextApiResponse, userId: string) {
   }, 85000);
 
   // Set up onclose handler to clean up transport when closed
-  transport.onclose = () => {
+  transport.onclose = async () => {
     console.log(`SSE transport closed for session ${sessionId}`);
     clearTimeout(timeoutId);
-    pubSub.disconnect();
+    await pubSub.disconnect();
   };
 
   // Create MCP server
