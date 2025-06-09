@@ -12,7 +12,9 @@ export const config = {
   },
 };
 
-export async function sseHandler(res: NextApiResponse, userId: string) {
+export async function sseHandler(req: NextApiRequest, res: NextApiResponse, userId: string) {
+  const { provider } = req.query;
+  
   const transport = new SSEServerTransport("/mcp/messages", res);
 
   const sessionId = transport.sessionId;
@@ -39,7 +41,7 @@ export async function sseHandler(res: NextApiResponse, userId: string) {
   };
 
   // Create MCP server
-  const server = await configureMcpServer(userId);
+  const server = await configureMcpServer(userId, provider ? Array.isArray(provider) ? provider[0] : provider : undefined);
 
   // Connect transport to server
   await server.connect(transport);
@@ -51,5 +53,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (!userId)
     return res.status(401).json({ error: 'Unauthorized' });
 
-  await sseHandler(res, userId);
+  await sseHandler(req, res, userId);
 }

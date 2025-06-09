@@ -23,6 +23,10 @@ const nextConfig: NextConfig = {
         destination: "/api/mcp/:path*",
       },
       {
+        source: "/:provider/mcp/:path*",
+        destination: "/api/:provider/mcp/:path*",
+      },
+      {
         source: "/ingest/static/:path*",
         destination: "https://us-assets.i.posthog.com/static/:path*",
       },

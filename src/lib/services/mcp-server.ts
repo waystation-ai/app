@@ -15,7 +15,9 @@ async function readInstructionsFile() {
   }
 }
 
-export async function configureMcpServer(userId: string): Promise<Server> {
+export async function configureMcpServer(userId: string, providerId?: string): Promise<Server> {
+  const provider = providerId ? registry.getProvider(providerId) : null;;
+  
   // Read instructions from file
   const instructions = await readInstructionsFile();
   
@@ -29,16 +31,21 @@ export async function configureMcpServer(userId: string): Promise<Server> {
   
   // Set up request handlers
   server.setRequestHandler(ListToolsRequestSchema, async () => {
-    const tools = [];
+    let tools = await registry.getAllTools(userId);
+
+    if (provider) 
+      tools = tools.filter(tool => tool.provider.id === provider.id);
+     
+    const result = [];
     
-    for (const {tool} of await registry.getAllTools(userId)) {
+    for (const {tool} of tools) {
       const schema = tool.inputSchema;
       const schemaObj = schema as Record<string, unknown>;
       
       // Ensure we have a valid properties object that satisfies { [x: string]: unknown }
       const properties = schemaObj.properties as Record<string, unknown> || {};
       
-      tools.push({
+      result.push({
         name: tool.id,
         description: tool.description || tool.summary,
         inputSchema: {
@@ -52,31 +59,33 @@ export async function configureMcpServer(userId: string): Promise<Server> {
 
     }
 
-    tools.push({
-      name: "search",
-      description: "Search across all connected apps",
-      inputSchema: {
-        type: "object" as const,
-        properties: {
-          query: { type: "string", description: "Search query" },
-        },
-        required: ["query"]
-      }
-    });
+    if (!provider) {
+      result.push({
+        name: "search",
+        description: "Search across all connected apps",
+        inputSchema: {
+          type: "object" as const,
+          properties: {
+            query: { type: "string", description: "Search query" },
+          },
+          required: ["query"]
+        }
+      });
 
-    tools.push({
-      name: "fetch",
-      description: "Search across all connected apps",
-      inputSchema: {
-        type: "object" as const,
-        properties: {
-          id: { type: "string", description: "The id of the document to fetch" },
-        },
-        required: ["id"]
-      }
-    });
+      result.push({
+        name: "fetch",
+        description: "Search across all connected apps",
+        inputSchema: {
+          type: "object" as const,
+          properties: {
+            id: { type: "string", description: "The id of the document to fetch" },
+          },
+          required: ["id"]
+        }
+      });
+    }
 
-    return { tools };
+    return { tools: result };
   });
 
   server.setRequestHandler(CallToolRequestSchema, async (request) => {
@@ -172,7 +181,11 @@ export async function configureMcpServer(userId: string): Promise<Server> {
   });
 
   server.setRequestHandler(ListResourcesRequestSchema , async () => {
-    const resources = await registry.getResources(userId);
+    let resources = await registry.getResources(userId);
+
+    if (provider)
+      resources = resources.filter(resource => resource.provider.id === provider.id);
+
     return {
       resources: resources.map(resource => {
         return {

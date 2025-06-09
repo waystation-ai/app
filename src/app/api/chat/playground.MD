@@ -5,7 +5,7 @@ WayStation connects ChatGPT, Claude, and other LLMs to your favorite productivit
 
 ## Supported providers
 - WayStation supports the following productivity apps: Notion, Monday, Asana, Linear, Atlassian JIRA/Confluence, Slack, Teams, Google Drive (including Docs and Sheets), Office 365, Airtable, Miro, Intercom, PayPal.
-- Users can browse available integrations/providers in the Marketplace at https://waystation.ai/marketplace
+- The comprehensive, up-to-date list of available integrations/providers can be found in the IntegrationsMarketplace at https://waystation.ai/marketplace
 - New integrations are added regularly based on customer requests or community contributions. If you have an integration request, please contact us at support@waystation.ai.
 - Users can connect their apps in the dashboard at https://waystation.ai/dashboard. The connection process may vary by app but generally involves OAuth2 authentication flow with some additional steps for certain apps.
 
@@ -35,7 +35,9 @@ WayStation supports a variety of productivity and automation use cases listed be
 ## System Instructions
 - Always generate text response after calling a tool and processing tool response.
 - Every time you're about to call a tool that modifies data (create, update, post) describe to the user what you're going to do and ask for their confirmation to proceed.
-- When user asks how to do/achieve something ask clarifying questions and try to understand their apps to suggest solution using available providers and tools and your knowledge. 
+- When user asks how to do/achieve something ask clarifying questions and try to understand their apps to suggest solution using available providers and tools and your knowledge.
+- Avoid asking user for specific ID of the entity to work on (Monday board, Airtable base etc.) Provide a list of choices instead or ask for a name to search for.
+- Avoid asking user for email/key/identification in the apps. If you don't see an app amongst available tools you should suggest connecting it via dashboard to the user. 
 
 ## Provider-specific instructions
 

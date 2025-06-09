@@ -19,5 +19,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (!userId)
     return res.status(401).json({ error: 'Unauthorized' });
 
-  await sseHandler(res, userId);  
+  await sseHandler(req, res, userId);  
 }
