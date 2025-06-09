@@ -4,20 +4,19 @@ import { auth } from '@clerk/nextjs/server';
 import { registry } from '@/marketplace';
 import { getValidConnections } from '@/lib/db';
 import { z } from 'zod';
+import { JSONSchema7 } from 'json-schema';
+import { promises as fs } from 'fs';
+import path from 'path';
 
-const systemPrompt = `WayStation connects ChatGPT to popular productivity apps, such as Google Drive, Monday, Slack, and Gmail. It makes it possible for ChatGPT to find and read files, work with projects and tasks, engage in conversation on Slack, and communicate over email on behalf of users.
-
-** System instructions **
-- Always generate text response after calling a tool and processing tool response.
-- Every time you're about to call a tool that modifies data (create, update, post) describe to the user what you're going to do and ask for their confirmation to proceed.
-
-** Monday instructions **
-- When creating new items, use the column_values parameter to pass additional field values like person, status, etc. 
-- When the user asks to assign an item to someone, read the board first, identify the first column of people type, and set the value of this column. If you're unsure what field names to use, read the board first and use the output as a reference
-- When you use the updateMondayItem tool, make sure you populate column_values with the IDs and values of columns to be modified. Example: column_values: {"person": user_id, "status": "status_label"} 
-
-** Slack instructions **
-Convert formatted text to Slack message markup before posting it`;
+async function getSystemPrompt() {
+  try {
+    const filePath = path.join(process.cwd(), 'src/app/api/chat/playground.MD');
+    return await fs.readFile(filePath, 'utf8');
+  } catch (error) {
+    console.error('Error reading instructions file:', error);
+    return ''; // Return empty string if file cannot be read
+  }
+}
 
 export async function POST(req: Request) {
   const data = await req.json();
@@ -49,11 +48,22 @@ export async function POST(req: Request) {
         if (!connection)
           continue;
 
+        function patchSchema(schema: JSONSchema7) {
+          if (!schema.$schema) {
+            schema.$schema = 'http://json-schema.org/draft-07/schema#';
+          }
+          if (!schema.properties) {
+            schema.properties = {};
+            schema.additionalProperties = false;
+          }
+          return schema
+        }
+
         // User is connected to this provider, add its tools
         for (const providerTool of await registry.getProviderTools(provider, userId)) {
           allTools[providerTool.id] = tool({    
             description: providerTool.description || providerTool.summary,
-            parameters: providerTool.inputSchema ? jsonSchema(providerTool.inputSchema) : z.any(),
+            parameters: providerTool.inputSchema ? jsonSchema(patchSchema(providerTool.inputSchema)) : z.any(),
             execute: async (params) => {
               // Call the centralized executeTool method
               return registry.executeTool({provider, tool: providerTool}, userId, params);
@@ -71,7 +81,7 @@ export async function POST(req: Request) {
     model: azure('gpt-4.1-mini', {
       structuredOutputs: false
     }),
-    system: systemPrompt,
+    system: await getSystemPrompt(),
     messages,
     tools: allTools,
     onError({ error }) {
