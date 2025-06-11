@@ -94,19 +94,29 @@ export async function fetchResourcesFromRemoteProvider(provider: RemoteProvider,
               
     // Connect to the MCP server
     await client.connect();
+
+    try {
+      const capabilities = await client.getServerCapabilities();
+
+      if (!capabilities?.resources) {
+        console.warn(`Provider "${provider.id}" does not support resources. Returning empty list.`);
+        return { resources: [] };
+      }
+      
+      // List tools
+      const resourcesList = await client.listResources();    
     
-    // List tools
-    const resourcesList = await client.listResources();
+      console.log(`Successfully fetched ${resourcesList.resources.length} tools from provider "${provider.id}"`);
+      // Convert to our Tool type
+      return resourcesList;
+    }
+    finally {
+      // Close the connection
+      await client.close();
+    }
     
-    // Close the connection
-    await client.close();
-    
-    console.log(`Successfully fetched ${resourcesList.resources.length} tools from provider "${provider.id}"`);
-    
-    // Convert to our Tool type
-    return resourcesList;
   } catch (error) {
-    console.error(`Error fetching tools from provider "${provider.id}":`, error);
+    console.error(`Error fetching resources from provider "${provider.id}":`, error);
     return { resources: []};
   }
 }
