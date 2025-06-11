@@ -51,7 +51,7 @@ export default function UseCaseCard({ useCase }: UseCaseCardProps) {
     : processedUseCase.summary;
 
   return (
-    <Link href={`/ai/${useCase.id}`} className="group block">
+    <Link href={`/use-cases/${useCase.id}`} className="group block">
       <div className="bg-white rounded-lg border border-gray-200 p-6 h-full flex flex-col transition-all duration-300 hover:shadow-lg hover:border-aurora-blue hover:scale-105">
         {/* Title */}
         <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">

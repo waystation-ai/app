@@ -70,7 +70,7 @@ export async function GET() {
   for (const useCase of useCases) {
     xml += `
   <url>
-    <loc>${domain}/ai/${useCase.id}</loc>
+    <loc>${domain}/use-cases/${useCase.id}</loc>
     <lastmod>${currentDate}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>

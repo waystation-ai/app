@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ usecase: 
       title: useCaseData.title,
       description: useCaseData.summary,
       siteName: "WayStation",
-      url: `/ai/${usecase}`,
+      url: `/use-cases/${usecase}`,
       images: {
         url: '/images/promo-wide.png'
       }

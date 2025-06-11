@@ -15,7 +15,7 @@ export default function UseCaseNavigation({ currentUseCaseId }: UseCaseNavigatio
         <div className="flex-1">
           {previous ? (
             <Link 
-              href={`/ai/${previous.id}`}
+              href={`/use-cases/${previous.id}`}
               className="group flex items-center text-left hover:text-blue-600 transition-colors"
             >
               <div className="mr-4 text-2xl group-hover:transform group-hover:-translate-x-1 transition-transform">
@@ -37,7 +37,7 @@ export default function UseCaseNavigation({ currentUseCaseId }: UseCaseNavigatio
         <div className="flex-1">
           {next ? (
             <Link 
-              href={`/ai/${next.id}`}
+              href={`/use-cases/${next.id}`}
               className="group flex items-center justify-end text-right hover:text-blue-600 transition-colors"
             >
               <div>
