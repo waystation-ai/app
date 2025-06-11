@@ -191,7 +191,7 @@ export default function Navigation() {
           </Link>
 
           <div className="border-t border-gray-200 mt-2 pt-4">
-            <Link href="/ai" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>AI Use Cases</Link>
+            <Link href="/use-cases" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>AI Use Cases</Link>
             <Link href="/marketplace" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>Marketplace</Link>
             <Link href="/playground" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>Playground</Link>
           </div>

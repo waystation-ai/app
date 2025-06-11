@@ -19,7 +19,7 @@ export async function GET() {
   const staticRoutes = [
     '',                    // Homepage
     '/marketplace',
-    '/ai',                 // Main AI page
+    '/use-cases',                 // Main AI page
     '/integrations/claude',
     '/connect/chatgpt',
     '/connect/claude',
