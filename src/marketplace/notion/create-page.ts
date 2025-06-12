@@ -52,6 +52,8 @@ export const createNotionPage = defineTool({
     
     // Convert content text to blocks if provided
     const children = params.content ? textToBlocks(params.content) : [];
+    if (children.length > 100)
+      children.length = 100; // Notion API limit for children blocks
     
     // Create page with title and content
     const createPageResult = await queryNotionApi(
