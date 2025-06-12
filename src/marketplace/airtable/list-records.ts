@@ -20,7 +20,7 @@ export const listRecords = defineTool({
   parameters: z.object({
     baseId: z.string().describe('ID of the Airtable base'),
     tableId: z.string().describe('ID of the table to get records from'),
-    maxRecords: z.number().optional().describe('Maximum number of records to return (1-100)'),
+    //maxRecords: z.number().optional().describe('Maximum number of records to return (1-100)'),
     fields: z.array(z.string()).optional().describe('Fields to include in the response'),
     pageSize: z.number().optional().describe('Number of records returned in each request (1-100)'),
     offset: z.string().optional().describe('Offset value returned from a previous request'),
@@ -43,9 +43,11 @@ export const listRecords = defineTool({
     try {
       const queryParams = new URLSearchParams();
       
+      /*
       if (params.maxRecords) {
         queryParams.append('maxRecords', params.maxRecords.toString());
       }
+      */
       if (params.pageSize) {
         queryParams.append('pageSize', params.pageSize.toString());
       }
@@ -56,7 +58,10 @@ export const listRecords = defineTool({
         queryParams.append('filterByFormula', params.filterByFormula);
       }
       if (params.sort) {
-        queryParams.append('sort', JSON.stringify(params.sort));
+        params.sort.forEach((sort, index) => {
+          queryParams.append(`sort[${index}][field]`, sort.field);
+          queryParams.append(`sort[${index}][direction]`, sort.direction || 'asc'); // Default to ascending order if not provided
+        }); 
       }
       if (params.fields) {
         params.fields.forEach(field => {

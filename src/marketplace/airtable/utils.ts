@@ -35,6 +35,8 @@ export async function callAirtableApi(context: ToolContext, path: string, option
   const { method = 'GET', body} = options;
 
   const accessToken = await context.getAccessToken();
+
+  console.log(`Calling Airtable API: ${method} ${AIRTABLE_API_BASE}${path}`, body);
     
   const response = await fetch(`${AIRTABLE_API_BASE}${path}`, {
     method,
@@ -47,7 +49,7 @@ export async function callAirtableApi(context: ToolContext, path: string, option
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ error: 'Unknown error' }));
-    throw new Error(`Airtable API error: ${error.error || response.statusText}`);
+    throw new Error(`Airtable API error: ${error.error || response.statusText}\n${method} ${AIRTABLE_API_BASE}${path}\n${JSON.stringify(body || {})}`);
   }
 
   return response.json();

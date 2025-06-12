@@ -7,6 +7,7 @@ interface AirtableTableResponse {
   name: string;
   description?: string;
   primaryFieldId: string;
+  fields: Array<unknown>
 }
 
 export const listTables = defineTool({
@@ -35,7 +36,8 @@ export const listTables = defineTool({
           id: table.id,
           name: table.name,
           description: table.description,
-          primaryFieldId: table.primaryFieldId
+          primaryFieldId: table.primaryFieldId,
+          fields: table.fields
         }))
       };
     } catch (error) {
