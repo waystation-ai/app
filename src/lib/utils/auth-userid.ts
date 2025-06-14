@@ -52,10 +52,14 @@ export async function authUserId(): Promise<string | null> {
 }
 
 export async function getAuthUserId(req: NextApiRequest, nanoId?: string): Promise<string | null> {
-  const session = getAuth(req);
-    
-  if (session.userId)
-    return session.userId;
+  try {
+    const session = getAuth(req);
+      
+    if (session.userId)
+      return session.userId;
+  } catch (error) {
+    console.log('Error getting auth session:', error);
+  }
 
   // Attempt authentication with nano ID first if provided
   if (nanoId) {
