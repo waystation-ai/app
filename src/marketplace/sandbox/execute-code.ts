@@ -83,24 +83,22 @@ async function executeCodeInSandbox(code: string): Promise<SandboxResult> {
     consoleLogs.push(`ERROR: ${errorMessage}`);
   }
 
-  // Determine output content
+  // Determine output content - separate console logs from return values
   let content: string;
   
   if (executionResult !== undefined && executionResult !== null) {
-    // If script returned a value, use that
+    // If script returned a value, use that as content
     content = typeof executionResult === 'string' 
       ? executionResult 
       : JSON.stringify(executionResult, null, 2);
-  } else if (consoleLogs.length > 0) {
-    // If no return value, use console output
-    content = consoleLogs.join('\n');
   } else {
-    content = 'Code executed successfully (no output)';
+    // If no return value, provide clear messaging
+    content = 'Code executed successfully (no return value)';
   }
 
   return {
     content,
-    logs: consoleLogs.join('\n')
+    logs: consoleLogs.join('\n') // Console logs always go to logs field
   };
 }
 
