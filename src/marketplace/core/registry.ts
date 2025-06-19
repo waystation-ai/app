@@ -1,7 +1,7 @@
 import { JSONSchema7 } from 'json-schema';
 import { z } from 'zod';
 
-import { isFullProvider, isNativeProvider, isRemoteProvider, NativeProvider, Provider, ProviderResource, ProviderResourceContent, ProviderTool, RemoteProvider, Resource, ResourceContent, Tool, ToolContext } from './types';
+import { isFullProvider, isNativeProvider, isOAuthFreeProvider, isRemoteProvider, NativeProvider, Provider, ProviderResource, ProviderResourceContent, ProviderTool, RemoteProvider, Resource, ResourceContent, Tool, ToolContext } from './types';
 import PostHogClient from '@/lib/utils/posthog-client'; // Using the existing PostHog client
 import { oauthService } from '@/lib/services/oauth-client'; // Assuming oauthService is accessible or passed
 import { getRemoteProviderMetadata, getValidConnections } from '@/lib/db';
@@ -100,7 +100,9 @@ export class ProviderRegistry {
     if (userId) {
       const connections = await getValidConnections(userId);
       const providerIds = Array.from(connections.values()).map(conn => conn.provider);
-      providers = providers.filter(provider => providerIds.includes(provider.id));
+      providers = providers.filter(provider => 
+        providerIds.includes(provider.id) || isOAuthFreeProvider(provider)
+      );
     }
 
     const providerToolsArrays = await Promise.all(

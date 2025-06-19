@@ -50,13 +50,15 @@ export interface BaseProvider {
 export interface NativeProvider extends BaseProvider {
   tools: Tool<any, any>[]; // eslint-disable-line @typescript-eslint/no-explicit-any
 
-  // OAuth fields (optional for providers without OAuth)
-  clientId: string;
+  // OAuth fields (optional for OAuth-free providers)
+  clientId?: string;
   clientSecret?: string;
   authorizationUrl?: string;
   tokenUrl?: string;
-  scopes: string[];
+  scopes?: string[];
   group?: string;
+
+  requiresOAuth?: boolean;
 
   getResources?: (context: ToolContext) => Promise<Resource[]>;
   getResourceContent?: (context: ToolContext, resource: Resource) => Promise<ResourceContent>;
@@ -75,13 +77,28 @@ export type Provider = BaseProvider | NativeProvider | RemoteProvider;
 
 export type FullProvider = NativeProvider | RemoteProvider;
 
-export function isNativeProvider(provider: Provider): provider is NativeProvider { return 'authorizationUrl' in provider; } 
+export function isNativeProvider(provider: Provider): provider is NativeProvider { 
+  return 'authorizationUrl' in provider || 
+         ('tools' in provider && 'requiresOAuth' in provider && provider.requiresOAuth === false);
+}
 
 export function isRemoteProvider(provider: Provider): provider is RemoteProvider { return 'serverUrl' in provider; }
 
 export function isFullProvider(provider: Provider): provider is FullProvider {
-  return 'authorizationUrl' in provider || 'serverUrl' in provider; 
-} 
+  return isNativeProvider(provider) || isRemoteProvider(provider);
+}
+
+export function requiresOAuth(provider: Provider): boolean {
+  if (isNativeProvider(provider)) {
+    return provider.requiresOAuth !== false;
+  }
+  return false;
+}
+
+export function isOAuthFreeProvider(provider: Provider): boolean {
+  return isNativeProvider(provider) && !requiresOAuth(provider);
+}
+
 export interface ProviderTool {
   provider: Provider;
   tool: Tool;

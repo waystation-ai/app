@@ -2,6 +2,7 @@ import { azure } from '@ai-sdk/azure';
 import { jsonSchema, streamText, tool } from 'ai';
 import { auth } from '@clerk/nextjs/server';
 import { registry } from '@/marketplace';
+import { isOAuthFreeProvider } from '@/marketplace/core/types';
 import { getValidConnections } from '@/lib/db';
 import { z } from 'zod';
 import { JSONSchema7 } from 'json-schema';
@@ -45,7 +46,7 @@ export async function POST(req: Request) {
         // Check if the user has a valid connection to this provider
         const connection = connections.get(provider.id);
 
-        if (!connection)
+        if (!connection && !isOAuthFreeProvider(provider))
           continue;
 
         function patchSchema(schema: JSONSchema7) {
@@ -59,7 +60,7 @@ export async function POST(req: Request) {
           return schema
         }
 
-        // User is connected to this provider, add its tools
+        // User is connected to this provider, or it's the sandbox provider, add its tools
         for (const providerTool of await registry.getProviderTools(provider, userId)) {
           allTools[providerTool.id] = tool({    
             description: providerTool.description || providerTool.summary,

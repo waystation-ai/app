@@ -9,7 +9,7 @@ import {
   storeClientRegistration,
 } from '@/lib/db';
 import { Buffer } from 'buffer';
-import { isRemoteProvider, RemoteProvider, NativeProvider, isNativeProvider, FullProvider } from '@/marketplace/core/types';
+import { isRemoteProvider, RemoteProvider, NativeProvider, isNativeProvider, FullProvider, isOAuthFreeProvider } from '@/marketplace/core/types';
 import { discoverOAuthMetadata, OAuthClientProvider, registerClient } from '@modelcontextprotocol/sdk/client/auth.js';
 import { OAuthClientInformation, OAuthClientMetadata, OAuthTokens, OAuthTokensSchema } from '@modelcontextprotocol/sdk/shared/auth.js';
 
@@ -306,6 +306,11 @@ export class OAuthClient {
     
     if (!userId) {
       throw new Error('User not authenticated');
+    }
+
+    if (isOAuthFreeProvider(provider)) {
+      console.log(`OAuth-free provider "${provider.id}" accessed by authenticated user "${userId}"`);
+      return ''; // Optionally return a Fixed token for Oauth free providers?
     }
 
     const connection = await getValidConnection(userId, provider.id);
