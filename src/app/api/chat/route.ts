@@ -3,6 +3,7 @@ import { jsonSchema, streamText, tool } from 'ai';
 import { auth } from '@clerk/nextjs/server';
 import { registry } from '@/marketplace';
 import { getValidConnections } from '@/lib/db';
+import { builtInTools } from '@/lib/tools';
 import { z } from 'zod';
 import { JSONSchema7 } from 'json-schema';
 import { promises as fs } from 'fs';
@@ -10,7 +11,7 @@ import path from 'path';
 
 async function getSystemPrompt() {
   try {
-    const filePath = path.join(process.cwd(), 'src/app/api/chat/playground.MD');
+    const filePath = path.join(process.cwd(), 'src/app/api/chat/system.MD');
     return await fs.readFile(filePath, 'utf8');
   } catch (error) {
     console.error('Error reading instructions file:', error);
@@ -74,6 +75,17 @@ export async function POST(req: Request) {
     } catch (error) {
       console.error('Error fetching user connections:', error);
       // Continue with default tools if there's an error
+    }
+
+    // Add built-in platform tools (always available)
+    for (const [toolId, builtInTool] of Object.entries(builtInTools)) {
+      allTools[toolId] = tool({
+        description: builtInTool.description,
+        parameters: builtInTool.parameters,
+        execute: async (params) => {
+          return builtInTool.handler(params);
+        }
+      });
     }
   }
 
