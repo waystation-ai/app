@@ -11,7 +11,6 @@ import Script from 'next/script';
 
 import BodyBackground from '@/components/app/BodyBackground';
 import Navigation from '@/components/app/Navigation';
-import Footer from '@/components/app/Footer';
 
 import { metadata } from './metadata';
 export { metadata };
@@ -19,7 +18,7 @@ export { metadata };
 
 export default function RootLayout({children}: Readonly<{children: React.ReactNode;}>) {
   return (
-    <ClerkProvider waitlistUrl="/waitlist">
+    <ClerkProvider>
     <html lang="en">
       <GoogleTagManager gtmId="GTM-TBLJV48V" />
       <Script id="twitter-pixel" strategy="afterInteractive">
@@ -39,7 +38,6 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
           <div className="flex-grow">
             {children}
           </div>
-          <Footer />
           <SpeedInsights />
           <Analytics />
         </PostHogProvider>

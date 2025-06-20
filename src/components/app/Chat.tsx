@@ -7,7 +7,7 @@ import { ThreadList } from "@/components/assistant-ui/thread-list";
 import { Menu, Maximize2, Minimize2 } from "lucide-react";
 import { useState } from "react";
 
-export default function Playground() {
+export default function Chat() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
 

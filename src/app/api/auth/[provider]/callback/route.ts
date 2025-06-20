@@ -61,7 +61,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     // Always redirect to dashboard, but include redirect_uri as a query parameter if it exists
-    const dashboardUrl = new URL('/dashboard', getRequestOrigin(request));
+    const dashboardUrl = new URL('/', getRequestOrigin(request));
     
     // For providers with settings, add the justConnected flag
     const providersWithSettings = ['gdrive'];

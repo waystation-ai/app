@@ -23,5 +23,5 @@ export async function GET(
   }
 
   await removeOAuthConnection(session.userId, provider);
-  return redirect('/dashboard');
+  return redirect('/');
 }

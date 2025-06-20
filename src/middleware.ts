@@ -16,7 +16,7 @@ const isPublicRoute = createRouteMatcher([
 
 const isProtectedRoute = createRouteMatcher([
   '/dashboard(.*)',
-  '/playground(.*)',
+  '/chat(.*)',
   '/waitlist(.*)',
   '/api/auth(.*)',
 ])

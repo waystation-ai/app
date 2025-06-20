@@ -310,7 +310,7 @@ export class OAuthClient {
 
     const connection = await getValidConnection(userId, provider.id);
     if (!connection) {
-      throw new Error(`No valid connection found for provider: ${provider.id}. Ask user to set up a connection with ${provider.id} by visiting https://${process.env.APP_DOMAIN}/dashboard`);
+      throw new Error(`No valid connection found for provider: ${provider.id}. Ask user to set up a connection with ${provider.id} by visiting https://${process.env.APP_DOMAIN}/`);
     }
 
     // If token is expired and we have a refresh token, try to refresh it
