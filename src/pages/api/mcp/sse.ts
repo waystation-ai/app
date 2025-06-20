@@ -4,6 +4,7 @@ import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { configureMcpServer } from '@/lib/services/mcp-server';
 import { createPubSub } from '@/lib/services/pubsub';
 import { getAuthUserId } from '@/lib/utils/auth-userid';
+import { generateWWWAuthenticateHeader } from '@/lib/utils/www-authenticate';
 
 // Add this at the top of the file
 export const config = {
@@ -50,8 +51,10 @@ export async function sseHandler(req: NextApiRequest, res: NextApiResponse, user
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const userId = await getAuthUserId(req);  
 
-  if (!userId)
+  if (!userId) {
+    res.setHeader('WWW-Authenticate', generateWWWAuthenticateHeader());
     return res.status(401).json({ error: 'Unauthorized' });
+  }
 
   await sseHandler(req, res, userId);
 }
