@@ -28,6 +28,8 @@ async function getSystemPrompt() {
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+   if (req.method !== 'POST') 
+    return res.status(405).json({ error: 'Method Not Allowed' });
 
   // Create MCP server
   const server = new McpServer({
@@ -63,6 +65,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // Connect transport to server
   const transport = new StreamableHTTPServerTransport({
     sessionIdGenerator: undefined,
+    enableJsonResponse: true,
   });    
   await server.connect(transport);
 
