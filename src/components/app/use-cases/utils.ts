@@ -1,4 +1,4 @@
-import useCases from '@/app/use-cases/use-cases.json';
+import useCases from '@/app/(frontend)/use-cases/use-cases.json';
 
 export interface UseCase {
   id: string;
