@@ -11,9 +11,9 @@ import {
 
 import { authenticated } from '../lib/access/authenticated'
 import { authenticatedOrPublished } from '../lib/access/authenticatedOrPublished'
-import { Banner } from '../../blocks/Banner/config'
-import { Code } from '../../blocks/Code/config'
-import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { Banner } from '@/components/payload/blocks/Banner/config'
+import { Code } from '@/components/payload/blocks/Code/config'
+import { MediaBlock } from '@/components/payload/blocks/MediaBlock/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
@@ -25,7 +25,9 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
-import { slugField } from '@/fields/slug'
+import { slugField } from '@/components/payload/fields/slug'
+import { CallToAction } from '@/components/payload/blocks/CallToAction/config'
+import { Content } from '@/components/payload/blocks/Content/config'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -92,7 +94,7 @@ export const Posts: CollectionConfig<'posts'> = {
                   return [
                     ...rootFeatures,
                     HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-                    BlocksFeature({ blocks: [Banner, Code, MediaBlock] }),
+                    BlocksFeature({ blocks: [Banner, Content, Code, MediaBlock, CallToAction] }),
                     FixedToolbarFeature(),
                     InlineToolbarFeature(),
                     HorizontalRuleFeature(),

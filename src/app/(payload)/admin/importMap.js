@@ -28,7 +28,7 @@ import { MetaTitleComponent as MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c08
 import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
-import { SlugComponent as SlugComponent_92cc057d0a2abb4f6cf0307edf59f986 } from '@/fields/slug/SlugComponent'
+import { SlugComponent as SlugComponent_92cc057d0a2abb4f6cf0307edf59f986 } from '@/components/payload/fields/slug/SlugComponent'
 import { RefreshClerkDataButtonField as RefreshClerkDataButtonField_a08a12ddc7f78c000d9a58ce30d8022c } from '@/components/payload/fields/refresh-clerk-data-button/refresh-clerk-data-button-field'
 import { UpdateClerkUserRolesField as UpdateClerkUserRolesField_0e5d1fcb3211a8a4295844b4665153a0 } from '@/components/payload/fields/update-clerk-user-roles/update-clerk-user-roles-field'
 

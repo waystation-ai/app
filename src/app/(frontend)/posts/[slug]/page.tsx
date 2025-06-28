@@ -1,17 +1,17 @@
 import type { Metadata } from 'next'
 
-import { RelatedPosts } from '@/blocks/RelatedPosts/Component'
+import { RelatedPosts } from '@/components/payload/blocks/RelatedPosts/Component'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
-import RichText from '@/components/posts/RichText'
+import RichText from '@/components/payload/ui/RichText'
 
 import type { Post } from '@/payload-types'
 
-import { PostHero } from '@/heros/PostHero'
+import { PostHero } from '@/components/payload/heros/PostHero'
 import { generateMeta } from '@/utilities/generateMeta'
-import { LivePreviewListener } from '@/components/posts/LivePreviewListener'
+import { LivePreviewListener } from '@/components/payload/ui/LivePreviewListener'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
