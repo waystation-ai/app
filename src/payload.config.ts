@@ -9,9 +9,9 @@ import sharp from 'sharp'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
-import { getServerSideURL } from './utilities/getURL'
-import { plugins } from './plugins'
 import { Categories } from './collections/Categories'
+import { getServerSideURL } from './components/payload/utilities/getURL'
+import { plugins } from '@/payload-plugins'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)

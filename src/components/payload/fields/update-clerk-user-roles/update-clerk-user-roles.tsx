@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { ALL_ROLES } from "@/constants/auth";
+import { ALL_ROLES } from "@/collections/lib/constants";
 import { Button, toast } from "@payloadcms/ui";
 import { updateClerkUserRoles } from "./actions";
 

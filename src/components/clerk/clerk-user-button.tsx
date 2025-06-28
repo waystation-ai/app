@@ -10,7 +10,7 @@ import {
 import React from "react";
 import { checkRoles } from "@/lib/auth-utils";
 import { Role } from "@/types/globals";
-import { ADMIN_ENABLED_ROLES } from "@/constants/auth";
+import { ADMIN_ENABLED_ROLES } from "@/collections/lib/constants";
 import { AdminIcon } from "@/components/app/icons";
 
 export const ClerkUserButton: React.FC = () => {

@@ -1,7 +1,7 @@
 import { UIFieldServerComponent, UIFieldServerProps } from "payload";
 import UpdateClerkUserRoles from "./update-clerk-user-roles";
 import { checkRoles } from "@/lib/payload/auth-utils";
-import { SUPER_ADMIN_ROLES } from "@/constants/auth";
+import { SUPER_ADMIN_ROLES } from "@/collections/lib/constants";
 import { clerkClient } from "@clerk/nextjs/server";
 
 export const UpdateClerkUserRolesField: UIFieldServerComponent = async ({

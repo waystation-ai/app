@@ -2,7 +2,7 @@
 
 import { updateRoles, UpdateUserRolesState } from "./actions";
 import React, { useActionState } from "react";
-import { ALL_ROLES } from "@/constants/auth";
+import { ALL_ROLES } from "@/collections/lib/constants";
 import { Button } from "@payloadcms/ui";
 
 interface UpdateUserRolesFormProps {

@@ -3,7 +3,7 @@
 import { clerkClient } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { checkRoles } from "@/lib/payload/auth-utils";
-import { SUPER_ADMIN_ROLES } from "@/constants/auth";
+import { SUPER_ADMIN_ROLES } from "@/collections/lib/constants";
 
 export interface UpdateClerkUserRolesState {
   isError: boolean;

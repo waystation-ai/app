@@ -7,7 +7,7 @@ import { SearchUsers } from "./search-users";
 import { clerkClient } from "@clerk/nextjs/server";
 import { UpdateUserRolesForm } from "./update-user-roles-form";
 import { checkRoles } from "@/lib/payload/auth-utils";
-import { SUPER_ADMIN_ROLES } from "@/constants/auth";
+import { SUPER_ADMIN_ROLES } from "@/collections/lib/constants";
 
 export const ClerkUsers: React.FC<AdminViewProps> = async ({
   initPageResult,

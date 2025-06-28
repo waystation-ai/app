@@ -18,7 +18,7 @@ import type {
   MediaBlock as MediaBlockProps,
 } from '@/payload-types'
 import { BannerBlock } from '@/components/payload/blocks/Banner/Component'
-import { cn } from '@/utilities/ui'
+import { cn } from '@/components/payload/utilities/ui'
 
 type NodeTypes =
   | DefaultNodeTypes

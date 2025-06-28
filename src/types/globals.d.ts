@@ -1,4 +1,4 @@
-import { ALL_ROLES } from "@/constants/auth";
+import { ALL_ROLES } from "@/collections/lib/constants";
 
 export {};
 

@@ -10,7 +10,7 @@ import RichText from '@/components/payload/ui/RichText'
 import type { Post } from '@/payload-types'
 
 import { PostHero } from '@/components/payload/heros/PostHero'
-import { generateMeta } from '@/utilities/generateMeta'
+import { generateMeta } from '@/components/payload/utilities/generateMeta'
 import { LivePreviewListener } from '@/components/payload/ui/LivePreviewListener'
 
 export async function generateStaticParams() {
