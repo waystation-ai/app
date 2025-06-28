@@ -2,7 +2,7 @@
 
 import { clerkClient } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
-import { checkRoles } from "@/lib/server/auth-utils";
+import { checkRoles } from "@/lib/payload/auth-utils";
 import { SUPER_ADMIN_ROLES } from "@/constants/auth";
 import { getPayload } from "payload";
 import configPromise from "@payload-config";

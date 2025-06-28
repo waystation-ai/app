@@ -1,6 +1,6 @@
 import { UIFieldServerComponent, UIFieldServerProps } from "payload";
 import UpdateClerkUserRoles from "./update-clerk-user-roles";
-import { checkRoles } from "@/lib/server/auth-utils";
+import { checkRoles } from "@/lib/payload/auth-utils";
 import { SUPER_ADMIN_ROLES } from "@/constants/auth";
 import { clerkClient } from "@clerk/nextjs/server";
 

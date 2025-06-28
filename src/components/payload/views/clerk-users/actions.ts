@@ -3,7 +3,7 @@
 import { clerkClient } from "@clerk/nextjs/server";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
-import { checkRoles } from "@/lib/server/auth-utils";
+import { checkRoles } from "@/lib/payload/auth-utils";
 import { SUPER_ADMIN_ROLES } from "@/constants/auth";
 
 const updateRolesSchema = z.object({
