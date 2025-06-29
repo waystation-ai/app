@@ -39,7 +39,7 @@ export function Menu() {
                 </NavigationMenuLink>
               </li>
               <li>
-                <NavigationMenuLink href="/integrations/claude" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                <NavigationMenuLink href="/connect/claude" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                   <div className="app-link text-sm font-medium leading-none">
                     <Image src="/images/apps/claude.svg" width={20} height={20} alt="Claude" />
                     <span>Integrations for Claude</span>
@@ -89,13 +89,6 @@ export function Menu() {
           </NavigationMenuLink>
         </NavigationMenuItem>
         </SignedIn>
-        {/*
-        <NavigationMenuItem>
-          <NavigationMenuLink className={navigationMenuTriggerStyle()} href="https://www.linkedin.com/company/waystation-ai" target="_blank">
-            What&apos;s New
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        */}
       </NavigationMenuList>
     </NavigationMenu>
   )
@@ -130,8 +123,8 @@ export default function Navigation() {
         {/* Dashboard button always visible on mobile */}
         <div className="md:hidden ml-auto mr-4">
           <SignedIn>
-            {pathname !== '/dashboard' && (
-              <Link href="/dashboard" className="aurora-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
+            {pathname !== '/app' && (
+              <Link href="/app" className="aurora-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
                 Dashboard
               </Link>
             )}
@@ -152,10 +145,6 @@ export default function Navigation() {
       <div className="hidden md:block">
         <Menu />
       </div>
-      <a className="ml-5 hidden md:block" href="https://www.producthunt.com/posts/marketplace-for-claude?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-marketplace&#0045;for&#0045;claude" target="_blank">
-          <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=945095&theme=light&t=1743150993435" alt="Marketplace&#0032;for&#0032;Claude - Effortlessly&#0032;connect&#0032;AI&#0032;to&#0032;your&#0032;everyday&#0032;apps | Product Hunt" style={{width: "200px", height: "27"}} width="200" height="27" /> {/* eslint-disable-line @next/next/no-img-element */}
-      </a>
-
       <div id="profile" className="hidden md:block md:ml-auto">
         <SignedOut>
           <Link href="/sign-in" className="aurora-btn px-4 py-2 text-sm font-bold rounded hover:scale-105 transition-transform duration-300 w-auto text-center">
@@ -164,8 +153,8 @@ export default function Navigation() {
         </SignedOut>
         <SignedIn>
           <div className="flex items-center gap-4">
-            {pathname !== '/dashboard' && (
-              <Link href="/dashboard" className="aurora-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
+            {pathname !== '/app' && (
+              <Link href="/app" className="aurora-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 w-auto text-center">
                 Dashboard
               </Link>
             )}
@@ -177,7 +166,7 @@ export default function Navigation() {
       {/* Mobile Navigation Menu */}
       <nav className={`md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl shadow-lg transition-all duration-300 ease-in-out overflow-hidden ${mobileMenuOpen ? 'max-h-96 py-4' : 'max-h-0'}`}>
         <div className="flex flex-col gap-4 px-6">
-          <Link href="/integrations/claude" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>
+          <Link href="/connect/claude" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>
             <Image src="/images/apps/claude.svg" width={20} height={20} alt="Claude" />
             <span>Integrations for Claude</span>
           </Link>

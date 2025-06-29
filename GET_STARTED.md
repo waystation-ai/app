@@ -39,8 +39,8 @@ DATABASE_URL=postgresql://username:password@localhost:5432/waystation_dev
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
 CLERK_SECRET_KEY=your_clerk_secret_key
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
-NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL=/dashboard
-NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL=/dashboard
+NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL=/app
+NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL=/app
 
 # OAuth Client (Required for MCP)
 CLERK_OAUTH_CLIENT_ID=your_oauth_client_id
@@ -69,7 +69,7 @@ The app will be available at `http://localhost:3000`
 
 1. **App loads**: Visit `http://localhost:3000`
 2. **Authentication works**: Click "Sign In" and create an account
-3. **Dashboard accessible**: After signing in, you should reach `/dashboard`
+3. **Dashboard accessible**: After signing in, you should reach `/app`
 4. **Connect provider**: Go to Integrations and connect official Asana account
 5. **Test in Playground**: Go to Playground and do something with Asana
 

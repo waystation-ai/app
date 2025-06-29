@@ -1,5 +1,5 @@
-import "./globals.css";
-import { sora } from './fonts';
+import "../globals.css";
+import { sora } from '../fonts';
 
 import { ClerkProvider} from '@clerk/nextjs';
 import { PostHogProvider } from './posthog';
@@ -13,7 +13,7 @@ import BodyBackground from '@/components/app/BodyBackground';
 import Navigation from '@/components/app/Navigation';
 import Footer from '@/components/app/Footer';
 
-import { metadata } from './metadata';
+import { metadata } from '../metadata';
 export { metadata };
 
 

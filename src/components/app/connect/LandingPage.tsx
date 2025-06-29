@@ -64,7 +64,7 @@ export default async function LandingPage({ appType }: LandingPageProps) {
               }
               {
                 (appType != "cursor") &&
-              <Link href="/dashboard" className="getstarted-btn">
+              <Link href="/app" className="getstarted-btn">
                 Get Started
               </Link>
               }

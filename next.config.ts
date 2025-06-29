@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: '/integrations/claude/:path*',
+        destination: '/connect/claude/:path*',
+        permanent: true,
+      },
+      {
         source: '/marketplace/claude/:path*',
         destination: '/integrations/claude/:path*',
         permanent: true,
@@ -62,7 +67,7 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withSentryConfig(withPayload(nextConfig, { devBundleServerPackages: false}), {
+const payloadConfig = withSentryConfig(withPayload(nextConfig, { devBundleServerPackages: false}), {
 // For all available options, see:
 // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
@@ -93,3 +98,4 @@ disableLogger: true,
 // https://vercel.com/docs/cron-jobs
 automaticVercelMonitors: true,
 });
+export default payloadConfig;

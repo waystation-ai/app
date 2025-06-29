@@ -48,7 +48,7 @@ export default function Home() {
             </ul>
             <div className="flex flex-wrap items-center gap-3 mt-4 mb-8">
               <SignedIn>
-                <Link href="/dashboard" className="getstarted-btn">
+                <Link href="/app" className="getstarted-btn">
                   Get Started
                 </Link>
               </SignedIn>
@@ -118,7 +118,7 @@ export default function Home() {
           <h2 className="text-3xl lg:text-4xl font-bold mb-6">Get Started Today</h2>
           <p className="text-lg mb-8">Connect AIs to your favorite apps now!</p>
           <SignedIn>
-            <Link href="/dashboard" className="getstarted-btn text-lg">
+            <Link href="/app" className="getstarted-btn text-lg">
               Get Started
             </Link>
           </SignedIn>
