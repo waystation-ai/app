@@ -7,6 +7,7 @@ export const miroProvider = registerProvider({
   id: 'miro',
   name: 'Miro',
   description: 'Collaborate on visual boards with your team using Miro integration.',
+  type: 'native',
   
   auth: {
     type: 'oauth',

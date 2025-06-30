@@ -10,6 +10,7 @@ export const jiraProvider = registerProvider({
   id: 'jira',
   name: 'Jira',
   description: 'Track issues, manage projects, and streamline workflows in Jira.',
+  type: 'native',
   
   auth: {
     type: 'oauth',

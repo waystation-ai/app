@@ -284,9 +284,7 @@ export class ProviderRegistry {
     if (isNativeProvider(provider)) {
       switch (provider?.auth?.type) {
         case 'oauth': {
-          const { auth, ...restOfProvider } = provider;
-          const oauthProvider = { ...restOfProvider, ...auth };
-          return oauthService.getValidAccessToken(oauthProvider, userId);
+          return oauthService.getValidAccessToken(provider, userId);
         }
       }
     }
@@ -294,19 +292,11 @@ export class ProviderRegistry {
   }
 
   private async getConnectionString(provider: Provider, userId: string): Promise<string> {
-    if (isNativeProvider(provider)) {
-      switch (provider?.auth?.type) {
-        case 'connection_string': {
-          const connection = await getValidConnection(userId, provider.id, ConnectionType.DATABASE);
-          if (!connection) {
-            throw new Error(`No connection found for user ${userId} and provider ${provider.id}`);
-          }
-          return connection.connectionString;
-        }
-        
+      const connection = await getValidConnection(userId, provider.id, ConnectionType.DATABASE);
+      if (connection) {
+        return connection.connectionString;
       }
-    }
-    return '';
+      throw new Error(`No valid connection found for provider: ${provider.id}`);
   }
 }
 

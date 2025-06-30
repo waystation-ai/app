@@ -9,7 +9,7 @@ export const airtableProvider = registerProvider({
   id: 'airtable',
   name: 'Airtable',
   description: 'Access and manage your Airtable bases, tables, and records seamlessly.',
-  
+  type: 'native',
   auth: {
     type: 'oauth',
     clientId: process.env.AIRTABLE_CLIENT_ID || '',

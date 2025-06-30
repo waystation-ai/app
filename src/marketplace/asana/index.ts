@@ -15,6 +15,7 @@ export const asanaProvider = registerProvider({
   id: 'asana',
   name: 'Asana',
   description: 'Access and manage your Asana workspaces, projects, and tasks seamlessly.',
+  type: 'native',
   
   auth: {
     type: 'oauth',

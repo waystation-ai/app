@@ -7,6 +7,7 @@ export const teamsProvider = registerProvider({
   id: 'teams',
   name: 'Microsoft Teams',
   description: 'Collaborate, chat, and manage meetings in Microsoft Teams.',
+  type: 'native',
   
   auth: {
     type: 'oauth',

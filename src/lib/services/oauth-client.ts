@@ -164,8 +164,12 @@ export class OAuthClient {
     }
     
     // Create an enhanced provider config with the client registration data
-    return {
-      ...provider,
+    const nativeProvider: NativeProvider = {
+      id: provider.id,
+      name: provider.name,
+      description: provider.description,
+      bullets: provider.bullets,
+      type: 'native', // Overwrite the type to be native
       auth: {
         type: 'oauth',
         clientId: clientInfo.client_id,
@@ -174,8 +178,12 @@ export class OAuthClient {
         tokenUrl: oauthMetadata?.token_endpoint,
         scopes: ['openid', 'profile', 'email'], // Default scopes, can be customized
       },
-      tools: []
+      tools: [],
+      getResources: provider.getResources,
+      getResourceContent: provider.getResourceContent,
+      chat: provider.chat,
     };
+    return nativeProvider;
   }
 
   async exchangeCodeForTokens(userId: string,provider: FullProvider, code: string, codeVerifier?: string): Promise<OAuthTokens> {

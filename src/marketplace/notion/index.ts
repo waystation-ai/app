@@ -17,6 +17,7 @@ export const notionProvider = registerProvider({
   id: 'notion',
   name: 'Notion',
   description: 'Access and manage your Notion databases, pages, and content.',
+  type: 'native',
   
   auth: {
     type: 'oauth',

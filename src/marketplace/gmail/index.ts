@@ -4,6 +4,7 @@ export const gmailProvider = registerProvider({
   id: 'gmail',
   name: 'Gmail',
   description: 'Read emails, send messages, and manage labels in your Gmail account.',
+  type: 'native',
   
   auth: {
     type: 'oauth',

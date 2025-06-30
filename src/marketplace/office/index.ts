@@ -8,6 +8,7 @@ export const officeProvider = registerProvider({
   id: 'office',
   name: 'Office 365',
   description: 'Create, edit, and collaborate on Office documents and spreadsheets.',
+  type: 'native',
   
   auth: {
     type: 'oauth',

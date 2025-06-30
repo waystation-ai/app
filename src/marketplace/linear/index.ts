@@ -17,6 +17,7 @@ export const linearProvider = registerProvider({
   id: 'linear',
   name: 'Linear',
   description: 'Track issues, manage product development, and streamline software projects with Linear.',
+  type: 'native',
   
   auth: {
     type: 'oauth',

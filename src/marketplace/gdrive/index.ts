@@ -6,6 +6,7 @@ export const gdriveProvider = registerProvider({
   id: 'gdrive',
   name: 'Google Drive',
   description: 'Browse, search, and manage your selected Google Drive files.',
+  type: 'native',
   
   auth: {
     type: 'oauth',

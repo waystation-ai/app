@@ -4,7 +4,8 @@ export const asanaOfficialProvider = registerProvider({
   id: 'asana-official',
   name: 'Asana',
   description: 'Access and manage your Asana workspaces, projects, and tasks seamlessly.',
-  
+  type: 'remote',
+
   serverUrl: 'https://mcp.asana.com/sse',
     
   // Marketing information
@@ -18,7 +19,5 @@ export const asanaOfficialProvider = registerProvider({
     { role: 'agent', content: "I'll review the meeting notes. Would you like these organized by project or deadline?" },
     { role: 'user', content: "Let's organize them by project" },
     { role: 'agent', content: "I've created 8 tasks across 3 projects, assigned them to the relevant team members, and added the context from our meeting notes." }
-  ],
-  
-  tools: []
+  ]
 });

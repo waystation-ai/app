@@ -68,7 +68,7 @@ export interface NativeProvider extends BaseProvider {
 
   auth?: Authentication;
   group?: string;
-
+  type: 'native',
   getResources?: (context: ToolContext) => Promise<Resource[]>;
   getResourceContent?: (context: ToolContext, resource: Resource) => Promise<ResourceContent>;
 
@@ -77,6 +77,7 @@ export interface NativeProvider extends BaseProvider {
 
 export interface RemoteProvider extends BaseProvider {
   serverUrl: string; // URL for the remote MCP server
+  type: 'remote',
 
   getResources?: (context: ToolContext) => Promise<Resource[]>;
   getResourceContent?: (context: ToolContext, resource: Resource) => Promise<ResourceContent>;
@@ -86,13 +87,13 @@ export type Provider = BaseProvider | NativeProvider | RemoteProvider;
 
 export type FullProvider = NativeProvider | RemoteProvider;
 
-export function isNativeProvider(provider: Provider): provider is NativeProvider { return 'tools' in provider; } 
+export function isNativeProvider(provider: Provider): provider is NativeProvider { return 'type' in provider && provider.type === 'native'; } 
 
-export function isRemoteProvider(provider: Provider): provider is RemoteProvider { return 'serverUrl' in provider; }
+export function isRemoteProvider(provider: Provider): provider is RemoteProvider { return 'type' in provider && provider.type === 'remote'; }
 
 export function isFullProvider(provider: Provider): provider is FullProvider {
-  return ('auth' in provider && 'authorizationUrl' in provider) || 'serverUrl' in provider;
-} 
+  return isNativeProvider(provider) || isRemoteProvider(provider);
+}
 export interface ProviderTool {
   provider: Provider;
   tool: Tool;

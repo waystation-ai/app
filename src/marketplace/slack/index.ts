@@ -7,6 +7,7 @@ export const slackProvider = registerProvider({
   id: 'slack',
   name: 'Slack',
   description: 'Send messages, access channels, and manage files in your Slack workspace.',
+  type: 'native',
   
   auth: {
     type: 'oauth',

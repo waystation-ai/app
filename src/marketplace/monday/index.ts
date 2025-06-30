@@ -9,6 +9,7 @@ export const mondayProvider = registerProvider({
   id: 'monday',
   name: 'Monday',
   description: 'Access and manage your Monday.com boards, items, and updates seamlessly.',
+  type: 'native',
   
   auth: {
     type: 'oauth',
