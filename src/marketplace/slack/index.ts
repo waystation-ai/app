@@ -8,20 +8,22 @@ export const slackProvider = registerProvider({
   name: 'Slack',
   description: 'Send messages, access channels, and manage files in your Slack workspace.',
   
-  // OAuth settings
-  clientId: process.env.SLACK_CLIENT_ID || '',
-  clientSecret: process.env.SLACK_CLIENT_SECRET || '',
-  authorizationUrl: 'https://slack.com/oauth/v2/authorize',
-  tokenUrl: 'https://slack.com/api/oauth.v2.access',
-  scopes: [
-    'channels:read',
-    'channels:history',
-    'groups:read',
-    'groups:history',
-    'chat:write',
-    'files:read',
-    'users:read'
-  ],
+  auth: {
+    type: 'oauth',
+    clientId: process.env.SLACK_CLIENT_ID || '',
+    clientSecret: process.env.SLACK_CLIENT_SECRET || '',
+    authorizationUrl: 'https://slack.com/oauth/v2/authorize',
+    tokenUrl: 'https://slack.com/api/oauth.v2.access',
+    scopes: [
+      'channels:read',
+      'channels:history',
+      'groups:read',
+      'groups:history',
+      'chat:write',
+      'files:read',
+      'users:read'
+    ]
+  },
   
   // Marketing information
   bullets: [

@@ -10,19 +10,21 @@ export const mondayProvider = registerProvider({
   name: 'Monday',
   description: 'Access and manage your Monday.com boards, items, and updates seamlessly.',
   
-  // OAuth settings
-  clientId: process.env.MONDAY_CLIENT_ID || '',
-  clientSecret: process.env.MONDAY_CLIENT_SECRET || '',
-  authorizationUrl: 'https://auth.monday.com/oauth2/authorize',
-  tokenUrl: 'https://auth.monday.com/oauth2/token',
-  scopes: [
-    'me:read',
-    'boards:read',
-    'boards:write',
-    'workspaces:read',
-    'updates:read',
-    'updates:write'
-  ],
+  auth: {
+    type: 'oauth',
+    clientId: process.env.MONDAY_CLIENT_ID || '',
+    clientSecret: process.env.MONDAY_CLIENT_SECRET || '',
+    authorizationUrl: 'https://auth.monday.com/oauth2/authorize',
+    tokenUrl: 'https://auth.monday.com/oauth2/token',
+    scopes: [
+      'me:read',
+      'boards:read',
+      'boards:write',
+      'workspaces:read',
+      'updates:read',
+      'updates:write'
+    ]
+  },
   
   // Marketing information
   bullets: [

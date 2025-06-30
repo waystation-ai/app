@@ -18,17 +18,19 @@ export const linearProvider = registerProvider({
   name: 'Linear',
   description: 'Track issues, manage product development, and streamline software projects with Linear.',
   
-  // OAuth settings
-  clientId: process.env.LINEAR_CLIENT_ID || '',
-  clientSecret: process.env.LINEAR_CLIENT_SECRET || '',
-  authorizationUrl: 'https://linear.app/oauth/authorize',
-  tokenUrl: 'https://api.linear.app/oauth/token',
-  scopes: [
-    'read',
-    'write',
-    'issues:create',
-    'comments:create',
-  ],
+  auth: {
+    type: 'oauth',
+    clientId: process.env.LINEAR_CLIENT_ID || '',
+    clientSecret: process.env.LINEAR_CLIENT_SECRET || '',
+    authorizationUrl: 'https://linear.app/oauth/authorize',
+    tokenUrl: 'https://api.linear.app/oauth/token',
+    scopes: [
+      'read',
+      'write',
+      'issues:create',
+      'comments:create',
+    ]
+  },
   
   // Marketing information
   bullets: [

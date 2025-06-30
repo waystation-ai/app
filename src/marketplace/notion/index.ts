@@ -18,20 +18,22 @@ export const notionProvider = registerProvider({
   name: 'Notion',
   description: 'Access and manage your Notion databases, pages, and content.',
   
-  // OAuth settings
-  clientId: process.env.NOTION_CLIENT_ID || '',
-  clientSecret: process.env.NOTION_CLIENT_SECRET || '',
-  authorizationUrl: 'https://api.notion.com/v1/oauth/authorize',
-  tokenUrl: 'https://api.notion.com/v1/oauth/token',
-  scopes: [
-    'read_user',
-    'read_databases',
-    'write_databases',
-    'read_pages',
-    'write_pages',
-    'read_blocks',
-    'write_blocks'
-  ],
+  auth: {
+    type: 'oauth',
+    clientId: process.env.NOTION_CLIENT_ID || '',
+    clientSecret: process.env.NOTION_CLIENT_SECRET || '',
+    authorizationUrl: 'https://api.notion.com/v1/oauth/authorize',
+    tokenUrl: 'https://api.notion.com/v1/oauth/token',
+    scopes: [
+      'read_user',
+      'read_databases',
+      'write_databases',
+      'read_pages',
+      'write_pages',
+      'read_blocks',
+      'write_blocks'
+    ]
+  },
   
   // Marketing information
   bullets: [

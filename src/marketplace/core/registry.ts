@@ -4,7 +4,8 @@ import { z } from 'zod';
 import { isFullProvider, isNativeProvider, isRemoteProvider, NativeProvider, Provider, ProviderResource, ProviderResourceContent, ProviderTool, RemoteProvider, Resource, ResourceContent, Tool, ToolContext } from './types';
 import PostHogClient from '@/lib/utils/posthog-client'; // Using the existing PostHog client
 import { oauthService } from '@/lib/services/oauth-client'; // Assuming oauthService is accessible or passed
-import { getRemoteProviderMetadata, getValidConnections } from '@/lib/db';
+import { getRemoteProviderMetadata, getValidConnection, getValidConnections } from '@/lib/db';
+import { ConnectionType } from '@/lib/db/types';
 import { callToolFromRemoteProvider, readResourceContentFromRemoteProvider } from '@/lib/services/mcp-remote';
 import { generateText } from 'ai';
 import { azure } from '@ai-sdk/azure';
@@ -141,9 +142,8 @@ export class ProviderRegistry {
 
       // Create the context for the tool handler
       const context: ToolContext = {
-        getAccessToken: () => {
-          return oauthService.getValidAccessToken(provider, userId);
-        }
+        getAccessToken: () => this.getAccessToken(provider, userId),
+        getConnectionString: () => this.getConnectionString(provider, userId),
       };
 
       // Call the original handler
@@ -167,7 +167,10 @@ export class ProviderRegistry {
       if (!provider.getResources)
         return [];
 
-      return await provider.getResources({ getAccessToken: () => oauthService.getValidAccessToken(provider, userId) });
+      return await provider.getResources({ 
+        getAccessToken: () => this.getAccessToken(provider, userId),
+        getConnectionString: () => this.getConnectionString(provider, userId)
+      });
     }
     
     if (isRemoteProvider(provider)) 
@@ -199,7 +202,10 @@ export class ProviderRegistry {
     if (isNativeProvider(resource.provider)) {
       const provider = resource.provider as NativeProvider;
 
-      const content = await provider.getResourceContent?.({ getAccessToken: () => oauthService.getValidAccessToken(provider, userId) }, resource);
+      const content = await provider.getResourceContent?.({ 
+        getAccessToken: () => this.getAccessToken(provider, userId),
+        getConnectionString: () => this.getConnectionString(provider, userId)
+      }, resource);
 
       if (!content) {
         throw new Error(`No content found for resource ${resource.id}`);
@@ -246,7 +252,10 @@ export class ProviderRegistry {
       if (!provider.search)
         return [];
 
-      return await provider.search({ getAccessToken: () => oauthService.getValidAccessToken(provider, userId) }, query);
+      return await provider.search({ 
+        getAccessToken: () => this.getAccessToken(provider, userId),
+        getConnectionString: () => this.getConnectionString(provider, userId)
+      }, query);
     }
     
     return [];
@@ -269,6 +278,35 @@ export class ProviderRegistry {
     }));
 
     return providerResourceArrays.flat();  
+  }
+
+  private async getAccessToken(provider: Provider, userId: string): Promise<string> {
+    if (isNativeProvider(provider)) {
+      switch (provider?.auth?.type) {
+        case 'oauth': {
+          const { auth, ...restOfProvider } = provider;
+          const oauthProvider = { ...restOfProvider, ...auth };
+          return oauthService.getValidAccessToken(oauthProvider, userId);
+        }
+      }
+    }
+    return '';
+  }
+
+  private async getConnectionString(provider: Provider, userId: string): Promise<string> {
+    if (isNativeProvider(provider)) {
+      switch (provider?.auth?.type) {
+        case 'connection_string': {
+          const connection = await getValidConnection(userId, provider.id, ConnectionType.DATABASE);
+          if (!connection) {
+            throw new Error(`No connection found for user ${userId} and provider ${provider.id}`);
+          }
+          return connection.connectionString;
+        }
+        
+      }
+    }
+    return '';
   }
 }
 

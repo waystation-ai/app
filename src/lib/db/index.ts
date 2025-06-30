@@ -4,6 +4,7 @@ import { and, eq, lt } from 'drizzle-orm';
 import * as schema from './schema';
 import { OAuthClientInformationFull, OAuthMetadata, OAuthTokens } from '@modelcontextprotocol/sdk/shared/auth.js';
 import { ListToolsResult, ListResourcesResult } from '@modelcontextprotocol/sdk/types.js';
+import { Connection, OAuthConnection, DatabaseConnection, ConnectionType } from './types';
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL environment variable is not set');
@@ -122,33 +123,103 @@ export async function addToWaitlist(userId: string, provider: string): Promise<v
 }
 
 // Helper function to get a valid connection for a specific user and provider
-export async function getValidConnection(userId: string, provider: string) {
-  const connections = await db.select().from(schema.oauthConnections)
-    .where(and(
-      eq(schema.oauthConnections.userId, userId),
-      eq(schema.oauthConnections.provider, provider)
-    ));
+export async function getValidConnection(
+  userId: string,
+  provider: string,
+  connectionType: ConnectionType.OAUTH,
+): Promise<OAuthConnection | null>;
+export async function getValidConnection(
+  userId: string,
+  provider: string,
+  connectionType: ConnectionType.DATABASE,
+): Promise<DatabaseConnection | null>;
+export async function getValidConnection(
+  userId: string,
+  provider: string,
+  connectionType: ConnectionType,
+): Promise<Connection | null> {
+  if (connectionType === ConnectionType.OAUTH) {
+    const [conn] = await db
+      .select()
+      .from(schema.oauthConnections)
+      .where(
+        and(
+          eq(schema.oauthConnections.userId, userId),
+          eq(schema.oauthConnections.provider, provider),
+        ),
+      )
+      .limit(1);
 
-  if (!connections.length) {
-    return null;
+    return conn ? ({ ...conn, type: 'oauth' } as OAuthConnection) : null;
   }
 
-  return connections[0];
+  if (connectionType === ConnectionType.DATABASE) {
+    const [conn] = await db
+      .select()
+      .from(schema.dbConnections)
+      .where(
+        and(
+          eq(schema.dbConnections.userId, userId),
+          eq(schema.dbConnections.provider, provider),
+        ),
+      )
+      .limit(1);
+
+    return conn ? ({ ...conn, type: 'database' } as DatabaseConnection) : null;
+  }
+
+  return null;
 }
 
 // Helper function to get all valid connections for a specific user
-export async function getValidConnections(userId: string) {
-  const connections = await db.select().from(schema.oauthConnections)
+export async function getValidConnections(userId: string): Promise<Map<string, Connection>> {
+  // Get OAuth connections
+  const oauthConnections = await db.select().from(schema.oauthConnections)
     .where(eq(schema.oauthConnections.userId, userId));
 
+  // Get database connections
+  const dbConnections = await db.select().from(schema.dbConnections)
+    .where(eq(schema.dbConnections.userId, userId));
+
   // Create a map of provider -> connection for easy lookup
-  const connectionMap = new Map();
-  for (const connection of connections) {
-    connectionMap.set(connection.provider, connection);
+  const connectionMap = new Map<string, Connection>();
+  
+  // Add OAuth connections
+  for (const conn of oauthConnections) {
+    const oauthConnection: OAuthConnection = {
+      id: conn.id,
+      userId: conn.userId,
+      provider: conn.provider,
+      type: 'oauth',
+      accessToken: conn.accessToken,
+      refreshToken: conn.refreshToken,
+      expiresAt: conn.expiresAt,
+      scopes: conn.scopes,
+      metadata: conn.metadata as Record<string, unknown> | null,
+      createdAt: conn.createdAt || new Date(),
+      updatedAt: conn.updatedAt || new Date()
+    };
+    connectionMap.set(conn.provider, oauthConnection);
+  }
+  
+  // Add database connections
+  for (const conn of dbConnections) {
+    const dbConnection: DatabaseConnection = {
+      id: conn.id,
+      userId: conn.userId,
+      provider: conn.provider,
+      type: 'database',
+      connectionString: conn.connectionString,
+      name: conn.name,
+      createdAt: conn.createdAt || new Date(),
+      updatedAt: conn.updatedAt || new Date()
+    };
+    connectionMap.set(conn.provider, dbConnection);
   }
 
   return connectionMap;
 }
+
 
 // Helper function to store or update OAuth tokens
 export async function storeOAuthTokens(
@@ -202,6 +273,56 @@ export async function removeOAuthConnection(userId: string, provider: string) {
       eq(schema.oauthConnections.provider, provider)
     ));
 }
+
+// Helper function to store or update a connection string
+export async function storeConnectionString(
+  userId: string,
+  provider: string,
+  connectionString: string,
+  name?: string
+) {
+  const existing = await db.select().from(schema.dbConnections)
+    .where(and(
+      eq(schema.dbConnections.userId, userId),
+      eq(schema.dbConnections.provider, provider)
+    ));
+
+  if (existing.length) {
+    console.log(`Updating connection string for user "${userId}" for provider "${provider}"`);
+    
+    // Update existing connection
+    return db.update(schema.dbConnections)
+      .set({
+        connectionString,
+        name: name || existing[0].name,
+        updatedAt: new Date()
+      })
+      .where(and(
+        eq(schema.dbConnections.userId, userId),
+        eq(schema.dbConnections.provider, provider)
+      ));
+  }
+
+  console.log(`Saving connection string for user "${userId}" for provider "${provider}"`);
+
+  // Create new connection
+  return db.insert(schema.dbConnections).values({
+    userId,
+    provider,
+    connectionString,
+    name: name || `${provider} connection`
+  });
+}
+
+// Helper function to remove a database connection
+export async function removeDbConnection(userId: string, provider: string) {
+  return db.delete(schema.dbConnections)
+    .where(and(
+      eq(schema.dbConnections.userId, userId),
+      eq(schema.dbConnections.provider, provider)
+    ));
+}
+
 
 // Helper function to update OAuth connection metadata
 export async function updateConnectionMetadata(userId: string, provider: string, metadata: Record<string, unknown>) {
@@ -392,4 +513,3 @@ export async function storeRemoteProviderMetadata(userId: string, provider: stri
     providerMetadata: mergedMetadata
   });
 }
-

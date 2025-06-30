@@ -91,3 +91,13 @@ export const nanoIds = pgTable('nano_ids', {
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow()
 });
+
+export const dbConnections = pgTable('db_connections', {
+  id: serial('id').primaryKey(),
+  userId: text('user_id').notNull(),
+  name: varchar('name', { length: 100 }).notNull(),
+  provider: varchar('provider', { length: 50 }).notNull(),
+  connectionString: text('connection_string').notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow()
+});

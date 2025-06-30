@@ -10,16 +10,18 @@ export const airtableProvider = registerProvider({
   name: 'Airtable',
   description: 'Access and manage your Airtable bases, tables, and records seamlessly.',
   
-  // OAuth settings
-  clientId: process.env.AIRTABLE_CLIENT_ID || '',
-  clientSecret: process.env.AIRTABLE_CLIENT_SECRET || '',
-  authorizationUrl: 'https://airtable.com/oauth2/v1/authorize',
-  tokenUrl: 'https://airtable.com/oauth2/v1/token',
-  scopes: [
-    'data.records:read',
-    'data.records:write',
-    'schema.bases:read'
-  ],
+  auth: {
+    type: 'oauth',
+    clientId: process.env.AIRTABLE_CLIENT_ID || '',
+    clientSecret: process.env.AIRTABLE_CLIENT_SECRET || '',
+    authorizationUrl: 'https://airtable.com/oauth2/v1/authorize',
+    tokenUrl: 'https://airtable.com/oauth2/v1/token',
+    scopes: [
+      'data.records:read',
+      'data.records:write',
+      'schema.bases:read'
+    ]
+  },
   
   // Marketing information
   bullets: [

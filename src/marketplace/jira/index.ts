@@ -11,17 +11,19 @@ export const jiraProvider = registerProvider({
   name: 'Jira',
   description: 'Track issues, manage projects, and streamline workflows in Jira.',
   
-  // OAuth settings
-  clientId: process.env.JIRA_CLIENT_ID || '',
-  clientSecret: process.env.JIRA_CLIENT_SECRET || '',
-  authorizationUrl: 'https://auth.atlassian.com/authorize',
-  tokenUrl: 'https://auth.atlassian.com/oauth/token',
-  scopes: [
-    'read:jira-work',
-    'write:jira-work',
-    'read:jira-user',
-    'offline_access'
-  ],
+  auth: {
+    type: 'oauth',
+    clientId: process.env.JIRA_CLIENT_ID || '',
+    clientSecret: process.env.JIRA_CLIENT_SECRET || '',
+    authorizationUrl: 'https://auth.atlassian.com/authorize',
+    tokenUrl: 'https://auth.atlassian.com/oauth/token',
+    scopes: [
+      'read:jira-work',
+      'write:jira-work',
+      'read:jira-user',
+      'offline_access'
+    ]
+  },
   
   // Marketing information
   bullets: [

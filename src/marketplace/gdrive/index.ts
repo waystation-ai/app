@@ -7,14 +7,16 @@ export const gdriveProvider = registerProvider({
   name: 'Google Drive',
   description: 'Browse, search, and manage your selected Google Drive files.',
   
-  // OAuth settings
-  clientId: process.env.GOOGLE_CLIENT_ID || '',
-  clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-  authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
-  tokenUrl: 'https://oauth2.googleapis.com/token',
-  scopes: [
-    'https://www.googleapis.com/auth/drive.file'
-  ],
+  auth: {
+    type: 'oauth',
+    clientId: process.env.GOOGLE_CLIENT_ID || '',
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+    authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
+    tokenUrl: 'https://oauth2.googleapis.com/token',
+    scopes: [
+      'https://www.googleapis.com/auth/drive.file'
+    ]
+  },
   group: 'google',
   
   // Marketing information

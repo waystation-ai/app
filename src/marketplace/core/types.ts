@@ -4,6 +4,7 @@ import { zodToJsonSchema } from 'zod-to-json-schema';
 
 export interface ToolContext {
   getAccessToken: () => Promise<string>;
+  getConnectionString: () => Promise<string>;
 }
 
 export interface ToolResult {
@@ -47,15 +48,25 @@ export interface BaseProvider {
   }>;
 }
 
-export interface NativeProvider extends BaseProvider {
-  tools: Tool<any, any>[]; // eslint-disable-line @typescript-eslint/no-explicit-any
-
-  // OAuth fields (optional for providers without OAuth)
+export type OAuthCredentials = {
+  type: 'oauth';
   clientId: string;
   clientSecret?: string;
   authorizationUrl?: string;
   tokenUrl?: string;
   scopes: string[];
+};
+
+export type ConnectionStringCredentials = {
+  type: 'connection_string';
+};
+
+export type Authentication = OAuthCredentials | ConnectionStringCredentials;
+
+export interface NativeProvider extends BaseProvider {
+  tools: Tool<any, any>[]; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+  auth?: Authentication;
   group?: string;
 
   getResources?: (context: ToolContext) => Promise<Resource[]>;
@@ -75,12 +86,12 @@ export type Provider = BaseProvider | NativeProvider | RemoteProvider;
 
 export type FullProvider = NativeProvider | RemoteProvider;
 
-export function isNativeProvider(provider: Provider): provider is NativeProvider { return 'authorizationUrl' in provider; } 
+export function isNativeProvider(provider: Provider): provider is NativeProvider { return 'tools' in provider; } 
 
 export function isRemoteProvider(provider: Provider): provider is RemoteProvider { return 'serverUrl' in provider; }
 
 export function isFullProvider(provider: Provider): provider is FullProvider {
-  return 'authorizationUrl' in provider || 'serverUrl' in provider; 
+  return ('auth' in provider && 'authorizationUrl' in provider) || 'serverUrl' in provider;
 } 
 export interface ProviderTool {
   provider: Provider;

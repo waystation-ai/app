@@ -8,15 +8,17 @@ export const miroProvider = registerProvider({
   name: 'Miro',
   description: 'Collaborate on visual boards with your team using Miro integration.',
   
-  // OAuth settings
-  clientId: process.env.MIRO_CLIENT_ID || '',
-  clientSecret: process.env.MIRO_CLIENT_SECRET || '',
-  authorizationUrl: 'https://miro.com/oauth/authorize',
-  tokenUrl: 'https://api.miro.com/v1/oauth/token',
-  scopes: [
-    'boards:read',
-    'boards:write',
-  ],
+  auth: {
+    type: 'oauth',
+    clientId: process.env.MIRO_CLIENT_ID || '',
+    clientSecret: process.env.MIRO_CLIENT_SECRET || '',
+    authorizationUrl: 'https://miro.com/oauth/authorize',
+    tokenUrl: 'https://api.miro.com/v1/oauth/token',
+    scopes: [
+      'boards:read',
+      'boards:write',
+    ]
+  },
   
   // Marketing information
   bullets: [
