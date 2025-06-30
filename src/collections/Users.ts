@@ -1,7 +1,7 @@
 import type { CollectionConfig } from "payload";
 import { ClerkAuthStrategy } from "./lib/auth/clerk-strategy";
-import { isForbidden } from "./lib/access/is-forbidden";
-import { isAdminEnabledRoles } from "./lib/access/is-admin-enabled-roles";
+import { isForbidden } from "./lib/access/forbidden";
+import { isAdminRoles } from "./lib/access/is-admin-roles";
 
 export const Users: CollectionConfig = {
   slug: "users",
@@ -18,10 +18,10 @@ export const Users: CollectionConfig = {
   },
   access: {
     create: isForbidden,
-    read: isAdminEnabledRoles,
+    read: isAdminRoles,
     update: isForbidden,
     delete: isForbidden,
-    admin: isAdminEnabledRoles,
+    admin: isAdminRoles,
     unlock: isForbidden,
     readVersions: isForbidden,
   },
