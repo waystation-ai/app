@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import UseCasePage from '@/components/app/use-cases/UseCasePage';
 import useCases from '../use-cases.json';
+import { getUseCaseById } from '@/components/app/use-cases/utils';
 
 export async function generateStaticParams() {
   return useCases.map((useCase) => ({
@@ -11,7 +12,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ usecase: string }> }): Promise<Metadata> {
   const { usecase } = await params;
-  const useCaseData = useCases.find(uc => uc.id === usecase);
+  const useCaseData = await getUseCaseById(usecase);
   
   if (!useCaseData) {
     return {
@@ -38,7 +39,7 @@ export async function generateMetadata({ params }: { params: Promise<{ usecase: 
 
 export default async function Page({ params }: { params: Promise<{ usecase: string }> }) {
   const { usecase } = await params;
-  const useCaseData = useCases.find(uc => uc.id === usecase);
+  const useCaseData = await getUseCaseById(usecase);
   
   if (!useCaseData) {
     notFound();

@@ -1,8 +1,8 @@
 import UseCaseCard from './UseCaseCard';
 import { getAllUseCases } from './utils';
 
-export default function UseCaseGrid() {
-  const useCases = getAllUseCases();
+export default async function UseCaseGrid() {
+  const useCases = await getAllUseCases();
 
   return (
     <div className="px-4 sm:px-8 pb-12 max-w-7xl mx-auto w-full">

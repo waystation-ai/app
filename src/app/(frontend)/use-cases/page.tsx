@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   }
 };
 
-export default function AIUseCasesPage() {
+export default async function AIUseCasesPage() {
   return (
     <div className="flex flex-col relative">
       <main className="flex-1 flex flex-col">

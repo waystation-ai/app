@@ -12,6 +12,7 @@ import { Media } from './collections/Media'
 import { Categories } from './collections/Categories'
 import { getServerSideURL } from './components/payload/utilities/getURL'
 import { plugins } from '@/payload-plugins'
+import { UseCases } from './collections/UseCases'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -45,7 +46,7 @@ export default buildConfig({
       ],
     },
   },
-  collections: [Posts, Media, Categories, Users,],
+  collections: [Posts, Media, UseCases, Categories, Users],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
