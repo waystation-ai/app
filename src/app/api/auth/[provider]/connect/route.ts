@@ -2,6 +2,7 @@ import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import { oauthService } from '@/lib/services/oauth-client';
 import { getProviderConfig } from '@/lib/services/provider-config';
+import { isNativeProvider } from '@/marketplace/core/types';
 
 import { stateStore } from '@/lib/services/state-store';
 
@@ -17,13 +18,20 @@ export async function GET(
 
     // Validate provider
     const { provider } = await params;
+    let providerConfig;
     try {
-      getProviderConfig(provider);
+      providerConfig = getProviderConfig(provider);
     } catch {
       return new NextResponse('Invalid provider', { status: 400 });
     }
 
-    // Generate authorization URL with state and PKCE for Airtable
+    // Check if this is a connection string provider and redirect to setup page
+    if (isNativeProvider(providerConfig) && providerConfig.auth?.type === 'connection_string') {
+      const requestUrl = new URL(request.url);
+      return NextResponse.redirect(new URL(`/connect/${provider}/setup`, requestUrl.origin));
+    }
+
+    // Generate authorization URL with state and PKCE for OAuth providers
     const { url, state, codeVerifier } = await oauthService.buildAuthorizationUrl(session.userId, provider);
 
     // Extract redirect_uri from request URL

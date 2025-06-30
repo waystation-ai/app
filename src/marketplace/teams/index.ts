@@ -7,19 +7,21 @@ export const teamsProvider = registerProvider({
   id: 'teams',
   name: 'Microsoft Teams',
   description: 'Collaborate, chat, and manage meetings in Microsoft Teams.',
-  
-  // OAuth settings
-  clientId: process.env.OFFICE_CLIENT_ID || '',
-  clientSecret: process.env.OFFICE_CLIENT_SECRET || '',
-  authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
-  tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
-  scopes: [
-    'User.Read',
-    'Team.ReadBasic.All',
-    'Channel.ReadBasic.All',
-    'ChannelMessage.Send',
-    'offline_access'
-  ],
+
+  auth: {
+    type: 'oauth',
+    clientId: process.env.OFFICE_CLIENT_ID || '',
+    clientSecret: process.env.OFFICE_CLIENT_SECRET || '',
+    authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+    tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+    scopes: [
+      'User.Read',
+      'Team.ReadBasic.All',
+      'Channel.ReadBasic.All',
+      'ChannelMessage.Send',
+      'offline_access'
+    ]
+  },
   group: 'microsoft',
   
   // Marketing information

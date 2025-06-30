@@ -15,20 +15,21 @@ export const asanaProvider = registerProvider({
   id: 'asana',
   name: 'Asana',
   description: 'Access and manage your Asana workspaces, projects, and tasks seamlessly.',
-  
-  // OAuth settings
-  clientId: process.env.ASANA_CLIENT_ID || '',
-  clientSecret: process.env.ASANA_CLIENT_SECRET || '',
-  authorizationUrl: 'https://app.asana.com/-/oauth_authorize',
-  tokenUrl: 'https://app.asana.com/-/oauth_token',
-  scopes: [
-    'default',
-    'projects:read',
-    'projects:write',
-    'tasks:read',
-    'tasks:write',
-    'workspaces:read'
-  ],
+  auth: {
+    type: 'oauth',
+    clientId: process.env.ASANA_CLIENT_ID || '',
+    clientSecret: process.env.ASANA_CLIENT_SECRET || '',
+    authorizationUrl: 'https://app.asana.com/-/oauth_authorize',
+    tokenUrl: 'https://app.asana.com/-/oauth_token',
+    scopes: [
+      'default',
+      'projects:read',
+      'projects:write',
+      'tasks:read',
+      'tasks:write',
+      'workspaces:read'
+    ]
+  },
   
   // Marketing information
   bullets: [

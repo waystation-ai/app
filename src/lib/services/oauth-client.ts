@@ -12,6 +12,7 @@ import { Buffer } from 'buffer';
 import { isRemoteProvider, RemoteProvider, NativeProvider, isNativeProvider, FullProvider } from '@/marketplace/core/types';
 import { discoverOAuthMetadata, OAuthClientProvider, registerClient } from '@modelcontextprotocol/sdk/client/auth.js';
 import { OAuthClientInformation, OAuthClientMetadata, OAuthTokens, OAuthTokensSchema } from '@modelcontextprotocol/sdk/shared/auth.js';
+import { OAuthConnection } from '../db/types';
 
 // Helper function for base64URL encoding
 function base64URLEncode(buffer: Uint8Array): string {
@@ -70,13 +71,18 @@ export class OAuthClient {
 
   private async buildAuthorizationUrlWithConfig(provider: string, config: NativeProvider): Promise<{ url: string; state: string; codeVerifier: string }> {
     // This is the existing implementation, extracted to a separate method
-    if (!config.clientId) {
+    const auth = config.auth;
+    if (!auth || auth.type !== 'oauth') {
+      throw new Error(`OAuth configuration not found for provider: ${provider}`);
+    }
+
+    if (!auth.clientId) {
       throw new Error(`Client ID not configured for provider: ${provider}`);
     }
-    if (!config.authorizationUrl) {
+    if (!auth.authorizationUrl) {
       throw new Error(`Authorization URL not configured for provider: ${provider}`);
     }
-    if (!config.scopes) {
+    if (!auth.scopes) {
       throw new Error(`Scopes not configured for provider: ${provider}`);
     }
 
@@ -85,11 +91,11 @@ export class OAuthClient {
     const codeChallenge = await this.generateCodeChallenge(codeVerifier);
 
     const params = new URLSearchParams({
-      client_id: config.clientId,
+      client_id: auth.clientId,
       redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/${provider}/callback`,
       response_type: 'code',
       access_type: 'offline',
-      scope: config.scopes.join(' '),
+      scope: auth.scopes.join(' '),
       state,
       code_challenge: codeChallenge,
       code_challenge_method: 'S256',
@@ -97,11 +103,11 @@ export class OAuthClient {
 
     // Add provider-specific parameters
     if (provider === 'slack') {
-      params.append('user_scope', config.scopes.join(' '));
+      params.append('user_scope', auth.scopes.join(' '));
     }
 
     return {
-      url: `${config.authorizationUrl}?${params.toString()}`,
+      url: `${auth.authorizationUrl}?${params.toString()}`,
       state,
       codeVerifier
     };
@@ -157,16 +163,30 @@ export class OAuthClient {
       }
     }
     
+    if (!oauthMetadata) {
+      throw new Error(`Failed to get OAuth metadata for provider: ${provider}`);
+    }
+
     // Create an enhanced provider config with the client registration data
-    return {
-      ...provider,
-      clientId: clientInfo.client_id,
-      clientSecret: clientInfo.client_secret,
-      authorizationUrl: oauthMetadata?.authorization_endpoint,
-      tokenUrl: oauthMetadata?.token_endpoint,
-      scopes: ['openid', 'profile', 'email'], // Default scopes, can be customized
-      tools: []
+    const nativeProvider: NativeProvider = {
+      id: provider.id,
+      name: provider.name,
+      description: provider.description,
+      bullets: provider.bullets,
+      auth: {
+        type: 'oauth',
+        clientId: clientInfo.client_id,
+        clientSecret: clientInfo.client_secret,
+        authorizationUrl: oauthMetadata.authorization_endpoint,
+        tokenUrl: oauthMetadata.token_endpoint,
+        scopes: ['openid', 'profile', 'email'], // Default scopes, can be customized
+      },
+      tools: [],
+      getResources: provider.getResources,
+      getResourceContent: provider.getResourceContent,
+      chat: provider.chat,
     };
+    return nativeProvider;
   }
 
   async exchangeCodeForTokens(userId: string,provider: FullProvider, code: string, codeVerifier?: string): Promise<OAuthTokens> {
@@ -181,25 +201,30 @@ export class OAuthClient {
     }
     
     // Use existing code for native providers
-    return this.exchangeCodeForTokensWithConfig(provider, code, codeVerifier);
+    return this.exchangeCodeForTokensWithConfig(provider as NativeProvider, code, codeVerifier);
   }
 
   private async exchangeCodeForTokensWithConfig(provider: NativeProvider, code: string, codeVerifier?: string): Promise<OAuthTokens> {
-    if (!provider.clientId) {
-      throw new Error(`Client ID not configured for provider: ${provider}`);
+    const auth = provider.auth;
+    if (!auth || auth.type !== 'oauth') {
+      throw new Error(`OAuth configuration not found for provider: ${provider.id}`);
     }
 
-    if (!provider.clientSecret) {
-      throw new Error(`Client secret not configured for provider: ${provider}`);
+    if (!auth.clientId) {
+      throw new Error(`Client ID not configured for provider: ${provider.id}`);
     }
 
-    if (!provider.tokenUrl) {
-      throw new Error(`Token URL not configured for provider: ${provider}`);
+    if (!auth.clientSecret) {
+      throw new Error(`Client secret not configured for provider: ${provider.id}`);
+    }
+
+    if (!auth.tokenUrl) {
+      throw new Error(`Token URL not configured for provider: ${provider.id}`);
     }
 
     const params = new URLSearchParams({
-      client_id: provider.clientId,
-      client_secret: provider.clientSecret || '',
+      client_id: auth.clientId,
+      client_secret: auth.clientSecret || '',
       code,
       redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/${provider.id}/callback`,
       grant_type: 'authorization_code',
@@ -211,12 +236,12 @@ export class OAuthClient {
       params.delete('client_secret');
     }
 
-    const response = await fetch(provider.tokenUrl, {
+    const response = await fetch(auth.tokenUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         Accept: 'application/json',
-        Authorization: `Basic ${Buffer.from(`${provider.clientId}:${provider.clientSecret}`).toString('base64')}`
+        Authorization: `Basic ${Buffer.from(`${auth.clientId}:${auth.clientSecret}`).toString('base64')}`
       },
       body: params.toString()
     });
@@ -256,25 +281,30 @@ export class OAuthClient {
     }
     
     // Use existing code for native providers
-    return this.refreshAccessTokenWithConfig(provider, refreshToken);
+    return this.refreshAccessTokenWithConfig(provider as NativeProvider, refreshToken);
   }
 
   private async refreshAccessTokenWithConfig(provider: NativeProvider, refreshToken: string): Promise<OAuthTokens> {
-    if (!provider.clientId) {
-      throw new Error(`Client ID not configured for provider: ${provider}`);
+    const auth = provider.auth;
+    if (!auth || auth.type !== 'oauth') {
+      throw new Error(`OAuth configuration not found for provider: ${provider.id}`);
     }
 
-    if (!provider.clientSecret) {
-      throw new Error(`Client secret not configured for provider: ${provider}`);
+    if (!auth.clientId) {
+      throw new Error(`Client ID not configured for provider: ${provider.id}`);
     }
 
-    if (!provider.tokenUrl) {
-      throw new Error(`Token URL not configured for provider: ${provider}`);
+    if (!auth.clientSecret) {
+      throw new Error(`Client secret not configured for provider: ${provider.id}`);
+    }
+
+    if (!auth.tokenUrl) {
+      throw new Error(`Token URL not configured for provider: ${provider.id}`);
     }
 
     const params = new URLSearchParams({
-      client_id: provider.clientId,
-      client_secret: provider.clientSecret || '',
+      client_id: auth.clientId,
+      client_secret: auth.clientSecret || '',
       refresh_token: refreshToken,
       grant_type: 'refresh_token'
     });
@@ -284,12 +314,12 @@ export class OAuthClient {
       params.delete('client_secret');
     }
 
-    const response = await fetch(provider.tokenUrl, {
+    const response = await fetch(auth.tokenUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         Accept: 'application/json',
-        Authorization: `Basic ${Buffer.from(`${provider.clientId}:${provider.clientSecret}`).toString('base64')}`
+        Authorization: `Basic ${Buffer.from(`${auth.clientId}:${auth.clientSecret}`).toString('base64')}`
       },
       body: params.toString()
     });
@@ -313,7 +343,7 @@ export class OAuthClient {
       throw new Error('User not authenticated');
     }
 
-    const connection = await getValidConnection(userId, provider.id);
+    const connection = await getValidConnection(userId, provider.id) as OAuthConnection;
     if (!connection) {
       throw new Error(`No valid connection found for provider: ${provider.id}. Ask user to set up a connection with ${provider.id} by visiting https://${process.env.APP_DOMAIN}/app`);
     }
@@ -372,7 +402,7 @@ export class RemoteOAuthClientProvider implements OAuthClientProvider {
   }
 
   async tokens(): Promise<OAuthTokens | undefined> {
-    const connection = await getValidConnection(this.userId, this.provider.id);
+    const connection = await getValidConnection(this.userId, this.provider.id) as OAuthConnection;
     
     if (!connection) 
       return undefined;

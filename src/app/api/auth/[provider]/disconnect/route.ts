@@ -1,7 +1,7 @@
 import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
-import { removeOAuthConnection } from '@/lib/db';
+import { removeOAuthConnection, removeConnection } from '@/lib/db';
 import { redirect } from 'next/navigation';
 import { getProviderConfig } from '@/lib/services/provider-config';
 
@@ -23,5 +23,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
   const redirectUrl = url.searchParams.get('redirectUrl');
 
   await removeOAuthConnection(session.userId, provider);
+  await removeConnection(session.userId, provider);
   return redirect(redirectUrl || '/app');
 }
