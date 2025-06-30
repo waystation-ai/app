@@ -16,27 +16,34 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-import { MessageSquareText, Plug, Users } from "lucide-react";
+import { School, MessageSquareText, Plug, Users } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { OrganizationSwitcher, SignedIn, UserButton } from "@clerk/nextjs";
 
 const items = [
   {
+    title: "Dashboard",
+    url: "/app",
+    icon: School,
+  },
+  {
     title: "Chat",
-    url: "/chat",
+    url: "/app/chat",
     icon: MessageSquareText,
   },
   {
     title: "Integrations",
-    url: "/integrations",
+    url: "/app/integrations",
     icon: Plug,
   },
+  /*
   {
     title: "Team",
-    url: "/team",
+    url: "/app/team",
     icon: Users,
   },
+  */
 ];
 
 export function AppSidebar() {
@@ -59,10 +66,8 @@ export function AppSidebar() {
         </div>
       </SidebarHeader>
       <SidebarContent>
+        <OrganizationSwitcher organizationProfileMode='modal' organizationProfileUrl='/app/team' />
         <SidebarGroup>
-          <SidebarGroupLabel>
-            <OrganizationSwitcher organizationProfileMode='navigation' organizationProfileUrl='/team' className="w-full" />
-          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -75,6 +80,22 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Connect</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem><SidebarMenuButton asChild>
+                <Link href='/app/connect/mcp'><Image src="/images/apps/mcp.svg" width={20} height={20} alt=""></Image>Universal MCP</Link>
+              </SidebarMenuButton></SidebarMenuItem>
+              <SidebarMenuItem><SidebarMenuButton asChild>
+                <Link href='/app/connect/claude'><Image src="/images/apps/claude.svg" width={20} height={20} alt=""></Image>Claude Integration</Link>
+              </SidebarMenuButton></SidebarMenuItem>
+              <SidebarMenuItem><SidebarMenuButton asChild>
+                <Link href='/app/connect/chatgpt'><Image src="/images/apps/chatgpt.svg" width={20} height={20} alt=""></Image>ChatGPT Connector</Link>
+              </SidebarMenuButton></SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
