@@ -24,6 +24,7 @@ import './chrome';
 import './gmeet';
 import './salesforce';
 import './smartsheet';
+import './postgres';
 
 import './remote-mcps';
 
