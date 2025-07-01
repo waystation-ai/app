@@ -6,6 +6,7 @@ import { useTrackEvent } from '@/lib/utils/track-event';
 import GDrivePickerButton from './provider-settings/GDrivePickerButton';
 import { useState } from 'react';
 import { ConnectionStringForm } from './ConnectionStringForm';
+import { AuthType } from '@/marketplace/core/types';
 
 interface ProviderCardProps {
   name: string;
@@ -29,7 +30,7 @@ export default function ProviderCard({ name, description, isConnected, provider,
     if (isConnected) {
       setIsDisconnecting(true);
       // Disconnect
-      if (authType === 'connection_string') {
+      if (authType === AuthType.ConnectionString) {
         await fetch(`/api/auth/${provider}/connection_string`, { method: 'DELETE' });
         window.location.reload();
       } else {
@@ -37,7 +38,7 @@ export default function ProviderCard({ name, description, isConnected, provider,
       }
     } else {
       // Connect
-      if (authType === 'connection_string') {
+      if (authType === AuthType.ConnectionString) {
         setIsModalOpen(true);
       } else {
         window.location.href = `/api/auth/${provider}/connect`;

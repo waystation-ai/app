@@ -1,11 +1,12 @@
 import { registerProvider } from '../core/registry';
+import { ProviderType } from '../core/types';
 
 
 export const jiraProvider = registerProvider({
   id: 'atlassian',
   name: 'Atlassian',
   description: 'Track issues, manage projects, and streamline workflows in Jira.',
-  type: 'remote',
+  type: ProviderType.Remote,
   serverUrl: 'https://mcp.atlassian.com/v1/sse',
   
   // Marketing information

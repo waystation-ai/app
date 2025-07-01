@@ -8,9 +8,8 @@ import {
   getClientRegistration,
   storeClientRegistration,
 } from '@/lib/db';
-import { ConnectionType } from '@/lib/db/types';
 import { Buffer } from 'buffer';
-import { isRemoteProvider, RemoteProvider, NativeProvider, isNativeProvider, FullProvider } from '@/marketplace/core/types';
+import { isRemoteProvider, RemoteProvider, NativeProvider, isNativeProvider, FullProvider, AuthType, ProviderType } from '@/marketplace/core/types';
 import { discoverOAuthMetadata, OAuthClientProvider, registerClient } from '@modelcontextprotocol/sdk/client/auth.js';
 import { OAuthClientInformation, OAuthClientMetadata, OAuthTokens, OAuthTokensSchema } from '@modelcontextprotocol/sdk/shared/auth.js';
 
@@ -72,7 +71,7 @@ export class OAuthClient {
   private async buildAuthorizationUrlWithConfig(provider: string, config: NativeProvider): Promise<{ url: string; state: string; codeVerifier: string }> {
     // This is the existing implementation, extracted to a separate method
     const auth = config.auth;
-    if (!auth || auth.type !== 'oauth') {
+    if (!auth || auth.type !== AuthType.OAuth) {
       throw new Error(`OAuth configuration not found for provider: ${provider}`);
     }
 
@@ -169,9 +168,9 @@ export class OAuthClient {
       name: provider.name,
       description: provider.description,
       bullets: provider.bullets,
-      type: 'native', // Overwrite the type to be native
+      type: ProviderType.Native, // Overwrite the type to be native
       auth: {
-        type: 'oauth',
+        type: AuthType.OAuth,
         clientId: clientInfo.client_id,
         clientSecret: clientInfo.client_secret,
         authorizationUrl: oauthMetadata?.authorization_endpoint,
@@ -198,12 +197,12 @@ export class OAuthClient {
     }
     
     // Use existing code for native providers
-    return this.exchangeCodeForTokensWithConfig(provider, code, codeVerifier);
+    return this.exchangeCodeForTokensWithConfig(provider as NativeProvider, code, codeVerifier);
   }
 
   private async exchangeCodeForTokensWithConfig(provider: NativeProvider, code: string, codeVerifier?: string): Promise<OAuthTokens> {
     const auth = provider.auth;
-    if (!auth || auth.type !== 'oauth') {
+    if (!auth || auth.type !== AuthType.OAuth) {
       throw new Error(`OAuth configuration not found for provider: ${provider.id}`);
     }
 
@@ -273,12 +272,12 @@ export class OAuthClient {
     }
     
     // Use existing code for native providers
-    return this.refreshAccessTokenWithConfig(provider, refreshToken);
+    return this.refreshAccessTokenWithConfig(provider as NativeProvider, refreshToken);
   }
 
   private async refreshAccessTokenWithConfig(provider: NativeProvider, refreshToken: string): Promise<OAuthTokens> {
     const auth = provider.auth;
-    if (!auth || auth.type !== 'oauth') {
+    if (!auth || auth.type !== AuthType.OAuth) {
       throw new Error(`OAuth configuration not found for provider: ${provider.id}`);
     }
 
@@ -335,7 +334,7 @@ export class OAuthClient {
       throw new Error('User not authenticated');
     }
 
-    const connection = await getValidConnection(userId, provider.id, ConnectionType.OAUTH);
+    const connection = await getValidConnection(userId, provider.id, AuthType.OAuth);
     if (!connection) {
       throw new Error(`No valid connection found for provider: ${provider.id}. Ask user to set up a connection with ${provider.id} by visiting https://${process.env.APP_DOMAIN}/`);
     }
@@ -394,7 +393,7 @@ export class RemoteOAuthClientProvider implements OAuthClientProvider {
   }
 
   async tokens(): Promise<OAuthTokens | undefined> {
-    const connection = await getValidConnection(this.userId, this.provider.id, ConnectionType.OAUTH);
+    const connection = await getValidConnection(this.userId, this.provider.id, AuthType.OAuth);
     
     if (!connection) 
       return undefined;

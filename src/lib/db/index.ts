@@ -4,7 +4,8 @@ import { and, eq, lt } from 'drizzle-orm';
 import * as schema from './schema';
 import { OAuthClientInformationFull, OAuthMetadata, OAuthTokens } from '@modelcontextprotocol/sdk/shared/auth.js';
 import { ListToolsResult, ListResourcesResult } from '@modelcontextprotocol/sdk/types.js';
-import { Connection, OAuthConnection, DatabaseConnection, ConnectionType } from './types';
+import { Connection, OAuthConnection, DatabaseConnection } from './types';
+import { AuthType } from '@/marketplace/core/types';
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL environment variable is not set');
@@ -126,19 +127,19 @@ export async function addToWaitlist(userId: string, provider: string): Promise<v
 export async function getValidConnection(
   userId: string,
   provider: string,
-  connectionType: ConnectionType.OAUTH,
+  connectionType: AuthType.OAuth,
 ): Promise<OAuthConnection | null>;
 export async function getValidConnection(
   userId: string,
   provider: string,
-  connectionType: ConnectionType.DATABASE,
+  connectionType: AuthType.ConnectionString,
 ): Promise<DatabaseConnection | null>;
 export async function getValidConnection(
   userId: string,
   provider: string,
-  connectionType: ConnectionType,
+  connectionType: AuthType,
 ): Promise<Connection | null> {
-  if (connectionType === ConnectionType.OAUTH) {
+  if (connectionType === AuthType.OAuth) {
     const [conn] = await db
       .select()
       .from(schema.oauthConnections)
@@ -150,10 +151,10 @@ export async function getValidConnection(
       )
       .limit(1);
 
-    return conn ? ({ ...conn, type: 'oauth' } as OAuthConnection) : null;
+    return conn ? ({ ...conn, type: AuthType.OAuth } as OAuthConnection) : null;
   }
 
-  if (connectionType === ConnectionType.DATABASE) {
+  if (connectionType === AuthType.ConnectionString) {
     const [conn] = await db
       .select()
       .from(schema.dbConnections)
@@ -165,7 +166,7 @@ export async function getValidConnection(
       )
       .limit(1);
 
-    return conn ? ({ ...conn, type: 'database' } as DatabaseConnection) : null;
+    return conn ? ({ ...conn, type: AuthType.ConnectionString } as DatabaseConnection) : null;
   }
 
   return null;
@@ -190,7 +191,7 @@ export async function getValidConnections(userId: string): Promise<Map<string, C
       id: conn.id,
       userId: conn.userId,
       provider: conn.provider,
-      type: 'oauth',
+      type: AuthType.OAuth,
       accessToken: conn.accessToken,
       refreshToken: conn.refreshToken,
       expiresAt: conn.expiresAt,
@@ -208,7 +209,7 @@ export async function getValidConnections(userId: string): Promise<Map<string, C
       id: conn.id,
       userId: conn.userId,
       provider: conn.provider,
-      type: 'database',
+      type: AuthType.ConnectionString,
       connectionString: conn.connectionString,
       name: conn.name,
       createdAt: conn.createdAt || new Date(),

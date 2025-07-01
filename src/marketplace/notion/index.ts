@@ -1,3 +1,4 @@
+import { AuthType, ProviderType } from '../core/types';
 import { registerProvider } from '../core/registry';
 import { listNotionDatabases } from './list-databases';
 import { queryNotionDatabase } from './query-database';
@@ -17,10 +18,10 @@ export const notionProvider = registerProvider({
   id: 'notion',
   name: 'Notion',
   description: 'Access and manage your Notion databases, pages, and content.',
-  type: 'native',
+  type: ProviderType.Native,
   
   auth: {
-    type: 'oauth',
+    type: AuthType.OAuth,
     clientId: process.env.NOTION_CLIENT_ID || '',
     clientSecret: process.env.NOTION_CLIENT_SECRET || '',
     authorizationUrl: 'https://api.notion.com/v1/oauth/authorize',

@@ -1,9 +1,4 @@
-// Unified connection types to handle both OAuth and database connections
-
-export enum ConnectionType {
-  OAUTH = 'oauth',
-  DATABASE = 'database'
-}
+import { AuthType } from "@/marketplace/core/types";
 
 export interface BaseConnection {
   id: number;
@@ -11,11 +6,11 @@ export interface BaseConnection {
   provider: string;
   createdAt: Date;
   updatedAt: Date;
-  type: 'oauth' | 'database';
+  type: AuthType;
 }
 
 export interface OAuthConnection extends BaseConnection {
-  type: 'oauth';
+  type: AuthType.OAuth;
   accessToken: string;
   refreshToken: string | null;
   expiresAt: Date | null;
@@ -24,7 +19,7 @@ export interface OAuthConnection extends BaseConnection {
 }
 
 export interface DatabaseConnection extends BaseConnection {
-  type: 'database';
+  type: AuthType.ConnectionString;
   connectionString: string;
   name: string;
 }

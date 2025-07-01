@@ -1,3 +1,4 @@
+import { AuthType, ProviderType } from '../core/types';
 import { registerProvider } from '../core/registry';
 import { listJiraProjects } from './list-projects';
 import { listJiraIssues } from './list-issues';
@@ -10,10 +11,10 @@ export const jiraProvider = registerProvider({
   id: 'jira',
   name: 'Jira',
   description: 'Track issues, manage projects, and streamline workflows in Jira.',
-  type: 'native',
+  type: ProviderType.Native,
   
   auth: {
-    type: 'oauth',
+    type: AuthType.OAuth,
     clientId: process.env.JIRA_CLIENT_ID || '',
     clientSecret: process.env.JIRA_CLIENT_SECRET || '',
     authorizationUrl: 'https://auth.atlassian.com/authorize',

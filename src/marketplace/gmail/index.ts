@@ -1,13 +1,14 @@
 import { registerProvider } from '../core/registry';
+import { AuthType, ProviderType } from '../core/types';
 
 export const gmailProvider = registerProvider({
   id: 'gmail',
   name: 'Gmail',
   description: 'Read emails, send messages, and manage labels in your Gmail account.',
-  type: 'native',
+  type: ProviderType.Native,
   
   auth: {
-    type: 'oauth',
+    type: AuthType.OAuth,
     clientId: process.env.GOOGLE_CLIENT_ID || '',
     clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     // authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth',

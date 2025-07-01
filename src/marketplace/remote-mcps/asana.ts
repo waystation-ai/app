@@ -1,10 +1,11 @@
 import { registerProvider } from '../core/registry';
+import { ProviderType } from '../core/types';
 
 export const asanaOfficialProvider = registerProvider({
   id: 'asana-official',
   name: 'Asana',
   description: 'Access and manage your Asana workspaces, projects, and tasks seamlessly.',
-  type: 'remote',
+  type: ProviderType.Remote,
 
   serverUrl: 'https://mcp.asana.com/sse',
     

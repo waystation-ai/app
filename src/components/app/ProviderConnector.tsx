@@ -1,6 +1,7 @@
 'use client';
 
 import { ConnectionStringForm } from '@/components/app/ConnectionStringForm';
+import { AuthType } from '@/marketplace/core/types';
 import Link from 'next/link';
 
 interface ProviderConnectorProps {
@@ -26,7 +27,7 @@ export default function ProviderConnector({
     );
   }
 
-  if (authType === 'connection_string') {
+  if (authType === AuthType.ConnectionString) {
     return (
       <ConnectionStringForm
         provider={provider}

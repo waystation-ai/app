@@ -2,7 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { getProviderConfig } from "@/lib/services/provider-config";
 import { storeConnectionString, removeDbConnection } from "@/lib/db";
-import { isNativeProvider } from "@/marketplace/core/types";
+import { isNativeProvider, AuthType } from "@/marketplace/core/types";
 
 export async function DELETE(
   request: Request,
@@ -48,7 +48,7 @@ export async function POST(
     if (
       isNativeProvider(provider) &&
       provider.auth &&
-      provider.auth.type === "connection_string"
+      provider.auth.type === AuthType.ConnectionString
     ) {
       await storeConnectionString(
         session.userId,

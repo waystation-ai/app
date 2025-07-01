@@ -1,3 +1,4 @@
+import { AuthType, ProviderType } from '../core/types';
 import { registerProvider } from '../core/registry';
 import { listTeamsChannels } from './list-channels';
 import { postTeamsMessage } from './post-message';
@@ -7,10 +8,10 @@ export const teamsProvider = registerProvider({
   id: 'teams',
   name: 'Microsoft Teams',
   description: 'Collaborate, chat, and manage meetings in Microsoft Teams.',
-  type: 'native',
+  type: ProviderType.Native,
   
   auth: {
-    type: 'oauth',
+    type: AuthType.OAuth,
     clientId: process.env.OFFICE_CLIENT_ID || '',
     clientSecret: process.env.OFFICE_CLIENT_SECRET || '',
     authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',

@@ -1,3 +1,4 @@
+import { AuthType, ProviderType } from '../core/types';
 import { registerProvider } from '../core/registry';
 import { listMondayBoards } from './list-boards';
 import { readMondayBoard } from './read-board';
@@ -9,10 +10,10 @@ export const mondayProvider = registerProvider({
   id: 'monday',
   name: 'Monday',
   description: 'Access and manage your Monday.com boards, items, and updates seamlessly.',
-  type: 'native',
+  type: ProviderType.Native,
   
   auth: {
-    type: 'oauth',
+    type: AuthType.OAuth,
     clientId: process.env.MONDAY_CLIENT_ID || '',
     clientSecret: process.env.MONDAY_CLIENT_SECRET || '',
     authorizationUrl: 'https://auth.monday.com/oauth2/authorize',

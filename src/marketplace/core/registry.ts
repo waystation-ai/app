@@ -1,11 +1,11 @@
 import { JSONSchema7 } from 'json-schema';
 import { z } from 'zod';
 
-import { isFullProvider, isNativeProvider, isRemoteProvider, NativeProvider, Provider, ProviderResource, ProviderResourceContent, ProviderTool, RemoteProvider, Resource, ResourceContent, Tool, ToolContext } from './types';
+import { isFullProvider, isNativeProvider, isRemoteProvider, NativeProvider, Provider, ProviderResource, ProviderResourceContent, ProviderTool, RemoteProvider, Resource, ResourceContent, Tool, ToolContext, AuthType } from './types';
 import PostHogClient from '@/lib/utils/posthog-client'; // Using the existing PostHog client
 import { oauthService } from '@/lib/services/oauth-client'; // Assuming oauthService is accessible or passed
 import { getRemoteProviderMetadata, getValidConnection, getValidConnections } from '@/lib/db';
-import { ConnectionType } from '@/lib/db/types';
+import { DatabaseConnection } from '@/lib/db/types';
 import { callToolFromRemoteProvider, readResourceContentFromRemoteProvider } from '@/lib/services/mcp-remote';
 import { generateText } from 'ai';
 import { azure } from '@ai-sdk/azure';
@@ -283,7 +283,7 @@ export class ProviderRegistry {
   private async getAccessToken(provider: Provider, userId: string): Promise<string> {
     if (isNativeProvider(provider)) {
       switch (provider?.auth?.type) {
-        case 'oauth': {
+        case AuthType.OAuth: {
           return oauthService.getValidAccessToken(provider, userId);
         }
       }
@@ -292,9 +292,9 @@ export class ProviderRegistry {
   }
 
   private async getConnectionString(provider: Provider, userId: string): Promise<string> {
-      const connection = await getValidConnection(userId, provider.id, ConnectionType.DATABASE);
+      const connection = await getValidConnection(userId, provider.id, AuthType.ConnectionString);
       if (connection) {
-        return connection.connectionString;
+        return (connection as DatabaseConnection).connectionString;
       }
       throw new Error(`No valid connection found for provider: ${provider.id}`);
   }

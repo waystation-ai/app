@@ -1,3 +1,4 @@
+import { AuthType, ProviderType } from '../core/types';
 import { registerProvider } from '../core/registry';
 import { listSlackChannels } from './list-channels';
 import { postSlackMessage } from './post-message';
@@ -7,10 +8,10 @@ export const slackProvider = registerProvider({
   id: 'slack',
   name: 'Slack',
   description: 'Send messages, access channels, and manage files in your Slack workspace.',
-  type: 'native',
+  type: ProviderType.Native,
   
   auth: {
-    type: 'oauth',
+    type: AuthType.OAuth,
     clientId: process.env.SLACK_CLIENT_ID || '',
     clientSecret: process.env.SLACK_CLIENT_SECRET || '',
     authorizationUrl: 'https://slack.com/oauth/v2/authorize',

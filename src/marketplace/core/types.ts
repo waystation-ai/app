@@ -48,8 +48,13 @@ export interface BaseProvider {
   }>;
 }
 
+export enum AuthType {
+  OAuth = 'oauth',
+  ConnectionString = 'connection_string',
+}
+
 export type OAuthCredentials = {
-  type: 'oauth';
+  type: AuthType.OAuth;
   clientId: string;
   clientSecret?: string;
   authorizationUrl?: string;
@@ -58,17 +63,22 @@ export type OAuthCredentials = {
 };
 
 export type ConnectionStringCredentials = {
-  type: 'connection_string';
+  type: AuthType.ConnectionString;
 };
 
 export type Authentication = OAuthCredentials | ConnectionStringCredentials;
+
+export enum ProviderType {
+  Native = 'native',
+  Remote = 'remote',
+}
 
 export interface NativeProvider extends BaseProvider {
   tools: Tool<any, any>[]; // eslint-disable-line @typescript-eslint/no-explicit-any
 
   auth?: Authentication;
   group?: string;
-  type: 'native',
+  type: ProviderType.Native,
   getResources?: (context: ToolContext) => Promise<Resource[]>;
   getResourceContent?: (context: ToolContext, resource: Resource) => Promise<ResourceContent>;
 
@@ -77,7 +87,7 @@ export interface NativeProvider extends BaseProvider {
 
 export interface RemoteProvider extends BaseProvider {
   serverUrl: string; // URL for the remote MCP server
-  type: 'remote',
+  type: ProviderType.Remote,
 
   getResources?: (context: ToolContext) => Promise<Resource[]>;
   getResourceContent?: (context: ToolContext, resource: Resource) => Promise<ResourceContent>;
@@ -87,9 +97,9 @@ export type Provider = BaseProvider | NativeProvider | RemoteProvider;
 
 export type FullProvider = NativeProvider | RemoteProvider;
 
-export function isNativeProvider(provider: Provider): provider is NativeProvider { return 'type' in provider && provider.type === 'native'; } 
+export function isNativeProvider(provider: Provider): provider is NativeProvider { return 'type' in provider && provider.type === ProviderType.Native; } 
 
-export function isRemoteProvider(provider: Provider): provider is RemoteProvider { return 'type' in provider && provider.type === 'remote'; }
+export function isRemoteProvider(provider: Provider): provider is RemoteProvider { return 'type' in provider && provider.type === ProviderType.Remote; }
 
 export function isFullProvider(provider: Provider): provider is FullProvider {
   return isNativeProvider(provider) || isRemoteProvider(provider);

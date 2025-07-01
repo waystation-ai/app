@@ -1,3 +1,4 @@
+import { AuthType, ProviderType } from '../core/types';
 import { registerProvider } from '../core/registry';
 import { listBases } from './list-bases';
 import { listTables } from './list-tables';
@@ -9,9 +10,9 @@ export const airtableProvider = registerProvider({
   id: 'airtable',
   name: 'Airtable',
   description: 'Access and manage your Airtable bases, tables, and records seamlessly.',
-  type: 'native',
+  type: ProviderType.Native,
   auth: {
-    type: 'oauth',
+    type: AuthType.OAuth,
     clientId: process.env.AIRTABLE_CLIENT_ID || '',
     clientSecret: process.env.AIRTABLE_CLIENT_SECRET || '',
     authorizationUrl: 'https://airtable.com/oauth2/v1/authorize',

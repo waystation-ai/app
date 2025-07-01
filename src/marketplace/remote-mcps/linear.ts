@@ -1,10 +1,11 @@
 import { registerProvider } from '../core/registry';
+import { ProviderType } from '../core/types';
 
 export const linearOfficialProvider = registerProvider({
   id: 'linear-official',
   name: 'Linear',
   description: 'Track issues, manage product development, and streamline software projects with Linear',
-  type: 'remote',
+  type: ProviderType.Remote,
   
   serverUrl: 'https://mcp.linear.app/sse',
     
