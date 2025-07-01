@@ -1,49 +1,36 @@
 'use client';
 
 import Image from 'next/image';
-import clsx from 'clsx';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useTrackEvent } from '@/lib/utils/track-event';
 import GDrivePickerButton from './provider-settings/GDrivePickerButton';
-import { useState } from 'react';
-import { ConnectionStringForm } from './ConnectionStringForm';
+import { removeDatabaseConnection } from '@/app/actions';
 
 interface ProviderCardProps {
   name: string;
   description: string;
   isConnected: boolean;
   provider: string;
-  authType: string | null;
+  connectionType: 'oauth' | 'connection_string';
 }
 
-export default function ProviderCard({ name, description, isConnected, provider, authType }: ProviderCardProps) {
+export default function ProviderCard({ name, description, isConnected, provider, connectionType }: ProviderCardProps) {
   const trackEvent = useTrackEvent();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDisconnecting, setIsDisconnecting] = useState(false);
-
+  const router = useRouter();
+  
   function trackConnect() {
     trackEvent(isConnected ? 'disconnectProvider' : 'connectProvider', { provider });
-  }
+  }  
 
-  const handleConnectClick = async () => {
+  async function handleDisconnect() {
     trackConnect();
-    if (isConnected) {
-      setIsDisconnecting(true);
-      // Disconnect
-      if (authType === 'connection_string') {
-        await fetch(`/api/auth/${provider}/connection_string`, { method: 'DELETE' });
-        window.location.reload();
-      } else {
-        window.location.href = `/api/auth/${provider}/disconnect`;
-      }
+    if (connectionType === 'connection_string') {
+      await removeDatabaseConnection(provider);
     } else {
-      // Connect
-      if (authType === 'connection_string') {
-        setIsModalOpen(true);
-      } else {
-        window.location.href = `/api/auth/${provider}/connect`;
-      }
+      router.push(`/api/auth/${provider}/disconnect`);
     }
-  };
+  }
 
   return (
     <>
@@ -58,25 +45,27 @@ export default function ProviderCard({ name, description, isConnected, provider,
         </div>
         <p className="flex-grow leading-relaxed">{description}</p>
         
+        {/* Connect/Disconnect button for all providers */}
         <div className="flex items-center space-x-2">
-          <button
-            onClick={handleConnectClick}
-            disabled={isDisconnecting}
-            className={clsx('connect-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 flex-grow text-center flex items-center justify-center',
-              {
-                'bg-red-500 hover:bg-red-600 text-white' : isConnected,
-                'bg-blue-600 hover:bg-blue-700 text-white' : !isConnected
-              },
-              isDisconnecting && 'cursor-not-allowed bg-gray-400'
-            )}>
-            {isConnected ? (
-              <>
-                {isDisconnecting && <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>}
-                {isDisconnecting ? 'Disconnecting...' : 'Disconnect'}
-              </>
-            ) : 'Connect'}
-          </button>
+          {isConnected ? (
+            <button
+              onClick={handleDisconnect}
+              className='connect-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 flex-grow text-center bg-red-500 hover:bg-red-600 text-white'
+            >
+              Disconnect
+            </button>
+          ) : (
+            <Link
+              href={connectionType === 'connection_string' ? `/connect/${provider}/setup` : `/api/auth/${provider}/connect`}
+              onClick={trackConnect}
+              prefetch={false}
+              className='connect-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 flex-grow text-center bg-blue-600 hover:bg-blue-700 text-white'
+            >
+              Connect
+            </Link>
+          )}
           
+          {/* Provider-specific settings buttons */}
           {isConnected && provider === 'gdrive' && (
             <GDrivePickerButton 
               className="px-2 py-2 text-sm font-medium rounded-lg bg-gray-200 hover:bg-gray-300 hover:scale-105 transition-transform duration-300"
@@ -86,21 +75,6 @@ export default function ProviderCard({ name, description, isConnected, provider,
         </div>
       </div>
       
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-8 rounded-lg shadow-2xl w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-4">Connect to {name}</h2>
-            <ConnectionStringForm
-              provider={provider}
-              onConnect={() => {
-                setIsModalOpen(false);
-                window.location.reload();
-              }}
-            />
-            <button onClick={() => setIsModalOpen(false)} className="mt-4 text-sm text-gray-600 hover:text-gray-800">Cancel</button>
-          </div>
-        </div>
-      )}
     </>
   );
 }

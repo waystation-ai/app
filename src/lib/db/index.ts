@@ -162,7 +162,7 @@ export async function getValidConnection(
 }
 
 // Helper function to get all valid connections for a specific user
-export async function getValidConnections(userId: string): Promise<Map<string, Connection>> {
+export async function getConnections(userId: string): Promise<Connection[]> {
   // Get OAuth connections
   const oauthConnections = await db.select().from(schema.oauthConnections)
     .where(eq(schema.oauthConnections.userId, userId));
@@ -171,42 +171,20 @@ export async function getValidConnections(userId: string): Promise<Map<string, C
   const dbConnections = await db.select().from(schema.dbConnections)
     .where(eq(schema.dbConnections.userId, userId));
 
-  // Create a map of provider -> connection for easy lookup
-  const connectionMap = new Map<string, Connection>();
-  
-  // Add OAuth connections
-  for (const conn of oauthConnections) {
-    const oauthConnection: OAuthConnection = {
-      id: conn.id,
-      userId: conn.userId,
-      provider: conn.provider,
-      type: 'oauth',
-      accessToken: conn.accessToken,
-      refreshToken: conn.refreshToken,
-      expiresAt: conn.expiresAt,
-      scopes: conn.scopes,
-      metadata: conn.metadata as Record<string, unknown> | null,
-      createdAt: conn.createdAt || new Date(),
-      updatedAt: conn.updatedAt || new Date()
-    };
-    connectionMap.set(conn.provider, oauthConnection);
-  }
-  
-  // Add database connections
-  for (const conn of dbConnections) {
-    const dbConnection: DatabaseConnection = {
-      id: conn.id,
-      userId: conn.userId,
-      provider: conn.provider,
-      type: 'connection_string',
-      connectionString: conn.connectionString,
-      name: conn.name,
-      createdAt: conn.createdAt || new Date(),
-      updatedAt: conn.updatedAt || new Date()
-    };
-    connectionMap.set(conn.provider, dbConnection);
-  }
+  // Combine and return all connections
+  return [
+    ...oauthConnections.map(conn => ({ ...conn, type: 'oauth' } as OAuthConnection)),
+    ...dbConnections.map(conn => ({ ...conn, type: 'connection_string' } as DatabaseConnection)),
+  ];
+}
 
+// Helper function to get all valid connections for a specific user
+export async function getValidConnections(userId: string): Promise<Map<string, Connection>> {
+  const connections = await getConnections(userId);
+  const connectionMap = new Map<string, Connection>();
+  for (const conn of connections) {
+    connectionMap.set(conn.provider, conn);
+  }
   return connectionMap;
 }
 

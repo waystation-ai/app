@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import { getValidConnections } from '@/lib/db';
 import { registry } from '@/marketplace';
-import { isFullProvider, isNativeProvider, Provider } from '@/marketplace/core/types';
+import { isFullProvider, Provider } from '@/marketplace/core/types';
 
 import { LaunchPad } from '@/components/app/LaunchPad';
 import ProviderCard from '@/components/app/ProviderCard';
@@ -24,14 +24,8 @@ export default async function Page() {
   }
 
   // Get connected providers
-  let connectedProviderIds = new Set<string>();
-  try {
-    const connectionsMap = await getValidConnections(session.userId);
-    connectedProviderIds = new Set(connectionsMap.keys());
-  } catch (error) {
-    console.error('Error fetching connections:', error);
-    // Continue with empty connections
-  }
+  const connectionsMap = await getValidConnections(session.userId);
+  const connectedProviderIds = new Set(connectionsMap.keys());
 
   // Get vetoed providers (main set we want to show) and handle unvetoed connected providers
   const vetoedProviders = registry.getVetoedProviders();
@@ -104,7 +98,8 @@ export default async function Page() {
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 w-full my-3 sm:my-9">
             {displayIds.map(providerId => {
               const provider = providersData.connected[providerId] || providersData.unconnected[providerId];
-              const authType = isNativeProvider(provider) ? provider.auth?.type ?? null : null;
+              const connection = connectionsMap.get(providerId);
+              const connectionType = connection ? connection.type : 'oauth';
               return (
                 <ProviderCard
                   key={providerId}
@@ -112,7 +107,7 @@ export default async function Page() {
                   name={provider.name}
                   description={provider.description}
                   isConnected={connectedProviderIds.has(providerId)}
-                  authType={authType}
+                  connectionType={connectionType}
                 />
               );
             })}

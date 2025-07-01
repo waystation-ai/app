@@ -4,9 +4,9 @@ import { getValidConnections } from "@/lib/db";
 import { getProviderConfig } from "@/lib/services/provider-config";
 import { authUserId } from "@/lib/utils/auth-userid";
 import { isFullProvider, isNativeProvider } from "@/marketplace/core/types";
-import ProviderConnector from "@/components/app/ProviderConnector";
+import Link from "next/link";
 
-export async function generateMetadata({ params }: { params: Promise<{ provider:string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ provider: string }> }) {
   const { provider } = await params;
   const config = getProviderConfig(provider);
 
@@ -30,12 +30,8 @@ export default async function Page({ params }: { params: Promise<{ provider: str
   const config = getProviderConfig(provider);
 
   const userId = await authUserId();
-  const connected = userId ? (await getValidConnections(userId)).has(provider) : false;
 
-  const authType = isNativeProvider(config) ? config.auth?.type ?? null : null;
-  const isFull = isFullProvider(config);
-  const waitlistUrl = `/waitlist/${provider}`;
-
+  const connected = userId ?  (await getValidConnections(userId)).has(provider) : false;
   return (
     <div className="flex flex-col relative">
       {/* Hero Section */}
@@ -57,13 +53,14 @@ export default async function Page({ params }: { params: Promise<{ provider: str
               </ul>
             )}
 
-            <ProviderConnector
-              provider={provider}
-              authType={authType}
-              isFull={isFull}
-              waitlistUrl={waitlistUrl}
-              connected={connected}
-            />
+            { !(connected) && 
+            <Link
+              href={isNativeProvider(config) && config.auth?.type === 'connection_string' ? `/connect/${provider}/setup` : (isFullProvider(config) ? `/api/auth/${provider}/connect` : `/waitlist/${provider}`)}
+              className="getstarted-btn"
+            >
+              Connect Now
+            </Link>
+        }
 
             <div className="sm:mt-4">
               <p>And make it even more powerful with other providers we support</p>

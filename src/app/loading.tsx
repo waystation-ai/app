@@ -31,7 +31,7 @@ export default async function Page() {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 w-full my-3 sm:my-9">
             {providersToDisplay.map(([provider, config]) => {
-              const authType = isNativeProvider(config) ? config.auth?.type ?? null : null;
+              const connectionType = isNativeProvider(config) ? config.auth?.type ?? 'oauth' : 'oauth';
               return (
                 <ProviderCard
                   key={provider}
@@ -39,7 +39,7 @@ export default async function Page() {
                   name={config.name}
                   description={config.description}
                   isConnected={!!connectedProviders[provider]}
-                  authType={authType}
+                  connectionType={connectionType}
                 />
               );
             })}
