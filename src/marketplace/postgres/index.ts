@@ -1,15 +1,22 @@
 import { registerProvider } from '../core/registry';
-import { executeSqlQuery, fetchSchema } from '../sql/tools';
+import {
+  createExecuteSqlQueryTool,
+  createFetchSchemaTool,
+} from '../sql/tools';
 
-export const postgresProvider = registerProvider({
+const provider = {
   id: 'postgres',
   name: 'PostgreSQL',
-  description: 'Connect to your PostgreSQL database to query data and schemas.',
+};
+
+export const postgresProvider = registerProvider({
+  ...provider,
+  description: `Connect to your ${provider.name} database to query data and schemas.`,
   auth: {
     type: 'connection_string',
   },
   tools: [
-    executeSqlQuery,
-    fetchSchema,
+    createExecuteSqlQueryTool(provider),
+    createFetchSchemaTool(provider),
   ],
 });

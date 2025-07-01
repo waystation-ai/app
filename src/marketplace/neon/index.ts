@@ -1,15 +1,22 @@
 import { registerProvider } from '../core/registry';
-import { executeSqlQuery, fetchSchema } from '../sql/tools';
+import {
+  createExecuteSqlQueryTool,
+  createFetchSchemaTool,
+} from '../sql/tools';
 
-export const neonProvider = registerProvider({
+const provider = {
   id: 'neon',
   name: 'Neon',
-  description: 'Connect to your Neon database to query data and schemas.',
+};
+
+export const neonProvider = registerProvider({
+  ...provider,
+  description: `Connect to your ${provider.name} database to query data and schemas.`,
   auth: {
     type: 'connection_string',
   },
   tools: [
-    executeSqlQuery,
-    fetchSchema,
+    createExecuteSqlQueryTool(provider),
+    createFetchSchemaTool(provider),
   ],
 });

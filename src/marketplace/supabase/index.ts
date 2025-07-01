@@ -1,15 +1,22 @@
 import { registerProvider } from '../core/registry';
-import { executeSqlQuery, fetchSchema } from '../sql/tools';
+import {
+  createExecuteSqlQueryTool,
+  createFetchSchemaTool,
+} from '../sql/tools';
 
-export const supabaseProvider = registerProvider({
+const provider = {
   id: 'supabase',
   name: 'Supabase',
-  description: 'Connect to your Supabase database to query data and schemas.',
+};
+
+export const supabaseProvider = registerProvider({
+  ...provider,
+  description: `Connect to your ${provider.name} database to query data and schemas.`,
   auth: {
     type: 'connection_string',
   },
   tools: [
-    executeSqlQuery,
-    fetchSchema,
+    createExecuteSqlQueryTool(provider),
+    createFetchSchemaTool(provider),
   ],
 });
