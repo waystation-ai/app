@@ -286,8 +286,8 @@ export class ProviderRegistry {
 
   private async getConnectionString(provider: Provider, userId: string): Promise<string> {
       const connection = await getValidConnection(userId, provider.id, 'connection_string') as DatabaseConnection;
-      if (connection) {
-        return (connection as DatabaseConnection).connectionString;
+      if (connection && typeof connection.metadata?.connectionString === 'string') {
+        return connection.metadata.connectionString;
       }
       throw new Error(`No valid connection found for provider: ${provider.id}`);
   }

@@ -1,17 +1,17 @@
 'use server';
 
-import { removeDbConnection, storeConnectionString } from '@/lib/db';
+import { addDbConnection, removeDbConnection } from '@/lib/db';
 import { auth } from '@clerk/nextjs/server';
 import { revalidatePath } from 'next/cache';
 
-export async function storeConnectionStringAction(provider: string, connectionString: string) {
+export async function storeConnectionStringAction(provider: string, name: string, connectionString: string) {
   const { userId } = await auth();
 
   if (!userId) {
     throw new Error('You must be signed in to store a connection string.');
   }
 
-  await storeConnectionString(userId, provider, connectionString);
+  await addDbConnection(userId, provider, name, { connectionString });
   revalidatePath('/');
 }
 

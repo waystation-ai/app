@@ -18,7 +18,7 @@ export interface OAuthConnection extends BaseConnection {
 
 export interface DatabaseConnection extends BaseConnection {
   type: 'connection_string';
-  connectionString: string;
+  metadata: Record<string, unknown> | null;
   name: string;
 }
 

@@ -26,7 +26,7 @@ export default function ClientPage({ provider }: ClientPageProps) {
     setError(null);
 
     try {
-      await storeConnectionStringAction(provider.id, connectionString);
+      await storeConnectionStringAction(provider.id, `${provider.name} Connection`, connectionString);
       router.push('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred.');

@@ -146,11 +146,11 @@ export async function getValidConnection(
   if (connectionType === 'connection_string') {
     const [conn] = await db
       .select()
-      .from(schema.dbConnections)
+      .from(schema.connections)
       .where(
         and(
-          eq(schema.dbConnections.userId, userId),
-          eq(schema.dbConnections.provider, provider),
+          eq(schema.connections.userId, userId),
+          eq(schema.connections.provider, provider),
         ),
       )
       .limit(1);
@@ -168,13 +168,13 @@ export async function getConnections(userId: string): Promise<Connection[]> {
     .where(eq(schema.oauthConnections.userId, userId));
 
   // Get database connections
-  const dbConnections = await db.select().from(schema.dbConnections)
-    .where(eq(schema.dbConnections.userId, userId));
+  const connectionsResult = await db.select().from(schema.connections)
+    .where(eq(schema.connections.userId, userId));
 
   // Combine and return all connections
   return [
     ...oauthConnections.map(conn => ({ ...conn, type: 'oauth' } as OAuthConnection)),
-    ...dbConnections.map(conn => ({ ...conn, type: 'connection_string' } as DatabaseConnection)),
+    ...connectionsResult.map(conn => ({ ...conn, type: 'connection_string' } as DatabaseConnection)),
   ];
 }
 
@@ -243,51 +243,51 @@ export async function removeOAuthConnection(userId: string, provider: string) {
 }
 
 // Helper function to store or update a connection string
-export async function storeConnectionString(
+export async function addDbConnection(
   userId: string,
   provider: string,
-  connectionString: string,
-  name?: string
+  name: string,
+  metadata: object,
 ) {
-  const existing = await db.select().from(schema.dbConnections)
+  const existing = await db.select().from(schema.connections)
     .where(and(
-      eq(schema.dbConnections.userId, userId),
-      eq(schema.dbConnections.provider, provider)
+      eq(schema.connections.userId, userId),
+      eq(schema.connections.provider, provider)
     ));
 
   if (existing.length) {
-    console.log(`Updating connection string for user "${userId}" for provider "${provider}"`);
+    console.log(`Updating connection for user "${userId}" for provider "${provider}"`);
     
     // Update existing connection
-    return db.update(schema.dbConnections)
+    return db.update(schema.connections)
       .set({
-        connectionString,
-        name: name || existing[0].name,
+        name,
+        metadata,
         updatedAt: new Date()
       })
       .where(and(
-        eq(schema.dbConnections.userId, userId),
-        eq(schema.dbConnections.provider, provider)
+        eq(schema.connections.userId, userId),
+        eq(schema.connections.provider, provider)
       ));
   }
 
-  console.log(`Saving connection string for user "${userId}" for provider "${provider}"`);
+  console.log(`Saving connection for user "${userId}" for provider "${provider}"`);
 
   // Create new connection
-  return db.insert(schema.dbConnections).values({
+  return db.insert(schema.connections).values({
     userId,
     provider,
-    connectionString,
-    name: name || `${provider} connection`
+    name,
+    metadata,
   });
 }
 
 // Helper function to remove a database connection
 export async function removeDbConnection(userId: string, provider: string) {
-  return db.delete(schema.dbConnections)
+  return db.delete(schema.connections)
     .where(and(
-      eq(schema.dbConnections.userId, userId),
-      eq(schema.dbConnections.provider, provider)
+      eq(schema.connections.userId, userId),
+      eq(schema.connections.provider, provider)
     ));
 }
 
