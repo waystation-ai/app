@@ -18,6 +18,7 @@ interface ProviderCardProps {
 export default function ProviderCard({ name, description, isConnected, provider, authType }: ProviderCardProps) {
   const trackEvent = useTrackEvent();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDisconnecting, setIsDisconnecting] = useState(false);
 
   function trackConnect() {
     trackEvent(isConnected ? 'disconnectProvider' : 'connectProvider', { provider });
@@ -26,6 +27,7 @@ export default function ProviderCard({ name, description, isConnected, provider,
   const handleConnectClick = async () => {
     trackConnect();
     if (isConnected) {
+      setIsDisconnecting(true);
       // Disconnect
       if (authType === 'connection_string') {
         await fetch(`/api/auth/${provider}/connection_string`, { method: 'DELETE' });
@@ -59,13 +61,20 @@ export default function ProviderCard({ name, description, isConnected, provider,
         <div className="flex items-center space-x-2">
           <button
             onClick={handleConnectClick}
-            className={clsx('connect-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 flex-grow text-center',
+            disabled={isDisconnecting}
+            className={clsx('connect-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 flex-grow text-center flex items-center justify-center',
               {
                 'bg-red-500 hover:bg-red-600 text-white' : isConnected,
                 'bg-blue-600 hover:bg-blue-700 text-white' : !isConnected
-              }
+              },
+              isDisconnecting && 'cursor-not-allowed bg-gray-400'
             )}>
-            {isConnected ? 'Disconnect' : 'Connect'}
+            {isConnected ? (
+              <>
+                {isDisconnecting && <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>}
+                {isDisconnecting ? 'Disconnecting...' : 'Disconnect'}
+              </>
+            ) : 'Connect'}
           </button>
           
           {isConnected && provider === 'gdrive' && (

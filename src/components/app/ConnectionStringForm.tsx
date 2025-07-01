@@ -1,6 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import clsx from 'clsx';
 
 export function ConnectionStringForm({ provider, onConnect }: { provider: string, onConnect: () => void }) {
   const [connectionString, setConnectionString] = useState('');
@@ -41,9 +48,30 @@ export function ConnectionStringForm({ provider, onConnect }: { provider: string
         className="p-2 border rounded"
         rows={4}
       />
-      <button type="submit" disabled={isSubmitting} className="getstarted-btn">
-        {isSubmitting ? 'Connecting...' : 'Connect Now'}
-      </button>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              type="submit"
+              disabled={isSubmitting || !connectionString}
+              className={clsx(
+                'getstarted-btn flex items-center justify-center',
+                (isSubmitting || !connectionString) && 'cursor-not-allowed bg-gray-400'
+              )}
+            >
+              {isSubmitting && (
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
+              )}
+              {isSubmitting ? 'Connecting...' : 'Connect Now'}
+            </button>
+          </TooltipTrigger>
+          {!connectionString && (
+            <TooltipContent>
+              <p>Please enter a connection string</p>
+            </TooltipContent>
+          )}
+        </Tooltip>
+      </TooltipProvider>
       {error && <p className="text-red-500">{error}</p>}
     </form>
   );
