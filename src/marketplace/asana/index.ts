@@ -1,4 +1,3 @@
-import { AuthType, ProviderType } from '../core/types';
 import { registerProvider } from '../core/registry';
 import { listAsanaWorkspaces } from './list-workspaces';
 import { listAsanaProjects } from './list-projects';
@@ -16,10 +15,8 @@ export const asanaProvider = registerProvider({
   id: 'asana',
   name: 'Asana',
   description: 'Access and manage your Asana workspaces, projects, and tasks seamlessly.',
-  type: ProviderType.Native,
-  
   auth: {
-    type: AuthType.OAuth,
+    type: 'oauth',
     clientId: process.env.ASANA_CLIENT_ID || '',
     clientSecret: process.env.ASANA_CLIENT_SECRET || '',
     authorizationUrl: 'https://app.asana.com/-/oauth_authorize',

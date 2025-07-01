@@ -1,12 +1,10 @@
 import { registerProvider } from '../core/registry';
-import { ProviderType } from '../core/types';
 
 export const paypalProvider = registerProvider({
   id: 'paypal',
   name: 'PayPal',
   description: 'Access and manage PayPal transactions, payments, and account information.',
-  type: ProviderType.Remote,
-  
+
   serverUrl: 'https://mcp.paypal.com/sse',
     
   // Marketing information

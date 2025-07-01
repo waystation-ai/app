@@ -1,4 +1,3 @@
-import { AuthType, ProviderType } from '../core/types';
 import { registerProvider } from '../core/registry';
 import { listDocs } from './list-docs';
 import { readDoc } from './read-doc';
@@ -7,10 +6,8 @@ export const gdriveProvider = registerProvider({
   id: 'gdrive',
   name: 'Google Drive',
   description: 'Browse, search, and manage your selected Google Drive files.',
-  type: ProviderType.Native,
-  
   auth: {
-    type: AuthType.OAuth,
+    type: 'oauth',
     clientId: process.env.GOOGLE_CLIENT_ID || '',
     clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth',

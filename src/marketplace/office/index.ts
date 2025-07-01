@@ -1,4 +1,3 @@
-import { AuthType, ProviderType } from '../core/types';
 import { registerProvider } from '../core/registry';
 import { listDocs } from './list-docs';
 import { readDoc } from './read-doc';
@@ -9,10 +8,9 @@ export const officeProvider = registerProvider({
   id: 'office',
   name: 'Office 365',
   description: 'Create, edit, and collaborate on Office documents and spreadsheets.',
-  type: ProviderType.Native,
-  
+
   auth: {
-    type: AuthType.OAuth,
+    type: 'oauth',
     clientId: process.env.OFFICE_CLIENT_ID || '',
     clientSecret: process.env.OFFICE_CLIENT_SECRET || '',
     authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',

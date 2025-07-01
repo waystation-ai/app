@@ -1,4 +1,3 @@
-import { AuthType, ProviderType } from '../core/types';
 import { registerProvider } from '../core/registry';
 import { listMiroBoards } from './list-boards';
 import { getMiroBoard } from './get-board';
@@ -8,10 +7,9 @@ export const miroProvider = registerProvider({
   id: 'miro',
   name: 'Miro',
   description: 'Collaborate on visual boards with your team using Miro integration.',
-  type: ProviderType.Native,
-  
+
   auth: {
-    type: AuthType.OAuth,
+    type: 'oauth',
     clientId: process.env.MIRO_CLIENT_ID || '',
     clientSecret: process.env.MIRO_CLIENT_SECRET || '',
     authorizationUrl: 'https://miro.com/oauth/authorize',

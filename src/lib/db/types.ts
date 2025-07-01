@@ -1,4 +1,3 @@
-import { AuthType } from "@/marketplace/core/types";
 
 export interface BaseConnection {
   id: number;
@@ -6,11 +5,10 @@ export interface BaseConnection {
   provider: string;
   createdAt: Date;
   updatedAt: Date;
-  type: AuthType;
 }
 
 export interface OAuthConnection extends BaseConnection {
-  type: AuthType.OAuth;
+  type: 'oauth';
   accessToken: string;
   refreshToken: string | null;
   expiresAt: Date | null;
@@ -19,7 +17,7 @@ export interface OAuthConnection extends BaseConnection {
 }
 
 export interface DatabaseConnection extends BaseConnection {
-  type: AuthType.ConnectionString;
+  type: 'connection_string';
   connectionString: string;
   name: string;
 }

@@ -1,7 +1,6 @@
 import { validate as isUuid } from 'uuid';
 
 
-import { AuthType, ProviderType } from '../core/types';
 import { registerProvider } from '../core/registry';
 import { listLinearTeams } from './list-teams';
 import { listLinearProjects } from './list-projects';
@@ -18,10 +17,9 @@ export const linearProvider = registerProvider({
   id: 'linear',
   name: 'Linear',
   description: 'Track issues, manage product development, and streamline software projects with Linear.',
-  type: ProviderType.Native,
-  
+
   auth: {
-    type: AuthType.OAuth,
+    type: 'oauth',
     clientId: process.env.LINEAR_CLIENT_ID || '',
     clientSecret: process.env.LINEAR_CLIENT_SECRET || '',
     authorizationUrl: 'https://linear.app/oauth/authorize',

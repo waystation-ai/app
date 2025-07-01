@@ -1,7 +1,7 @@
 import { JSONSchema7 } from 'json-schema';
 import { z } from 'zod';
 
-import { isFullProvider, isNativeProvider, isRemoteProvider, NativeProvider, Provider, ProviderResource, ProviderResourceContent, ProviderTool, RemoteProvider, Resource, ResourceContent, Tool, ToolContext, AuthType } from './types';
+import { isFullProvider, isNativeProvider, isRemoteProvider, NativeProvider, Provider, ProviderResource, ProviderResourceContent, ProviderTool, RemoteProvider, Resource, ResourceContent, Tool, ToolContext, FullProvider } from './types';
 import PostHogClient from '@/lib/utils/posthog-client'; // Using the existing PostHog client
 import { oauthService } from '@/lib/services/oauth-client'; // Assuming oauthService is accessible or passed
 import { getRemoteProviderMetadata, getValidConnection, getValidConnections } from '@/lib/db';
@@ -281,18 +281,11 @@ export class ProviderRegistry {
   }
 
   private async getAccessToken(provider: Provider, userId: string): Promise<string> {
-    if (isNativeProvider(provider)) {
-      switch (provider?.auth?.type) {
-        case AuthType.OAuth: {
-          return oauthService.getValidAccessToken(provider, userId);
-        }
-      }
-    }
-    return '';
+    return oauthService.getValidAccessToken(provider as FullProvider, userId);
   }
 
   private async getConnectionString(provider: Provider, userId: string): Promise<string> {
-      const connection = await getValidConnection(userId, provider.id, AuthType.ConnectionString);
+      const connection = await getValidConnection(userId, provider.id, 'connection_string') as DatabaseConnection;
       if (connection) {
         return (connection as DatabaseConnection).connectionString;
       }

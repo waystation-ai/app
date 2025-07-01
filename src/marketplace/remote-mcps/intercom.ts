@@ -1,11 +1,9 @@
 import { registerProvider } from '../core/registry';
-import { ProviderType } from '../core/types';
 
 export const intercomProvider = registerProvider({
   id: 'intercom',
   name: 'Intercom',
   description: 'Manage customer relationships with Intercom\'s powerful CRM for tracking people, companies, and conversations',
-  type: ProviderType.Remote,
 
   serverUrl: 'https://mcp.intercom.com/sse',
     
