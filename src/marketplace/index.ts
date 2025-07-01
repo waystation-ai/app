@@ -25,6 +25,8 @@ import './gmeet';
 import './salesforce';
 import './smartsheet';
 import './postgres';
+import './supabase';
+import './neon';
 
 import './remote-mcps';
 
