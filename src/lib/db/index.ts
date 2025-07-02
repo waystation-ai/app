@@ -123,35 +123,22 @@ export async function addToWaitlist(userId: string, provider: string): Promise<v
 }
 
 // Helper function to get a valid connection for a specific user and provider
-export async function getValidConnection(
-  userId: string,
-  provider: string,
-): Promise<OAuthConnection | DatabaseConnection | null> {
-  const [oauthConn] = await db
-    .select()
-    .from(schema.oauthConnections)
-    .where(
-      and(
-        eq(schema.oauthConnections.userId, userId),
-        eq(schema.oauthConnections.provider, provider),
-      ),
-    )
-    .limit(1);
+export async function getValidConnection(userId: string, provider: string): Promise<OAuthConnection | DatabaseConnection | null> {
+  const [oauthConn] = await db.select().from(schema.oauthConnections)
+    .where(and(
+      eq(schema.oauthConnections.userId, userId),
+      eq(schema.oauthConnections.provider, provider),
+    )).limit(1);
 
   if (oauthConn) {
     return oauthConn as OAuthConnection;
   }
 
-  const [conn] = await db
-    .select()
-    .from(schema.connections)
-    .where(
-      and(
-        eq(schema.connections.userId, userId),
-        eq(schema.connections.provider, provider),
-      ),
-    )
-    .limit(1);
+  const [conn] = await db.select().from(schema.connections)
+    .where(and(
+      eq(schema.connections.userId, userId),
+      eq(schema.connections.provider, provider),
+    )).limit(1);
 
   if (conn && hasValidConnectionStringMetadata(conn.metadata)) {
       return conn as DatabaseConnection;
