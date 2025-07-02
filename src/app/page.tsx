@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 import { getValidConnections } from '@/lib/db';
+import { isOAuthConnection } from '@/lib/db/types';
 import { registry } from '@/marketplace';
 import { isFullProvider, Provider } from '@/marketplace/core/types';
 
@@ -99,7 +100,9 @@ export default async function Page() {
             {displayIds.map(providerId => {
               const provider = providersData.connected[providerId] || providersData.unconnected[providerId];
               const connection = connectionsMap.get(providerId);
-              const connectionType = connection ? connection.type : 'oauth';
+              const connectionType = connection 
+                ? (isOAuthConnection(connection) ? 'oauth' : 'connection_string')
+                : 'oauth';
               return (
                 <ProviderCard
                   key={providerId}

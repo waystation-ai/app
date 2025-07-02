@@ -4,7 +4,7 @@ import { and, eq, lt } from 'drizzle-orm';
 import * as schema from './schema';
 import { OAuthClientInformationFull, OAuthMetadata, OAuthTokens } from '@modelcontextprotocol/sdk/shared/auth.js';
 import { ListToolsResult, ListResourcesResult } from '@modelcontextprotocol/sdk/types.js';
-import { Connection, OAuthConnection, DatabaseConnection } from './types';
+import { Connection, OAuthConnection, DatabaseConnection, hasValidConnectionStringMetadata } from './types';
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL environment variable is not set');
@@ -139,7 +139,7 @@ export async function getValidConnection(
     .limit(1);
 
   if (oauthConn) {
-    return { ...oauthConn, type: 'oauth' } as OAuthConnection;
+    return oauthConn as OAuthConnection;
   }
 
   const [conn] = await db
@@ -153,8 +153,8 @@ export async function getValidConnection(
     )
     .limit(1);
 
-  if (conn) {
-    return { ...conn, type: 'connection_string' } as DatabaseConnection;
+  if (conn && hasValidConnectionStringMetadata(conn.metadata)) {
+      return conn as DatabaseConnection;
   }
 
   return null;
@@ -172,8 +172,10 @@ export async function getConnections(userId: string): Promise<Connection[]> {
 
   // Combine and return all connections
   return [
-    ...oauthConnections.map(conn => ({ ...conn, type: 'oauth' } as OAuthConnection)),
-    ...connectionsResult.map(conn => ({ ...conn, type: 'connection_string' } as DatabaseConnection)),
+    ...oauthConnections.map(conn => conn as OAuthConnection),
+    ...connectionsResult
+      .filter(conn => hasValidConnectionStringMetadata(conn.metadata))
+      .map(conn => conn as DatabaseConnection)
   ];
 }
 
@@ -243,6 +245,11 @@ export async function removeOAuthConnection(userId: string, provider: string) {
 
 // Helper function to store or update a connection string
 export async function addConnection(userId: string, provider: string, name: string, metadata: object) {
+  // Validate that metadata contains connectionString
+  if (!hasValidConnectionStringMetadata(metadata)) {
+    throw new Error(`Invalid metadata: connectionString is required for database connections`);
+  }
+
   const existing = await db.select().from(schema.connections)
     .where(and(
       eq(schema.connections.userId, userId),

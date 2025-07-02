@@ -8,7 +8,6 @@ export interface BaseConnection {
 }
 
 export interface OAuthConnection extends BaseConnection {
-  type: 'oauth';
   accessToken: string;
   refreshToken: string | null;
   expiresAt: Date | null;
@@ -17,9 +16,29 @@ export interface OAuthConnection extends BaseConnection {
 }
 
 export interface DatabaseConnection extends BaseConnection {
-  type: 'connection_string';
-  metadata: Record<string, unknown> | null;
+  metadata: { connectionString: string } & Record<string, unknown>;
   name: string;
 }
 
 export type Connection = OAuthConnection | DatabaseConnection;
+
+// Type guard functions for runtime type checking
+export function isOAuthConnection(conn: Connection): conn is OAuthConnection {
+  return 'accessToken' in conn;
+}
+
+export function isDatabaseConnection(conn: Connection): conn is DatabaseConnection {
+  return 'name' in conn && 'metadata' in conn && 
+         hasValidConnectionStringMetadata(conn.metadata);
+}
+
+// Utility function to validate metadata contains a valid connectionString
+export function hasValidConnectionStringMetadata(metadata: unknown): metadata is { connectionString: string } & Record<string, unknown> {
+  if (metadata === null || typeof metadata !== 'object' || !('connectionString' in metadata)) {
+    return false;
+  }
+  
+  const metadataObj = metadata as Record<string, unknown>;
+  return typeof metadataObj.connectionString === 'string' && 
+         metadataObj.connectionString.length > 0;
+}

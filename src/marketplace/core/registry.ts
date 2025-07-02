@@ -5,7 +5,7 @@ import { isFullProvider, isNativeProvider, isRemoteProvider, NativeProvider, Pro
 import PostHogClient from '@/lib/utils/posthog-client'; // Using the existing PostHog client
 import { oauthService } from '@/lib/services/oauth-client'; // Assuming oauthService is accessible or passed
 import { getRemoteProviderMetadata, getValidConnection, getValidConnections } from '@/lib/db';
-import { DatabaseConnection } from '@/lib/db/types';
+import { isDatabaseConnection } from '@/lib/db/types';
 import { callToolFromRemoteProvider, readResourceContentFromRemoteProvider } from '@/lib/services/mcp-remote';
 import { generateText } from 'ai';
 import { azure } from '@ai-sdk/azure';
@@ -285,11 +285,18 @@ export class ProviderRegistry {
   }
 
   private async getConnectionString(provider: Provider, userId: string): Promise<string> {
-      const connection = await getValidConnection(userId, provider.id) as DatabaseConnection;
-      if (connection && typeof connection.metadata?.connectionString === 'string') {
-        return connection.metadata.connectionString;
-      }
-      throw new Error(`No valid connection found for provider: ${provider.id}`);
+    const connection = await getValidConnection(userId, provider.id);
+    
+    if (!connection) {
+      throw new Error(`No connection found for provider: ${provider.id}`);
+    }
+    
+    if (isDatabaseConnection(connection)) {
+      // Now we have typed access to connectionString in metadata
+      return connection.metadata.connectionString;
+    }
+    
+    throw new Error(`Provider ${provider.id} requires a database connection, but found OAuth connection`);
   }
 }
 
