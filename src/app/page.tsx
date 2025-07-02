@@ -24,8 +24,14 @@ export default async function Page() {
   }
 
   // Get connected providers
-  const connectionsMap = await getValidConnections(session.userId);
-  const connectedProviderIds = new Set(connectionsMap.keys());
+  let connectedProviderIds = new Set<string>();
+  try {
+    const connectionsMap = await getValidConnections(session.userId);
+    connectedProviderIds = new Set(connectionsMap.keys());
+  } catch (error) {
+    console.error('Error fetching connections:', error);
+    // Continue with empty connections
+  }
 
   // Get vetoed providers (main set we want to show) and handle unvetoed connected providers
   const vetoedProviders = registry.getVetoedProviders();

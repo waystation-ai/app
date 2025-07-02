@@ -30,17 +30,15 @@ export default async function Page() {
                 Connect your apps first...
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 w-full my-3 sm:my-9">
-            {providersToDisplay.map(([provider, config]) => {
-              return (
-                <ProviderCard
-                  key={provider}
-                  provider={provider}
-                  name={config.name}
-                  description={config.description}
-                  isConnected={!!connectedProviders[provider]}
-                />
-              );
-            })}
+            {providersToDisplay.map(([provider, config]) => (
+              <ProviderCard
+                key={provider}
+                provider={provider}
+                name={config.name}
+                description={config.description}
+                isConnected={!!connectedProviders[provider]}
+              />
+            ))}
           </div>
         </div>
 

@@ -161,7 +161,7 @@ export async function getValidConnection(
 }
 
 // Helper function to get all valid connections for a specific user
-export async function getConnections(userId: string): Promise<Connection[]> {
+export async function getValidConnections(userId: string): Promise<Map<string, Connection>> {
   // Get OAuth connections
   const oauthConnections = await db.select().from(schema.oauthConnections)
     .where(eq(schema.oauthConnections.userId, userId));
@@ -170,20 +170,17 @@ export async function getConnections(userId: string): Promise<Connection[]> {
   const connectionsResult = await db.select().from(schema.connections)
     .where(eq(schema.connections.userId, userId));
 
-  // Combine and return all connections
-  return [
+  // Combine all connections
+  const allConnections = [
     ...oauthConnections.map(conn => conn as OAuthConnection),
     ...connectionsResult
       .filter(conn => hasValidConnectionStringMetadata(conn.metadata))
       .map(conn => conn as DatabaseConnection)
   ];
-}
 
-// Helper function to get all valid connections for a specific user
-export async function getValidConnections(userId: string): Promise<Map<string, Connection>> {
-  const connections = await getConnections(userId);
+  // Convert to Map for efficient provider-based lookup
   const connectionMap = new Map<string, Connection>();
-  for (const conn of connections) {
+  for (const conn of allConnections) {
     connectionMap.set(conn.provider, conn);
   }
   return connectionMap;
