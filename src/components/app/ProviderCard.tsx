@@ -1,35 +1,22 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useTrackEvent } from '@/lib/utils/track-event';
 import GDrivePickerButton from './provider-settings/GDrivePickerButton';
-import { deleteConnection } from '@/app/actions';
 
 interface ProviderCardProps {
   name: string;
   description: string;
   isConnected: boolean;
   provider: string;
-  connectionType: 'oauth' | 'connection_string';
 }
 
-export default function ProviderCard({ name, description, isConnected, provider, connectionType }: ProviderCardProps) {
+export default function ProviderCard({ name, description, isConnected, provider }: ProviderCardProps) {
   const trackEvent = useTrackEvent();
-  const router = useRouter();
   
   function trackConnect() {
     trackEvent(isConnected ? 'disconnectProvider' : 'connectProvider', { provider });
-  }  
-
-  async function handleDisconnect() {
-    trackConnect();
-    if (connectionType === 'connection_string') {
-      await deleteConnection(provider);
-    } else {
-      router.push(`/api/auth/${provider}/disconnect`);
-    }
   }
 
   return (
@@ -48,15 +35,16 @@ export default function ProviderCard({ name, description, isConnected, provider,
         {/* Connect/Disconnect button for all providers */}
         <div className="flex items-center space-x-2">
           {isConnected ? (
-            <button
-              onClick={handleDisconnect}
+            <Link
+              href={`/api/auth/${provider}/disconnect`}
+              onClick={trackConnect}
               className='connect-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 flex-grow text-center bg-red-500 hover:bg-red-600 text-white'
             >
               Disconnect
-            </button>
+            </Link>
           ) : (
             <Link
-              href={connectionType === 'connection_string' ? `/connect/${provider}/setup` : `/api/auth/${provider}/connect`}
+              href={`/api/auth/${provider}/connect`}
               onClick={trackConnect}
               prefetch={false}
               className='connect-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 flex-grow text-center bg-blue-600 hover:bg-blue-700 text-white'

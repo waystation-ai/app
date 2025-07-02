@@ -1,7 +1,7 @@
 import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
-import { removeOAuthConnection } from '@/lib/db';
+import { removeOAuthConnection, removeConnection } from '@/lib/db';
 import { redirect } from 'next/navigation';
 import { getProviderConfig } from '@/lib/services/provider-config';
 
@@ -22,6 +22,8 @@ export async function GET(
     return new NextResponse('Invalid provider', { status: 400 });
   }
 
+  // Remove both types of connections - safe to call both
   await removeOAuthConnection(session.userId, provider);
+  await removeConnection(session.userId, provider);
   return redirect('/');
 }
