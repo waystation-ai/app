@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import clsx from 'clsx';
 import { useTrackEvent } from '@/lib/utils/track-event';
 import GDrivePickerButton from './provider-settings/GDrivePickerButton';
 
@@ -17,7 +18,7 @@ export default function ProviderCard({ name, description, isConnected, provider 
   
   function trackConnect() {
     trackEvent(isConnected ? 'disconnectProvider' : 'connectProvider', { provider });
-  }
+  }  
 
   return (
     <>
@@ -34,24 +35,18 @@ export default function ProviderCard({ name, description, isConnected, provider 
         
         {/* Connect/Disconnect button for all providers */}
         <div className="flex items-center space-x-2">
-          {isConnected ? (
-            <Link
-              href={`/api/auth/${provider}/disconnect`}
-              onClick={trackConnect}
-              className='connect-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 flex-grow text-center bg-red-500 hover:bg-red-600 text-white'
-            >
-              Disconnect
-            </Link>
-          ) : (
-            <Link
-              href={`/api/auth/${provider}/connect`}
-              onClick={trackConnect}
-              prefetch={false}
-              className='connect-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 flex-grow text-center bg-blue-600 hover:bg-blue-700 text-white'
-            >
-              Connect
-            </Link>
-          )}
+          <Link
+            href={`/api/auth/${provider}/${isConnected ? 'disconnect' : 'connect'}`}
+            onClick={trackConnect}
+            prefetch={false}
+            className={clsx('connect-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 flex-grow text-center',
+              {
+                'bg-red-500 hover:bg-red-600 text-white' : isConnected,
+                'bg-blue-600 hover:bg-blue-700 text-white' : !isConnected
+              }
+            )}>
+            {isConnected ? 'Disconnect' : 'Connect'}
+          </Link>
           
           {/* Provider-specific settings buttons */}
           {isConnected && provider === 'gdrive' && (
