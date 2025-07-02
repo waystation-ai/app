@@ -126,36 +126,35 @@ export async function addToWaitlist(userId: string, provider: string): Promise<v
 export async function getValidConnection(
   userId: string,
   provider: string,
-  connectionType: 'oauth' | 'connection_string',
 ): Promise<OAuthConnection | DatabaseConnection | null> {
-  if (connectionType === 'oauth') {
-    const [conn] = await db
-      .select()
-      .from(schema.oauthConnections)
-      .where(
-        and(
-          eq(schema.oauthConnections.userId, userId),
-          eq(schema.oauthConnections.provider, provider),
-        ),
-      )
-      .limit(1);
+  const [oauthConn] = await db
+    .select()
+    .from(schema.oauthConnections)
+    .where(
+      and(
+        eq(schema.oauthConnections.userId, userId),
+        eq(schema.oauthConnections.provider, provider),
+      ),
+    )
+    .limit(1);
 
-    return conn ? ({ ...conn, type: 'oauth' } as OAuthConnection) : null;
+  if (oauthConn) {
+    return { ...oauthConn, type: 'oauth' } as OAuthConnection;
   }
 
-  if (connectionType === 'connection_string') {
-    const [conn] = await db
-      .select()
-      .from(schema.connections)
-      .where(
-        and(
-          eq(schema.connections.userId, userId),
-          eq(schema.connections.provider, provider),
-        ),
-      )
-      .limit(1);
+  const [conn] = await db
+    .select()
+    .from(schema.connections)
+    .where(
+      and(
+        eq(schema.connections.userId, userId),
+        eq(schema.connections.provider, provider),
+      ),
+    )
+    .limit(1);
 
-    return conn ? ({ ...conn, type: 'connection_string' } as DatabaseConnection) : null;
+  if (conn) {
+    return { ...conn, type: 'connection_string' } as DatabaseConnection;
   }
 
   return null;

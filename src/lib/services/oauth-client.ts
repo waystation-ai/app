@@ -338,7 +338,7 @@ export class OAuthClient {
       throw new Error('User not authenticated');
     }
 
-    const connection = await getValidConnection(userId, provider.id, 'oauth') as OAuthConnection;
+    const connection = await getValidConnection(userId, provider.id) as OAuthConnection;
     if (!connection) {
       throw new Error(`No valid connection found for provider: ${provider.id}. Ask user to set up a connection with ${provider.id} by visiting https://${process.env.APP_DOMAIN}/`);
     }
@@ -397,7 +397,7 @@ export class RemoteOAuthClientProvider implements OAuthClientProvider {
   }
 
   async tokens(): Promise<OAuthTokens | undefined> {
-    const connection = await getValidConnection(this.userId, this.provider.id, 'oauth') as OAuthConnection;
+    const connection = await getValidConnection(this.userId, this.provider.id) as OAuthConnection;
     
     if (!connection) 
       return undefined;
