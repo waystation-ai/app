@@ -1,27 +1,35 @@
 'use server';
 
-import { addDbConnection, removeDbConnection } from '@/lib/db';
+import { addConnection, removeConnection } from '@/lib/db';
 import { auth } from '@clerk/nextjs/server';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
-export async function storeConnectionStringAction(provider: string, name: string, connectionString: string) {
+export async function storeConnectionString(
+  provider: string,
+  name: string,
+  formData: FormData,
+) {
   const { userId } = await auth();
-
   if (!userId) {
     throw new Error('You must be signed in to store a connection string.');
   }
 
-  await addDbConnection(userId, provider, name, { connectionString });
+  const connectionString = formData.get('connectionString') as string;
+
+  await addConnection(userId, provider, name, { connectionString });
+
   revalidatePath('/');
+  redirect('/');
 }
 
-export async function removeDatabaseConnection(provider: string) {
+export async function deleteConnection(provider: string) {
   const { userId } = await auth();
 
   if (!userId) {
     throw new Error('You must be signed in to remove a database connection.');
   }
 
-  await removeDbConnection(userId, provider);
+  await removeConnection(userId, provider);
   revalidatePath('/');
 }

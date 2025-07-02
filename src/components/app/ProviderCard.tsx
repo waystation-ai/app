@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useTrackEvent } from '@/lib/utils/track-event';
 import GDrivePickerButton from './provider-settings/GDrivePickerButton';
-import { removeDatabaseConnection } from '@/app/actions';
+import { deleteConnection } from '@/app/actions';
 
 interface ProviderCardProps {
   name: string;
@@ -26,7 +26,7 @@ export default function ProviderCard({ name, description, isConnected, provider,
   async function handleDisconnect() {
     trackConnect();
     if (connectionType === 'connection_string') {
-      await removeDatabaseConnection(provider);
+      await deleteConnection(provider);
     } else {
       router.push(`/api/auth/${provider}/disconnect`);
     }

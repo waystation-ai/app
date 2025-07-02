@@ -32,8 +32,7 @@ export const createExecuteSqlQueryTool = ({
       const connectionString = await context.getConnectionString();
       const client = createDbClient(connectionString);
       try {
-        const results = await client.executeQuery(params.query);
-        return results;
+        return await client.executeQuery(params.query);
       } finally {
         await client.close();
       }

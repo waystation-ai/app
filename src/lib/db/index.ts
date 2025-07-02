@@ -243,12 +243,7 @@ export async function removeOAuthConnection(userId: string, provider: string) {
 }
 
 // Helper function to store or update a connection string
-export async function addDbConnection(
-  userId: string,
-  provider: string,
-  name: string,
-  metadata: object,
-) {
+export async function addConnection(userId: string, provider: string, name: string, metadata: object) {
   const existing = await db.select().from(schema.connections)
     .where(and(
       eq(schema.connections.userId, userId),
@@ -283,7 +278,7 @@ export async function addDbConnection(
 }
 
 // Helper function to remove a database connection
-export async function removeDbConnection(userId: string, provider: string) {
+export async function removeConnection(userId: string, provider: string) {
   return db.delete(schema.connections)
     .where(and(
       eq(schema.connections.userId, userId),
