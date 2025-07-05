@@ -2,43 +2,171 @@ import { z } from 'zod';
 import { defineTool } from '../core/types';
 import { queryGmailApi } from './utils';
 
+// Helper function to decode base64url content
+function decodeBase64Url(data: string): string {
+  try {
+    const base64 = data.replace(/-/g, '+').replace(/_/g, '/');
+    return Buffer.from(base64, 'base64').toString('utf-8');
+  } catch {
+    return data; // Return original if decoding fails
+  }
+}
+
+// Helper function to format date from internal timestamp
+function formatDate(internalDate: string): string {
+  try {
+    const date = new Date(parseInt(internalDate));
+    return date.toISOString();
+  } catch {
+    return internalDate;
+  }
+}
+
+// Helper function to extract essential headers
+function parseHeaders(headers: Array<{ name: string; value: string }>) {
+  const essentialHeaders: Record<string, string> = {};
+  
+  for (const header of headers) {
+    const name = header.name.toLowerCase();
+    switch (name) {
+      case 'from':
+      case 'to':
+      case 'cc':
+      case 'bcc':
+      case 'subject':
+      case 'date':
+        essentialHeaders[name] = header.value;
+        break;
+    }
+  }
+  
+  return essentialHeaders;
+}
+
+// Type definitions for Gmail API structures
+interface GmailHeader {
+  name: string;
+  value: string;
+}
+
+interface GmailMessageBody {
+  size?: number;
+  data?: string;
+  attachmentId?: string;
+}
+
+interface GmailMessagePart {
+  partId?: string;
+  mimeType?: string;
+  filename?: string;
+  headers?: GmailHeader[];
+  body?: GmailMessageBody;
+  parts?: GmailMessagePart[];
+}
+
+// Payload is essentially a MessagePart at the root level
+type GmailPayload = GmailMessagePart;
+
+// Helper function to extract content from message parts
+function extractMessageContent(payload: GmailPayload): {
+  textContent?: string;
+  htmlContent?: string;
+  attachments: Array<{
+    filename: string;
+    mimeType: string;
+    size: number;
+    attachmentId?: string;
+  }>;
+} {
+  const result = {
+    textContent: undefined as string | undefined,
+    htmlContent: undefined as string | undefined,
+    attachments: [] as Array<{
+      filename: string;
+      mimeType: string;
+      size: number;
+      attachmentId?: string;
+    }>
+  };
+
+  function processPart(part: GmailMessagePart) {
+    const mimeType = part.mimeType || '';
+    const filename = part.filename || '';
+    
+    // Handle attachments (parts with filenames or specific content dispositions)
+    if (filename || (part.headers && part.headers.some((h: GmailHeader) => 
+      h.name.toLowerCase() === 'content-disposition' && h.value.includes('attachment')))) {
+      result.attachments.push({
+        filename: filename || 'unnamed_attachment',
+        mimeType,
+        size: part.body?.size || 0,
+        attachmentId: part.body?.attachmentId
+      });
+      return;
+    }
+
+    // Handle text content
+    if (mimeType === 'text/plain' && part.body?.data) {
+      const decoded = decodeBase64Url(part.body.data);
+      if (!result.textContent || decoded.length > result.textContent.length) {
+        result.textContent = decoded;
+      }
+    }
+    
+    // Handle HTML content
+    if (mimeType === 'text/html' && part.body?.data) {
+      const decoded = decodeBase64Url(part.body.data);
+      if (!result.htmlContent || decoded.length > result.htmlContent.length) {
+        result.htmlContent = decoded;
+      }
+    }
+
+    // Recursively process multipart messages
+    if (mimeType.startsWith('multipart/') && part.parts) {
+      for (const subPart of part.parts) {
+        processPart(subPart);
+      }
+    }
+  }
+
+  // Start processing from the root payload
+  processPart(payload);
+
+  return result;
+}
+
 export const readGmailThread = defineTool({
   id: 'readGmailThread',
   summary: 'Read a specific email thread',
-  description: 'Retrieves a complete email thread/conversation with all messages and their content.',
+  description: 'Retrieves a complete email thread/conversation with readable message content, stripped of unnecessary metadata.',
   method: 'GET',
   path: '/tools/gmail/read_thread',
   parameters: z.object({
     threadId: z.string().describe('The unique identifier of the thread to read'),
-    format: z.enum(['full', 'metadata', 'minimal']).default('full').describe('The format of the message data to return')
+    includeAttachments: z.boolean().default(true).describe('Whether to include attachment information in the response')
   }),
   responses: {
     '200': {
-      description: 'Success response with complete thread data',
+      description: 'Success response with clean, readable thread data',
       schema: z.object({
         id: z.string().describe('The unique identifier for the thread'),
-        historyId: z.string().describe('The history ID of the thread'),
         messages: z.array(z.object({
           id: z.string().describe('The unique identifier for the message'),
-          threadId: z.string().describe('The thread ID this message belongs to'),
-          labelIds: z.array(z.string()).describe('Array of label IDs applied to this message'),
-          snippet: z.string().describe('A short snippet of the message content'),
-          historyId: z.string().describe('The history ID of the message'),
-          internalDate: z.string().describe('The internal date of the message'),
-          payload: z.object({
-            partId: z.string().optional().describe('The part ID of the message part'),
-            mimeType: z.string().describe('The MIME type of the message part'),
-            filename: z.string().optional().describe('The filename of the attachment, if any'),
-            headers: z.array(z.object({
-              name: z.string().describe('The header name'),
-              value: z.string().describe('The header value')
-            })).describe('Array of message headers'),
-            body: z.object({
-              size: z.number().describe('The size of the message body in bytes'),
-              data: z.string().optional().describe('The body data (base64url encoded)')
-            }).optional().describe('The message body'),
-            parts: z.array(z.any()).optional().describe('Array of message parts for multipart messages')
-          }).describe('The message payload containing headers and body')
+          date: z.string().describe('Human-readable date when the message was sent/received'),
+          from: z.string().optional().describe('Sender email address'),
+          to: z.string().optional().describe('Recipient email address(es)'),
+          cc: z.string().optional().describe('CC email address(es)'),
+          bcc: z.string().optional().describe('BCC email address(es)'),
+          subject: z.string().optional().describe('Email subject line'),
+          textContent: z.string().optional().describe('Plain text content of the message'),
+          htmlContent: z.string().optional().describe('HTML content of the message'),
+          snippet: z.string().describe('Short preview of the message content'),
+          attachments: z.array(z.object({
+            filename: z.string().describe('Name of the attached file'),
+            mimeType: z.string().describe('MIME type of the attachment'),
+            size: z.number().describe('Size of the attachment in bytes'),
+            attachmentId: z.string().optional().describe('ID to retrieve the attachment content')
+          })).optional().describe('List of attachments in the message')
         }))
       })
     }
@@ -48,7 +176,7 @@ export const readGmailThread = defineTool({
       const endpoint = `users/me/threads/${params.threadId}?format=full`;
       const result = await queryGmailApi(context, endpoint);
 
-      // Process messages to decode body content when available
+      // Process messages to extract readable content
       const processedMessages = result.messages.map((message: {
         id: string;
         threadId: string;
@@ -56,46 +184,35 @@ export const readGmailThread = defineTool({
         snippet?: string;
         historyId: string;
         internalDate: string;
-        payload?: {
-          partId?: string;
-          mimeType?: string;
-          filename?: string;
-          headers?: Array<{ name: string; value: string }>;
-          body?: { size?: number; data?: string };
-          parts?: unknown[];
-        };
+        payload?: GmailPayload;
       }) => {
-        const processedMessage = {
+        const headers = parseHeaders(message.payload?.headers || []);
+        const content = extractMessageContent(message.payload || {});
+        
+        const processedMessage: Record<string, unknown> = {
           id: message.id,
-          threadId: message.threadId,
-          labelIds: message.labelIds || [],
+          date: formatDate(message.internalDate),
           snippet: message.snippet || '',
-          historyId: message.historyId,
-          internalDate: message.internalDate,
-          payload: {
-            partId: message.payload?.partId,
-            mimeType: message.payload?.mimeType || '',
-            filename: message.payload?.filename,
-            headers: message.payload?.headers || [],
-            body: message.payload?.body ? {
-              size: message.payload.body.size || 0,
-              data: message.payload.body.data
-            } : undefined,
-            parts: message.payload?.parts
-          }
+          ...headers // Spread essential headers (from, to, subject, etc.)
         };
 
-        // If body data exists and format is full, try to decode it
-        if (params.format === 'full' && message.payload?.body?.data) {
-          try {
-            const decodedData = Buffer.from(
-              message.payload.body.data.replace(/-/g, '+').replace(/_/g, '/'),
-              'base64'
-            ).toString('utf-8');
-            processedMessage.payload.body!.data = decodedData;
-          } catch {
-            // Keep original encoded data if decoding fails
-          }
+        // Add content if available
+        if (content.textContent) {
+          processedMessage.textContent = content.textContent;
+        }
+        
+        if (content.htmlContent) {
+          processedMessage.htmlContent = content.htmlContent;
+        }
+
+        // Add attachments if requested and available
+        if (params.includeAttachments && content.attachments.length > 0) {
+          processedMessage.attachments = content.attachments;
+        }
+
+        // If no content was extracted, try to use the snippet or indicate empty message
+        if (!content.textContent && !content.htmlContent) {
+          processedMessage.textContent = message.snippet || '[No readable content available]';
         }
 
         return processedMessage;
@@ -103,7 +220,6 @@ export const readGmailThread = defineTool({
 
       return {
         id: result.id,
-        historyId: result.historyId,
         messages: processedMessages
       };
     } catch (error) {
