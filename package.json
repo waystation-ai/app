@@ -48,6 +48,7 @@
     "platform-detect": "^3.0.1",
     "posthog-js": "^1.223.4",
     "posthog-node": "^4.10.1",
+    "puppeteer": "^24.11.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "remark-gfm": "^4.0.1",

@@ -1,4 +1,8 @@
 import { registerProvider } from '../core/registry';
+import { listGmailThreads } from './list-threads';
+import { readGmailThread } from './read-thread';
+import { saveGmailDraft } from './save-draft';
+import { sendGmailEmail } from './send-email';
 
 export const gmailProvider = registerProvider({
   id: 'gmail',
@@ -8,11 +12,12 @@ export const gmailProvider = registerProvider({
   // OAuth settings
   clientId: process.env.GOOGLE_CLIENT_ID || '',
   clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-  //authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
+  authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
   tokenUrl: 'https://oauth2.googleapis.com/token',
   scopes: [
     'https://www.googleapis.com/auth/gmail.readonly',
     'https://www.googleapis.com/auth/gmail.send',
+    'https://www.googleapis.com/auth/gmail.compose',
     'https://www.googleapis.com/auth/gmail.labels'
   ],
   group: 'google',
@@ -30,6 +35,10 @@ export const gmailProvider = registerProvider({
     { role: 'agent', content: "I've analyzed your emails and found 3 high-priority client requests. I've labeled them and drafted response templates for your review." }
   ],
   
-  // Empty tools array for now
-  tools: []
+  tools: [
+    listGmailThreads,
+    readGmailThread,
+    saveGmailDraft,
+    sendGmailEmail
+  ]
 });
