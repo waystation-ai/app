@@ -7,7 +7,7 @@ export const POST = async () => {
  
   if (!userId) throw new Error("User not authenticated");
  
-  const workspaceId = orgId ? `${orgId}:${userId}` : userId;
+  const workspaceId = orgId ? `${orgId}_${userId}` : userId;
   const assistantCloud = new AssistantCloud({
     apiKey: process.env["ASSISTANT_API_KEY"]!,
     userId,
