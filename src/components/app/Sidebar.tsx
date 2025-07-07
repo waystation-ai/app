@@ -66,7 +66,6 @@ export function AppSidebar() {
         </div>
       </SidebarHeader>
       <SidebarContent>
-        <OrganizationSwitcher organizationProfileMode='modal' organizationProfileUrl='/app/team' />
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
