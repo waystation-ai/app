@@ -20,7 +20,7 @@ export default async function Page({ params }: PageProps) {
   const storeConnectionStringWithProvider = storeConnectionString.bind(null, id, `${name} Connection`);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+    <div className="flex flex-col  mt-4 sm:mt-20 justify-center items-center">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
         <div className="flex flex-col items-center">
           <Image
@@ -36,9 +36,7 @@ export default async function Page({ params }: PageProps) {
         </div>
         <form className="mt-8 space-y-6" action={storeConnectionStringWithProvider}>
           <div>
-            <label htmlFor="connection-string" className="sr-only">
-              Connection String
-            </label>
+            <label htmlFor="connection-string" className="sr-only">Connection String</label>
             <input
               id="connection-string"
               name="connectionString"
