@@ -8,6 +8,7 @@ import React from 'react'
 
 import { importMap } from './admin/importMap.js'
 import './custom.scss'
+import { ClerkProvider } from '@clerk/nextjs'
 
 type Args = {
   children: React.ReactNode
@@ -23,9 +24,11 @@ const serverFunction: ServerFunctionClient = async function (args) {
 }
 
 const Layout = ({ children }: Args) => (
+  <ClerkProvider waitlistUrl="/waitlist">
   <RootLayout config={config} importMap={importMap} serverFunction={serverFunction}>
     {children}
   </RootLayout>
+  </ClerkProvider>
 )
 
 export default Layout

@@ -21,6 +21,7 @@ export const Media: CollectionConfig = {
     delete: authenticated,
     read: anyone,
     update: authenticated,
+    admin: authenticated,
   },
   fields: [
     {

@@ -4,6 +4,7 @@ import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { getServerSideURL } from '@/components/payload/utilities/getURL'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 
 /*
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
@@ -32,6 +33,12 @@ export const plugins: Plugin[] = [
   seoPlugin({
     generateTitle,
     generateURL,
+  }),
+  vercelBlobStorage({
+    collections: {
+      media: true,
+    },
+    token: process.env.PAYLOAD_READ_WRITE_TOKEN,
   }),
   /*
   redirectsPlugin({
@@ -96,5 +103,4 @@ export const plugins: Plugin[] = [
     },
   }),
   */
-  payloadCloudPlugin(),
 ]

@@ -21,6 +21,7 @@ export default buildConfig({
   admin: {
     user: Users.slug,
     importMap: {
+      autoGenerate: false,
       baseDir: path.resolve(dirname),
     },
     livePreview: {

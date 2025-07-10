@@ -11,6 +11,7 @@ export const Categories: CollectionConfig = {
     delete: authenticated,
     read: anyone,
     update: authenticated,
+    admin: authenticated,
   },
   admin: {
     useAsTitle: 'title',
