@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { defineTool } from '../core/types';
-import { querySlackApi } from './utils';
+import { querySlackApi, findSlackChannel } from './utils';
 
 export const postSlackMessage = defineTool({
   id: 'postSlackMessage',
@@ -24,17 +24,15 @@ export const postSlackMessage = defineTool({
   },
   handler: async ({ context, params }) => {
     try {
-      // Handle channel name with or without # prefix
-      const channelName = params.channel.startsWith('#') 
-        ? params.channel.substring(1) 
-        : params.channel;
+      // Find the channel using shared utility
+      const channel = await findSlackChannel(context, params.channel);
 
       const result = await querySlackApi(
         context,
         'chat.postMessage',
         'POST',
         {
-          channel: channelName,
+          channel: channel.id,
           text: params.message
         }
       );

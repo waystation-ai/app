@@ -1,12 +1,8 @@
 import { z } from 'zod';
 import { defineTool } from '../core/types';
-import { querySlackApi } from './utils';
+import { querySlackApi, findSlackChannel } from './utils';
 
 // Define Slack API response interfaces
-interface SlackChannel {
-  id: string;
-  name: string;
-}
 
 interface SlackMessage {
   ts: string;
@@ -75,16 +71,8 @@ export const readSlackChannel = defineTool({
   },
   handler: async ({ context, params }) => {
     try {
-      // Handle channel name with or without # prefix
-      const channelName = params.channel.startsWith('#') ? params.channel.substring(1) : params.channel;
-
-      // First, get channel ID if name was provided
-      const channelsResult = await querySlackApi(context, 'conversations.list?types=public_channel,private_channel');
-      const channel = channelsResult.channels.find((c: SlackChannel) => c.name === channelName || c.id === channelName);
-      
-      if (!channel) {
-        throw new Error(`Channel ${params.channel} not found`);
-      }
+      // Find the channel using shared utility
+      const channel = await findSlackChannel(context, params.channel);
 
       // Fetch channel history
       const historyParams = new URLSearchParams({

@@ -1,5 +1,10 @@
 import { ToolContext } from '../core/types';
 
+interface SlackChannel {
+  id: string;
+  name: string;
+}
+
 export async function querySlackApi(
   context: ToolContext, 
   endpoint: string, 
@@ -36,4 +41,19 @@ export async function querySlackApi(
     }
     throw new Error(`Unknown error: ${JSON.stringify(error)}`);
   }
+}
+
+export async function findSlackChannel(context: ToolContext, channel: string): Promise<SlackChannel> {
+  // Handle channel name with or without # prefix
+  const channelName = channel.startsWith('#') ? channel.substring(1) : channel;
+
+  // Get channel ID if name was provided
+  const response = await querySlackApi(context, 'conversations.list?types=public_channel,private_channel');
+  const result = response.channels.find((c: SlackChannel) => c.name === channelName || c.id === channelName);
+  
+  if (!result) {
+    throw new Error(`Channel #${channelName} not found. Use the listSlackChannels tool to see available channels.`);
+  }
+
+  return result;
 }
