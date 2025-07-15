@@ -99,6 +99,11 @@ export async function POST(req: Request) {
     onError({ error }) {
       console.error(error); 
     },
+    experimental_telemetry: {
+      isEnabled: true,
+      recordInputs: true,
+      recordOutputs: true,
+    },
     /*
     async onFinish({ response }) {
       if (id) {
