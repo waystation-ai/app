@@ -227,6 +227,11 @@ export class OAuthClient {
     }
 
     const data = await response.json();
+    
+    // Notion workaround: if refresh_token is null, remove it from the response
+    if (data.refresh_token === null)
+      delete data.refresh_token;
+
     const tokens = OAuthTokensSchema.parse(data);
 
     // For Slack, use the user token from authed_user if available
