@@ -41,10 +41,14 @@ async function verifyAccessToken(accessToken?: string|null): Promise<string | nu
 }
 
 export async function authUserId(): Promise<string | null> {
-  const session = await auth();
-    
-  if (session.userId)
-    return session.userId;
+  try {
+    const session = await auth();
+      
+    if (session.userId)
+      return session.userId;
+  } catch (error) {
+    console.log('Error getting auth session:', error);
+  }
 
   const _headers = await headers();
 
