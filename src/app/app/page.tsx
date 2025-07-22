@@ -9,7 +9,6 @@ import { isFullProvider, Provider } from '@/marketplace/core/types';
 import ProviderCard from '@/components/app/ProviderCard';
 import { RedirectHandler } from '@/components/app/RedirectHandler';
 
-import { useTrackEvent } from '@/lib/utils/track-event';
 import { LaunchPad } from '@/components/app/LaunchPad';
  
 export const metadata: Metadata = {

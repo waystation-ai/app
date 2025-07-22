@@ -53,7 +53,7 @@ export default function CursorClient({ isSignedIn, nanoId }: CursorClientProps) 
         <div className="mt-8 text-left bg-gray-50 rounded-lg p-6">
           <h3 className="text-lg font-medium text-gray-900 mb-4">How it works:</h3>
           <ol className="list-decimal list-inside space-y-2 text-gray-700">
-            <li>Click the "Add to Cursor" button above</li>
+            <li>Click the &quot;Add to Cursor&quot; button above</li>
             <li>Cursor will automatically configure WayStation as an MCP server</li>
             <li>Start using your WayStation integrations directly in Cursor</li>
           </ol>

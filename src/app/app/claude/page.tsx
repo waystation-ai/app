@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowLeft, ExternalLink } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
+import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: 'Connect to Claude - WayStation',
@@ -41,12 +42,14 @@ export default function ClaudePage() {
               <div className="ml-4">
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Access Claude Menu</h3>
                 <p className="text-gray-600 mb-3">
-                  In Claude, look for the menu on the left side of your chat interface. Click on "Connect apps" or scroll down to find "Add integrations" at the bottom of the menu.
+                  In Claude, look for the menu on the left side of your chat interface. Click on &quot;Connect apps&quot; or scroll down to find &quot;Add integrations&quot; at the bottom of the menu.
                 </p>
                 <div className="mt-4">
-                  <img 
+                  <Image 
                     src="/images/apps/claude-integration-settings.png"
                     alt="Claude menu showing Connect apps and Add integrations options"
+                    width={800}
+                    height={600}
                     className="w-full max-w-2xl rounded-lg border shadow-sm"
                   />
                   <p className="text-sm text-gray-500 mt-2 italic">Claude menu with integration options visible</p>
@@ -62,15 +65,17 @@ export default function ClaudePage() {
               <div className="ml-4">
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Open Integrations Page</h3>
                 <p className="text-gray-600 mb-3">
-                  Click on "Add integrations" from the menu. This will open the Integrations page where you can see existing connected services and add new ones.
+                  Click on &quot;Add integrations&quot; from the menu. This will open the Integrations page where you can see existing connected services and add new ones.
                 </p>
                 <div className="mt-4">
-                  <img 
+                  <Image 
                     src="/images/apps/claude-add-integration.png"
                     alt="Claude Integrations page showing connected services and Add integration button"
+                    width={800}
+                    height={600}
                     className="w-full max-w-2xl rounded-lg border shadow-sm"
                   />
-                  <p className="text-sm text-gray-500 mt-2 italic">Integrations page with existing connections and "Add integration" button</p>
+                  <p className="text-sm text-gray-500 mt-2 italic">Integrations page with existing connections and &quot;Add integration&quot; button</p>
                 </div>
               </div>
             </div>
@@ -83,12 +88,14 @@ export default function ClaudePage() {
               <div className="ml-4">
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Add New Integration</h3>
                 <p className="text-gray-600 mb-3">
-                  Click the "Add integration" button at the bottom of the integrations list. This will open a form where you can configure a custom integration.
+                  Click the &quot;Add integration&quot; button at the bottom of the integrations list. This will open a form where you can configure a custom integration.
                 </p>
                 <div className="mt-4">
-                  <img 
+                  <Image 
                     src="/images/apps/claude-oauth-flow.png"
                     alt="Add integration form with Integration name and URL fields"
+                    width={800}
+                    height={600}
                     className="w-full max-w-2xl rounded-lg border shadow-sm"
                   />
                   <p className="text-sm text-gray-500 mt-2 italic">Add integration form with name and URL fields</p>
@@ -118,7 +125,7 @@ export default function ClaudePage() {
                   </div>
                 </div>
                 <p className="text-sm text-gray-600">
-                  After filling in the fields, click the "Add" button to create the integration.
+                  After filling in the fields, click the &quot;Add&quot; button to create the integration.
                 </p>
               </div>
             </div>
@@ -131,8 +138,8 @@ export default function ClaudePage() {
               <div className="ml-4">
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Connect and Authenticate</h3>
                 <p className="text-gray-600 mb-3">
-                  After adding the integration, you'll see "WayStation" appear in your integrations list with a "Connect" button next to it. 
-                  Click the "Connect" button to authenticate your WayStation account and activate the integration.
+                  After adding the integration, you&apos;ll see &quot;WayStation&quot; appear in your integrations list with a &quot;Connect&quot; button next to it. 
+                  Click the &quot;Connect&quot; button to authenticate your WayStation account and activate the integration.
                 </p>
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
                   <p className="text-sm text-amber-700">
@@ -150,7 +157,7 @@ export default function ClaudePage() {
               <div className="ml-4">
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Start Using Your Tools</h3>
                 <p className="text-gray-600">
-                  Once authenticated, WayStation will show a "Connected" status in your integrations list. 
+                  Once authenticated, WayStation will show a &quot;Connected&quot; status in your integrations list. 
                   You can now access all your WayStation integrations directly within Claude conversations!
                 </p>
               </div>
@@ -164,13 +171,13 @@ export default function ClaudePage() {
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Example Commands</h2>
           <div className="space-y-3">
             <div className="bg-gray-50 p-3 rounded-md">
-              <code className="text-sm">"Create a new task in my Asana project for the marketing campaign"</code>
+              <code className="text-sm">&quot;Create a new task in my Asana project for the marketing campaign&quot;</code>
             </div>
             <div className="bg-gray-50 p-3 rounded-md">
-              <code className="text-sm">"Send a Slack message to the #team channel about today's standup"</code>
+              <code className="text-sm">&quot;Send a Slack message to the #team channel about today&apos;s standup&quot;</code>
             </div>
             <div className="bg-gray-50 p-3 rounded-md">
-              <code className="text-sm">"Search my Google Drive for documents related to Q4 planning"</code>
+              <code className="text-sm">&quot;Search my Google Drive for documents related to Q4 planning&quot;</code>
             </div>
           </div>
         </div>

@@ -16,10 +16,10 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-import { School, MessageSquareText, Plug, Users } from "lucide-react";
+import { School, MessageSquareText, Plug } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { OrganizationSwitcher, SignedIn, UserButton } from "@clerk/nextjs";
+import { SignedIn, UserButton } from "@clerk/nextjs";
 
 const items = [
   {

@@ -3,6 +3,8 @@ import useCases from '@/app/(frontend)/use-cases/use-cases.json';
 import configPromise from '@payload-config';
 import { getPayload } from 'payload';
 
+import { UseCase as PayloadUseCase } from '@/payload-types';
+
 
 export interface UseCase {
   id: string;
@@ -49,13 +51,13 @@ export async function getAllUseCases(): Promise<UseCase[]> {
     pagination: false,
   });
 
-  const dbCases = coll.docs.map((doc: any) => ({
+  const dbCases = coll.docs.map((doc: PayloadUseCase) => ({
     id: doc.slug,
     title: doc.title,
     summary: doc.summary,
     call_to_action: doc.callToAction,
     integration_recipe: doc.integrationRecipe,
-    bullet_points: doc.bulletPoints.map((item: string) => item.point),
+    bullet_points: doc.bulletPoints?.map((item) => item.point),
   }))
 
   // Merge dbCases and useCases excluding those already in dbCases
@@ -82,7 +84,7 @@ export async function getUseCaseById(id: string): Promise<UseCase | null> {
 
   if (result.docs?.[0])
     return {
-      id: result.docs[0].slug,
+      id: result.docs[0].slug || '',
       title: result.docs[0].title,
       summary: result.docs[0].summary,
       call_to_action: result.docs[0].callToAction,

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowLeft, ExternalLink, AlertTriangle, Info } from 'lucide-react';
+import { ExternalLink, Info } from 'lucide-react';
+import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: 'Connect to ChatGPT - WayStation',
@@ -34,7 +35,7 @@ export default function ChatGPTPage() {
           <div>
             <h3 className="text-sm font-medium text-amber-800 mb-1">Limited Availability</h3>
             <p className="text-sm text-amber-700">
-              Custom Connectors are currently only available in ChatGPT's "Deep Research Mode". 
+              Custom Connectors are currently only available in ChatGPT&apos;s &quot;Deep Research Mode&quot;. 
               They cannot be used in regular chat conversations yet.
             </p>
           </div>
@@ -68,12 +69,14 @@ export default function ChatGPTPage() {
               <div className="ml-4">
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Navigate to Connectors</h3>
                 <p className="text-gray-600 mb-3">
-                  In the Settings sidebar, look for and click on "Connectors" (marked as BETA). This will show you available connectors and a "Create" button.
+                  In the Settings sidebar, look for and click on &quot;Connectors&quot; (marked as BETA). This will show you available connectors and a &quot;Create&quot; button.
                 </p>
                 <div className="mt-4">
-                  <img 
+                  <Image 
                     src="/images/apps/chatgpt-connectors-settings.png"
                     alt="ChatGPT Connectors settings page showing available connectors"
+                    width={800}
+                    height={600}
                     className="w-full max-w-2xl rounded-lg border shadow-sm"
                   />
                   <p className="text-sm text-gray-500 mt-2 italic">Connectors page showing various app integrations and Create button</p>
@@ -89,12 +92,14 @@ export default function ChatGPTPage() {
               <div className="ml-4">
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Create New Connector</h3>
                 <p className="text-gray-600 mb-3">
-                  Click the "Create" button in the top-right corner of the Connectors page. This will open the "New connector" dialog.
+                  Click the &quot;Create&quot; button in the top-right corner of the Connectors page. This will open the &quot;New connector&quot; dialog.
                 </p>
                 <div className="mt-4">
-                  <img 
+                  <Image 
                     src="/images/apps/chatgpt-add-connector.png"
                     alt="New connector dialog with form fields for configuration"
+                    width={600}
+                    height={400}
                     className="w-full max-w-lg rounded-lg border shadow-sm"
                   />
                   <p className="text-sm text-gray-500 mt-2 italic">New connector creation form</p>
@@ -130,7 +135,7 @@ export default function ChatGPTPage() {
                   </div>
                 </div>
                 <p className="text-sm text-gray-600">
-                  After filling in the required fields, click "Create" to add the connector.
+                  After filling in the required fields, click &quot;Create&quot; to add the connector.
                 </p>
               </div>
             </div>
@@ -155,7 +160,7 @@ export default function ChatGPTPage() {
         <div className="bg-white border border-gray-200 rounded-lg p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Using Deep Research Mode</h2>
           <p className="text-gray-600 mb-4">
-            To access your WayStation tools, you'll need to use ChatGPT's Deep Research Mode:
+            To access your WayStation tools, you&apos;ll need to use ChatGPT&apos;s Deep Research Mode:
           </p>
           <div className="space-y-3">
             <div className="flex items-start">
@@ -168,7 +173,7 @@ export default function ChatGPTPage() {
               <div className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium mt-0.5">
                 2
               </div>
-              <p className="ml-3 text-gray-600">Switch to "Deep Research Mode" (look for the mode selector)</p>
+              <p className="ml-3 text-gray-600">Switch to &quot;Deep Research Mode&quot; (look for the mode selector)</p>
             </div>
             <div className="flex items-start">
               <div className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium mt-0.5">
@@ -184,13 +189,13 @@ export default function ChatGPTPage() {
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Example Research Queries</h2>
           <div className="space-y-3">
             <div className="bg-gray-50 p-3 rounded-md">
-              <code className="text-sm">"Research the latest marketing trends and create action items in my Asana project"</code>
+              <code className="text-sm">&quot;Research the latest marketing trends and create action items in my Asana project&quot;</code>
             </div>
             <div className="bg-gray-50 p-3 rounded-md">
-              <code className="text-sm">"Analyze my Google Drive documents for Q4 insights and summarize findings"</code>
+              <code className="text-sm">&quot;Analyze my Google Drive documents for Q4 insights and summarize findings&quot;</code>
             </div>
             <div className="bg-gray-50 p-3 rounded-md">
-              <code className="text-sm">"Research competitor pricing and update my team via Slack with key findings"</code>
+              <code className="text-sm">&quot;Research competitor pricing and update my team via Slack with key findings&quot;</code>
             </div>
           </div>
         </div>

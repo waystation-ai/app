@@ -1,6 +1,5 @@
 import { Plugin } from 'payload'
 
-import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { getServerSideURL } from '@/components/payload/utilities/getURL'

@@ -25,7 +25,7 @@ interface ProviderModalData {
 interface ProviderSettingsModalProps {
   providerData: ProviderModalData;
   isConnected: boolean;
-  connectionInfo?: any;
+  connectionInfo?: unknown;
 }
 
 export function ProviderSettingsModal({ providerData, isConnected, connectionInfo }: ProviderSettingsModalProps) {
