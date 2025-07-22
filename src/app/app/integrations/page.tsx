@@ -40,7 +40,7 @@ function ProviderRow({ providerData, isConnected, connectionInfo }: ProviderRowP
   return (
     <tr className="border-b border-gray-100 hover:bg-gray-50">
       {/* TOOL column */}
-      <td className="py-4 px-6">
+      <td className="py-4 px-6 w-full">
         <div className="flex items-center space-x-3">
           <ProviderIcon provider={providerData.id} width={24} height={24} />
           <span className="font-medium text-gray-900">{providerData.name}</span>
@@ -48,7 +48,7 @@ function ProviderRow({ providerData, isConnected, connectionInfo }: ProviderRowP
       </td>
       
       {/* CONNECTED AS column */}
-      <td className="py-4 px-6">
+      <td className="py-4 px-6 text-left whitespace-nowrap">
         {isConnected ? (
           <span className="text-sm text-gray-600">
             {connectionInfo?.metadata?.email || connectionInfo?.metadata?.username || 'Connected'}
@@ -56,7 +56,7 @@ function ProviderRow({ providerData, isConnected, connectionInfo }: ProviderRowP
         ) : (
           hasAuth ? (
             <Link 
-              href={`/connect/${providerData.id}`}
+              href={`/api/auth/${providerData.id}/connect`}
               className="inline-flex items-center px-3 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Connect
@@ -64,26 +64,26 @@ function ProviderRow({ providerData, isConnected, connectionInfo }: ProviderRowP
           ) : (
             <Link 
               href={`/waitlist/${providerData.id}`}
-              className="inline-flex items-center px-3 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-500 bg-gray-50 cursor-not-allowed"
+              className="inline-flex items-center px-3 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
-              Coming Soon
+              Connect
             </Link>
           )
         )}
       </td>
       
-      {/* ON/OFF column */}
-      <td className="py-4 px-6">
-        <div className="flex items-center">
-          {/* Toggle switch */}
+      {/* ON/OFF column 
+      <td className="py-4 px-6 text-right whitespace-nowrap">
+        <div className="flex items-center justify-end">
           <div className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${isConnected ? 'bg-blue-600' : 'bg-gray-200'}`}>
             <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isConnected ? 'translate-x-6' : 'translate-x-1'}`} />
           </div>
         </div>
       </td>
+      */}
       
       {/* SETTINGS column */}
-      <td className="py-4 px-6">
+      <td className="py-4 px-6 text-right whitespace-nowrap">
         <ProviderSettingsModal
           providerData={providerData}
           isConnected={isConnected}
@@ -177,18 +177,6 @@ export default async function IntegrationsPage() {
           <button className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
             + Add MCP
           </button>
-          <div className="flex items-center space-x-2">
-            <button className="p-2 text-gray-400 hover:text-gray-600">
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-              </svg>
-            </button>
-            <button className="p-2 text-gray-400 hover:text-gray-600">
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 002-2M9 7a2 2 0 012 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 002-2" />
-              </svg>
-            </button>
-          </div>
         </div>
       </div>
 
@@ -197,17 +185,18 @@ export default async function IntegrationsPage() {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-full">
                 TOOL
               </th>
-              <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                CONNECTED AS
+              <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                STATUS
               </th>
-              <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              {/*
+              <th className="py-3 px-6 text-right text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
                 ON/OFF
               </th>
-              <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                SETTINGS
+              */}
+              <th className="py-3 px-6 text-right text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
               </th>
             </tr>
           </thead>
