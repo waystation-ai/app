@@ -1,9 +1,10 @@
 import { auth } from '@clerk/nextjs/server';
 import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 
 import { getValidConnections } from '@/lib/db';
 import { registry } from '@/marketplace';
-import { isFullProvider, isNativeProvider } from '@/marketplace/core/types';
+import { isFullProvider, isNativeProvider, isRemoteProvider } from '@/marketplace/core/types';
 import { IntegrationsTabNavigation } from '@/components/app/IntegrationsTabNavigation';
 import { IntegrationsContent } from '@/components/app/IntegrationsContent';
 
@@ -27,7 +28,20 @@ export const metadata: Metadata = {
   title: 'Tools and Integrations',
 };
 
-export default async function IntegrationsPage() {
+interface PageProps {
+  params: {
+    tab: string;
+  };
+}
+
+export default async function IntegrationsTabPage({ params }: PageProps) {
+  const { tab } = params;
+
+  // Validate tab parameter
+  if (tab !== 'official' && tab !== 'native') {
+    redirect('/app/integrations');
+  }
+
   const session = await auth();
 
   if (!session.userId) {
@@ -48,8 +62,18 @@ export default async function IntegrationsPage() {
   // Get all providers from registry
   const allProviders = registry.getAllProviders();
   
+  // Filter providers based on tab
+  const filteredProviders = allProviders.filter(provider => {
+    if (tab === 'official') {
+      return isRemoteProvider(provider);
+    } else if (tab === 'native') {
+      return isNativeProvider(provider);
+    }
+    return true;
+  });
+  
   // Sort providers alphabetically by name
-  const sortedProviders = allProviders.sort((a, b) => a.name.localeCompare(b.name));
+  const sortedProviders = filteredProviders.sort((a, b) => a.name.localeCompare(b.name));
 
   // Create provider data with tools for each provider
   const providerDataList: ProviderModalData[] = await Promise.all(
@@ -92,7 +116,7 @@ export default async function IntegrationsPage() {
         </h1>
         
         {/* Tab navigation */}
-        <IntegrationsTabNavigation currentTab="all" />
+        <IntegrationsTabNavigation currentTab={tab as 'official' | 'native'} />
       </div>
 
       <IntegrationsContent
