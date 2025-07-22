@@ -1,105 +1,29 @@
-import { auth } from '@clerk/nextjs/server';
 import { Metadata } from 'next';
 
-import { getValidConnections } from '@/lib/db';
-import { registry } from '@/marketplace';
-import { isFullProvider, isNativeProvider } from '@/marketplace/core/types';
-import { IntegrationsTabNavigation } from '@/components/app/IntegrationsTabNavigation';
+import { getIntegrationsData } from './utils';
+import { IntegrationsLayout } from '@/components/app/IntegrationsLayout';
 import { IntegrationsContent } from '@/components/app/IntegrationsContent';
-
-interface ProviderTool {
-  id: string;
-  summary: string;
-  description?: string;
-}
-
-interface ProviderModalData {
-  id: string;
-  name: string;
-  description: string;
-  bullets?: string[];
-  tools: ProviderTool[];
-  hasAuth: boolean;
-  scopes?: string[];
-}
 
 export const metadata: Metadata = {
   title: 'Tools and Integrations',
 };
 
 export default async function IntegrationsPage() {
-  const session = await auth();
+  const data = await getIntegrationsData();
 
-  if (!session.userId) {
-    session.redirectToSignIn();
+  if (!data) {
     return null;
   }
 
-  // Get connected providers
-  let connectedProviderIds = new Set<string>();
-  let connectionsMap = new Map();
-  try {
-    connectionsMap = await getValidConnections(session.userId);
-    connectedProviderIds = new Set(connectionsMap.keys());
-  } catch (error) {
-    console.error('Error fetching connections:', error);
-  }
-
-  // Get all providers from registry
-  const allProviders = registry.getAllProviders();
-  
-  // Sort providers alphabetically by name
-  const sortedProviders = allProviders.sort((a, b) => a.name.localeCompare(b.name));
-
-  // Create provider data with tools for each provider
-  const providerDataList: ProviderModalData[] = await Promise.all(
-    sortedProviders.map(async (provider) => {
-      const isConnected = connectedProviderIds.has(provider.id);
-      let tools: ProviderTool[] = [];
-      
-      // Fetch tools only for connected providers
-      if (isConnected) {
-        try {
-          const providerTools = await registry.getProviderTools(provider, session.userId);
-          tools = providerTools.map(tool => ({
-            id: tool.id,
-            summary: tool.summary,
-            description: tool.description
-          }));
-        } catch (error) {
-          console.error(`Error fetching tools for ${provider.id}:`, error);
-        }
-      }
-
-      return {
-        id: provider.id,
-        name: provider.name,
-        description: provider.description,
-        bullets: provider.bullets,
-        tools,
-        hasAuth: isFullProvider(provider),
-        scopes: isNativeProvider(provider) ? provider.scopes : undefined
-      };
-    })
-  );
+  const { providers, connectedProviderIds, connectionsMap } = data;
 
   return (
-    <div className="mt-4 sm:mt-8 px-4 sm:px-6 lg:px-8 mx-auto">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl lg:text-4xl text-gray-900 font-bold mb-6">
-          Tools and Integrations
-        </h1>
-        
-        {/* Tab navigation */}
-        <IntegrationsTabNavigation currentTab="all" />
-      </div>
-
+    <IntegrationsLayout currentTab="all">
       <IntegrationsContent
-        providers={providerDataList}
+        providers={providers}
         connectedProviderIds={connectedProviderIds}
         connectionsMap={connectionsMap}
       />
-    </div>
+    </IntegrationsLayout>
   );
 }

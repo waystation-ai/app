@@ -1,0 +1,25 @@
+import { IntegrationsTabNavigation } from '@/components/app/IntegrationsTabNavigation';
+import { IntegrationTab } from '@/app/app/integrations/utils';
+
+interface IntegrationsLayoutProps {
+  currentTab: IntegrationTab;
+  children: React.ReactNode;
+}
+
+export function IntegrationsLayout({ currentTab, children }: IntegrationsLayoutProps) {
+  return (
+    <div className="mt-4 sm:mt-8 px-4 sm:px-6 lg:px-8 mx-auto">
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-3xl lg:text-4xl text-gray-900 font-bold mb-6">
+          Tools and Integrations
+        </h1>
+        
+        {/* Tab navigation */}
+        <IntegrationsTabNavigation currentTab={currentTab} />
+      </div>
+
+      {children}
+    </div>
+  );
+}
