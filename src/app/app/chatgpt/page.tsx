@@ -1,0 +1,226 @@
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { ArrowLeft, ExternalLink, AlertTriangle, Info } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'Connect to ChatGPT - WayStation',
+};
+
+export default function ChatGPTPage() {
+  return (
+    <div className="mt-4 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-3xl lg:text-4xl text-gray-900 font-bold mb-4">
+          Connect WayStation to ChatGPT
+        </h1>
+        <p className="text-lg text-gray-600">
+          Access your WayStation tools directly within ChatGPT Plus using Custom Connectors
+        </p>
+      </div>
+
+      {/* Requirements */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+        <h2 className="text-lg font-semibold text-blue-900 mb-2">Requirements</h2>
+        <ul className="space-y-1 text-blue-800">
+          <li>ChatGPT Plus subscription required</li>
+        </ul>
+      </div>
+
+      {/* Important Note */}
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 mb-8">
+        <div className="flex items-start">
+          <Info className="h-5 w-5 text-amber-600 mt-0.5 mr-3 flex-shrink-0" />
+          <div>
+            <h3 className="text-sm font-medium text-amber-800 mb-1">Limited Availability</h3>
+            <p className="text-sm text-amber-700">
+              Custom Connectors are currently only available in ChatGPT's "Deep Research Mode". 
+              They cannot be used in regular chat conversations yet.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Instructions */}
+      <div className="space-y-8">
+        <div className="bg-white border border-gray-200 rounded-lg p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">Setup Instructions</h2>
+          
+          <div className="space-y-6">
+            {/* Step 1 */}
+            <div className="flex">
+              <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
+                1
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Open ChatGPT Settings</h3>
+                <p className="text-gray-600 mb-3">
+                  In ChatGPT, click on your profile or settings icon to access the Settings menu.
+                </p>
+              </div>
+            </div>
+
+            {/* Step 2 */}
+            <div className="flex">
+              <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
+                2
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Navigate to Connectors</h3>
+                <p className="text-gray-600 mb-3">
+                  In the Settings sidebar, look for and click on "Connectors" (marked as BETA). This will show you available connectors and a "Create" button.
+                </p>
+                <div className="mt-4">
+                  <img 
+                    src="/images/apps/chatgpt-connectors-settings.png"
+                    alt="ChatGPT Connectors settings page showing available connectors"
+                    className="w-full max-w-2xl rounded-lg border shadow-sm"
+                  />
+                  <p className="text-sm text-gray-500 mt-2 italic">Connectors page showing various app integrations and Create button</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 3 */}
+            <div className="flex">
+              <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
+                3
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Create New Connector</h3>
+                <p className="text-gray-600 mb-3">
+                  Click the "Create" button in the top-right corner of the Connectors page. This will open the "New connector" dialog.
+                </p>
+                <div className="mt-4">
+                  <img 
+                    src="/images/apps/chatgpt-add-connector.png"
+                    alt="New connector dialog with form fields for configuration"
+                    className="w-full max-w-lg rounded-lg border shadow-sm"
+                  />
+                  <p className="text-sm text-gray-500 mt-2 italic">New connector creation form</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 4 */}
+            <div className="flex">
+              <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
+                4
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Configure WayStation Connection</h3>
+                <p className="text-gray-600 mb-3">
+                  Fill out the connector form with your WayStation details:
+                </p>
+                <div className="bg-gray-50 p-4 rounded-md mb-3">
+                  <div className="space-y-2 text-sm">
+                    <div>
+                      <strong>Name:</strong> WayStation
+                    </div>
+                    <div>
+                      <strong>URL:</strong> 
+                      <code className="ml-2 bg-white px-2 py-1 rounded border">https://waystation.app/api/mcp</code>
+                    </div>
+                    <div>
+                      <strong>Description (optional):</strong> Access your WayStation integrations
+                    </div>
+                    <div>
+                      <strong>Icon (optional):</strong> You can upload a custom icon or leave blank
+                    </div>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-600">
+                  After filling in the required fields, click "Create" to add the connector.
+                </p>
+              </div>
+            </div>
+
+            {/* Step 5 */}
+            <div className="flex">
+              <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
+                ✓
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Connector Created Successfully</h3>
+                <p className="text-gray-600 mb-3">
+                  Your WayStation connector is now created and ready to use! Remember that Custom Connectors are currently only available in Deep Research Mode.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {/* Deep Research Mode */}
+        <div className="bg-white border border-gray-200 rounded-lg p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Using Deep Research Mode</h2>
+          <p className="text-gray-600 mb-4">
+            To access your WayStation tools, you'll need to use ChatGPT's Deep Research Mode:
+          </p>
+          <div className="space-y-3">
+            <div className="flex items-start">
+              <div className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium mt-0.5">
+                1
+              </div>
+              <p className="ml-3 text-gray-600">Start a new conversation in ChatGPT</p>
+            </div>
+            <div className="flex items-start">
+              <div className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium mt-0.5">
+                2
+              </div>
+              <p className="ml-3 text-gray-600">Switch to "Deep Research Mode" (look for the mode selector)</p>
+            </div>
+            <div className="flex items-start">
+              <div className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium mt-0.5">
+                3
+              </div>
+              <p className="ml-3 text-gray-600">Your WayStation connector will now be available for use</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Usage Examples */}
+        <div className="bg-white border border-gray-200 rounded-lg p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Example Research Queries</h2>
+          <div className="space-y-3">
+            <div className="bg-gray-50 p-3 rounded-md">
+              <code className="text-sm">"Research the latest marketing trends and create action items in my Asana project"</code>
+            </div>
+            <div className="bg-gray-50 p-3 rounded-md">
+              <code className="text-sm">"Analyze my Google Drive documents for Q4 insights and summarize findings"</code>
+            </div>
+            <div className="bg-gray-50 p-3 rounded-md">
+              <code className="text-sm">"Research competitor pricing and update my team via Slack with key findings"</code>
+            </div>
+          </div>
+        </div>
+
+        {/* Support */}
+        <div className="bg-white border border-gray-200 rounded-lg p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Need Help?</h2>
+          <p className="text-gray-600 mb-4">
+            Having trouble connecting? Check out these resources:
+          </p>
+          <div className="space-y-2">
+            <Link 
+              href="/app/integrations"
+              className="inline-flex items-center text-blue-600 hover:text-blue-700"
+            >
+              <ExternalLink className="h-4 w-4 mr-2" />
+              Manage your integrations
+            </Link>
+            <a 
+              href="https://remotemcp.substack.com/p/custom-integrations-vs-custom-connectors"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center text-blue-600 hover:text-blue-700"
+            >
+              <ExternalLink className="h-4 w-4 mr-2" />
+              View original guide with screenshots
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
