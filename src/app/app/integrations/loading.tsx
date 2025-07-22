@@ -3,7 +3,7 @@ import { IntegrationsLayout } from '@/components/app/IntegrationsLayout';
 
 export default function IntegrationsLoading() {
   return (
-    <IntegrationsLayout currentTab="all">
+    <IntegrationsLayout currentTab="none">
       {/* Add MCP button */}
       <div className="mb-6 flex justify-between items-center">
         <div className="flex items-center space-x-4">

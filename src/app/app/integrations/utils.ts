@@ -20,7 +20,7 @@ export interface ProviderModalData {
   scopes?: string[];
 }
 
-export type IntegrationTab = 'all' | 'official' | 'native';
+export type IntegrationTab = 'all' | 'official' | 'native' | 'none';
 
 // Data fetching
 export async function getIntegrationsData(filterTab?: 'official' | 'native') {

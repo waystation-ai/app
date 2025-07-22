@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 interface IntegrationsTabNavigationProps {
-  currentTab: 'all' | 'official' | 'native';
+  currentTab: 'all' | 'official' | 'native' | 'none';
 }
 
 export function IntegrationsTabNavigation({ currentTab }: IntegrationsTabNavigationProps) {
