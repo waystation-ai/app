@@ -6,11 +6,11 @@ import { getValidConnections } from '@/lib/db';
 import { registry } from '@/marketplace';
 import { isFullProvider, Provider } from '@/marketplace/core/types';
 
-import { LaunchPad } from '@/components/app/LaunchPad';
-import { LaunchPadBasement } from '@/components/app/LaunchPadBasement';
 import ProviderCard from '@/components/app/ProviderCard';
-import { ProviderIcon } from '@/components/app/ProviderIcon';
 import { RedirectHandler } from '@/components/app/RedirectHandler';
+
+import { useTrackEvent } from '@/lib/utils/track-event';
+import { LaunchPad } from '@/components/app/LaunchPad';
  
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -82,76 +82,53 @@ export default async function Page() {
         ...unconnectedIds.slice(0, 4 - connectedIds.length)
       ];
   
-  // Create a Set of provider IDs that are displayed in "Connect your apps"
-  const displayedProviderIds = new Set(displayIds);
-  
-  // Get remaining provider IDs for "More integrations"
-  const moreIntegrationIds = [
-    ...unconnectedIds.filter(id => !displayedProviderIds.has(id)),
-    ...Object.keys(providersData.noAuth)
-  ];
 
   return (
-    <div className="mt-4 sm:mt-8 px-4 sm:px-6 lg:px-8  mx-auto">
+    <div className="mt-4 sm:mt-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
       {/* Add the redirect handler */}
       <RedirectHandler />
-      {/* Top section - Two columns */}
-      <div className="flex flex-col lg:flex-row gap-8 mb-12">
-        {/* Left Column - Connect your apps */}
-        <div className={`flex flex-col ${connectedIds.length > 0 ? 'lg:w-2/3' : 'w-full'}`}>
-          <p className="text-3xl lg:text-4xl text-gray-900 font-bold">
-                Connect your apps first...
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 w-full my-3 sm:my-9">
-            {displayIds.map(providerId => {
-              const provider = providersData.connected[providerId] || providersData.unconnected[providerId];
-              return (
-                <ProviderCard
-                  key={providerId}
-                  provider={providerId}
-                  name={provider.name}
-                  description={provider.description}
-                  isConnected={connectedProviderIds.has(providerId)}
-                />
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Right Column - Launch section - Only shown when at least one provider is connected */}
-        {connectedIds.length > 0 && (
-          <div className="flex flex-col lg:w-1/3 items-center justify-center h-full">
-            <p className="my-4 text-3xl lg:text-4xl text-gray-900 font-bold w-full text-center">
-                  ...and get started!
-            </p>
-            <LaunchPad  />
-            <LaunchPadBasement gptId={process.env.GPT_ID}/>
-          </div>
-        )}
-      </div>
       
-      {/* Bottom section - Full width */}
-      <div className="w-full">
-        <p className="text-xl lg:text-2xl text-gray-900 font-bold">
-          More Integrations
+      {/* Main section - Connect your apps */}
+      <div className="mb-12">
+        <p className="text-3xl lg:text-4xl text-gray-900 font-bold mb-6">
+          Dashboard
         </p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-8 gap-6 w-full my-6">
-          {moreIntegrationIds.map(providerId => {
-            const provider = providersData.unconnected[providerId] || providersData.noAuth[providerId];
+        <p className="text-xl lg:text-2xl text-gray-600 mb-6">
+          Connect your apps first...
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 w-full mb-8">
+          {displayIds.map(providerId => {
+            const provider = providersData.connected[providerId] || providersData.unconnected[providerId];
             return (
-              <Link 
-                key={providerId} 
-                href={isFullProvider(provider) ? `/connect/${providerId}` : `/waitlist/${providerId}`} 
-                className="provider-card flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
-              >
-                <ProviderIcon provider={providerId} />
-                <p className="mt-2 text-sm text-gray-600 text-center">{provider.name}</p>
-              </Link>
+              <ProviderCard
+                key={providerId}
+                provider={providerId}
+                name={provider.name}
+                description={provider.description}
+                isConnected={connectedProviderIds.has(providerId)}
+              />
             );
           })}
         </div>
-      </div>
 
+        {/* More Integrations Link */}
+        <div className="mt-6">
+          <Link href="/app/integrations" className="text-blue-600 hover:text-blue-800 font-medium">
+            More Integrations →
+          </Link>
+        </div>
+
+        {/* Connection Guides - Only shown when at least one provider is connected */}
+        {connectedIds.length > 0 && (
+
+        <div>  
+          <p className="text-xl lg:text-2xl text-gray-600 mb-6">
+            ...let WayStation to plug them into your AI agents
+          </p>
+          <LaunchPad />
+        </div>  
+        )}
+      </div>
     </div>
   );
 }

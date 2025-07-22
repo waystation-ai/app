@@ -7,6 +7,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import { GoogleTagManager } from "@next/third-parties/google";
 import Script from "next/script";
+import { cookies } from "next/headers";
 
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app/Sidebar";
@@ -15,7 +16,9 @@ import BodyBackground from "@/components/app/BodyBackground";
 
 export { metadata } from "../metadata";
 
-export default function RootLayout({children}: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({children}: Readonly<{ children: React.ReactNode }>) {
+  const cookieStore = await cookies();
+  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
   return (
     <ClerkProvider>
       <html lang="en">
@@ -32,10 +35,9 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
           <PostHogProvider>
             <BodyBackground />
 
-            <SidebarProvider>
+            <SidebarProvider defaultOpen={defaultOpen}>
               <AppSidebar />
-              <main className="flex-1 h-full">
-                
+              <main className="flex-1 h-full">                
                 <div className="h-full">{children}</div>
               </main>
             </SidebarProvider>

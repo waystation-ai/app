@@ -4,7 +4,7 @@ import { IntegrationsLayout } from '@/components/app/IntegrationsLayout';
 export default function IntegrationsLoading() {
   return (
     <IntegrationsLayout currentTab="none">
-      {/* Add MCP button */}
+      {/* Add MCP button
       <div className="mb-6 flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <button className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
@@ -12,6 +12,7 @@ export default function IntegrationsLoading() {
           </button>
         </div>
       </div>
+       */}
 
       {/* Table */}
       <div className="bg-white shadow-sm rounded-lg overflow-hidden">
