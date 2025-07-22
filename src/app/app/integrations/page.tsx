@@ -5,7 +5,7 @@ import { IntegrationsLayout } from '@/components/app/IntegrationsLayout';
 import { IntegrationsContent } from '@/components/app/IntegrationsContent';
 
 export const metadata: Metadata = {
-  title: 'Tools and Integrations',
+  title: 'Integrations',
 };
 
 export default async function IntegrationsPage() {
