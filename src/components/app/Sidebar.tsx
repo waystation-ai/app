@@ -49,6 +49,7 @@ const items = [
 export function AppSidebar() {
   const { open } = useSidebar();
   return (
+    <nav>
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <div className="flex items-center justify-between w-full">
@@ -109,5 +110,6 @@ export function AppSidebar() {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
+    </nav>
   );
 }

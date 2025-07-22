@@ -142,7 +142,7 @@ export default function Navigation() {
 
       {/* Desktop Navigation Links */}
       
-      <div className="hidden md:block">
+      <div className="hidden md:block pl-4">
         <Menu />
       </div>
       <div id="profile" className="hidden md:block md:ml-auto">

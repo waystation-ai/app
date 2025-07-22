@@ -202,22 +202,9 @@ export default function ChatGPTPage() {
             Having trouble connecting? Check out these resources:
           </p>
           <div className="space-y-2">
-            <Link 
-              href="/app/integrations"
-              className="inline-flex items-center text-blue-600 hover:text-blue-700"
-            >
-              <ExternalLink className="h-4 w-4 mr-2" />
-              Manage your integrations
+            <Link href="/app/integrations" className="inline-flex items-center text-blue-600 hover:text-blue-700">
+              <ExternalLink className="h-4 w-4 mr-2" />  Manage your integrations
             </Link>
-            <a 
-              href="https://remotemcp.substack.com/p/custom-integrations-vs-custom-connectors"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center text-blue-600 hover:text-blue-700"
-            >
-              <ExternalLink className="h-4 w-4 mr-2" />
-              View original guide with screenshots
-            </a>
           </div>
         </div>
       </div>

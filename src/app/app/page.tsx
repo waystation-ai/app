@@ -114,7 +114,7 @@ export default async function Page() {
         {/* More Integrations Link */}
         <div className="mt-6">
           <Link href="/app/integrations" className="text-blue-600 hover:text-blue-800 font-medium">
-            More Integrations →
+            More Apps →
           </Link>
         </div>
 
@@ -122,7 +122,7 @@ export default async function Page() {
         {connectedIds.length > 0 && (
 
         <div>  
-          <p className="text-xl lg:text-2xl text-gray-600 mb-6">
+          <p className="text-xl lg:text-2xl text-gray-600 my-6">
             ...let WayStation to plug them into your AI agents
           </p>
           <LaunchPad />

@@ -12,7 +12,7 @@ export function LaunchPad() {
       <Link href='/playground' onClick={() => trackEvent('launch', {'app': "playground"})} target='_blank' className="launch-btn px-4 py-2 font-bold hover:scale-105 transition-transform duration-300 w-auto text-center rounded-lg">
         <span>Launch Playground</span>
       </Link>
-      <span className="text-base font-medium text-gray-600">or</span>
+      <span className="text-base font-medium text-gray-600">or connect</span>
       <Link href="/app/claude" className="flex items-center gap-3 px-4 py-2 bg-white border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md">
         <img src="/images/apps/claude.svg" width={24} height={24} alt="Claude" />
         <span className="font-medium text-gray-900">Claude</span>
