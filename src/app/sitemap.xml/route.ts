@@ -1,5 +1,5 @@
 import { registry } from '@/marketplace';
-import useCases from '../use-cases/use-cases.json';
+import useCases from '../(frontend)/use-cases/use-cases.json';
 
 export async function GET() {
   // Get current date for lastmod

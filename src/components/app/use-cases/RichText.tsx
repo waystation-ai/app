@@ -5,16 +5,15 @@ import { ProcessedTextSegment } from "@/lib/utils/appLinkProcessor";
 interface RichTextProps {
   segments: ProcessedTextSegment[];
   className?: string;
+  links?: boolean;
 }
 
-export default function RichText({ segments, className = "" }: RichTextProps) {
+export default function RichText({ segments, className = "", links }: RichTextProps) {
   return (
     <span className={className}>
       {segments.map((segment, index) => {
         if (segment.type === 'app-link' && segment.appLink) {
-          return (
-            <Link key={index} href={`/connect/${segment.appLink.provider}`} className="font-bold">
-              <span className="whitespace-nowrap items-center">
+          const content = <span className="whitespace-nowrap items-center" key={segment.appLink.provider}>
                 <Image
                   src={segment.appLink.icon}
                   alt={segment.appLink.displayName}
@@ -23,9 +22,16 @@ export default function RichText({ segments, className = "" }: RichTextProps) {
                   className="inline-flex"
                 />
                 <span className="ml-1">{segment.appLink.displayName}</span>
-              </span>
-            </Link>
-          );
+              </span>;
+
+          if (!links)
+            return content;
+          else    
+            return (
+              <Link key={index} href={`/connect/${segment.appLink.provider}`} className="font-bold">
+                {content}
+              </Link>
+            );
         }
         
         return (

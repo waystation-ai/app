@@ -5,8 +5,8 @@ interface UseCaseNavigationProps {
   currentUseCaseId: string;
 }
 
-export default function UseCaseNavigation({ currentUseCaseId }: UseCaseNavigationProps) {
-  const { previous, next } = getAdjacentUseCases(currentUseCaseId);
+export default async function UseCaseNavigation({ currentUseCaseId }: UseCaseNavigationProps) {
+  const { previous, next } = await getAdjacentUseCases(currentUseCaseId);
 
   return (
     <div className="border-t border-gray-200 px-4 sm:px-8 py-8 max-w-7xl mx-auto w-full">

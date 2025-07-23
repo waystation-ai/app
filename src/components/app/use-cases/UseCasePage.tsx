@@ -19,7 +19,7 @@ export default function UseCasePage({ useCase }: UseCasePageProps) {
         <div className="text-center px-4 sm:px-8 py-8 max-w-4xl mx-auto">
           <h1 className="text-3xl lg:text-4xl font-bold mb-6">{processedUseCase.title}</h1>
           <div className="text-lg lg:text-xl leading-relaxed text-gray-700">
-            <RichText segments={processedUseCase.summary} />
+            <RichText segments={processedUseCase.summary} links={true}/>
           </div>
         </div>
 
@@ -33,7 +33,7 @@ export default function UseCasePage({ useCase }: UseCasePageProps) {
                 <li key={index} className="flex items-start">
                   <span className="text-aurora-green mr-3 mt-1 text-lg">•</span>
                   <span className="text-gray-700 leading-relaxed">
-                    <RichText segments={pointSegments} />
+                    <RichText segments={pointSegments} links={true} />
                   </span>
                 </li>
               ))}
@@ -48,7 +48,7 @@ export default function UseCasePage({ useCase }: UseCasePageProps) {
               <div className="absolute bottom-4 right-4 text-green-100 opacity-50 text-6xl font-serif rotate-180">&rdquo;</div>
               
               <div className="text-gray-700 leading-relaxed text-lg relative z-10">
-                <RichText segments={processedUseCase.integration_recipe} />
+                <RichText segments={processedUseCase.integration_recipe} links={true} />
               </div>
             </div>
           </div>
