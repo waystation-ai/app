@@ -48,7 +48,7 @@ export async function getIntegrationsData(): Promise<ProviderWithConnectionStatu
   const connections = await getValidConnections(session.userId);
 
   // Get all providers from registry and sort alphabetically
-  const providers = registry.getAllProviders().sort((a, b) => a.name.localeCompare(b.name));
+  const providers = registry.getVetoedProviders().sort((a, b) => a.name.localeCompare(b.name));
 
   // Create unified provider data with connection status and tools
   const providersWithStatus: ProviderWithConnectionStatus[] = await Promise.all(
