@@ -6,10 +6,7 @@ import { isNativeProvider } from '@/marketplace/core/types';
 
 import { stateStore } from '@/lib/services/state-store';
 
-export async function GET(
-  request: Request,
-  { params }: { params: Promise<{ provider: string }> }
-) {
+export async function GET(request: Request, { params }: { params: Promise<{ provider: string }> }) {
   try {
     const session = await auth();
     if (!session.userId) {
@@ -27,8 +24,7 @@ export async function GET(
 
     // Check if this is a connection string provider and redirect to setup page
     if (isNativeProvider(providerConfig) && providerConfig.auth?.type === 'connection_string') {
-      const requestUrl = new URL(request.url);
-      return NextResponse.redirect(new URL(`/connect/${provider}/setup`, requestUrl.origin));
+      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}/connect/${provider}/setup`);
     }
 
     // Generate authorization URL with state and PKCE for OAuth providers
