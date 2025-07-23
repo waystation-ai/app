@@ -5,24 +5,14 @@ import {
   SignedOut,
   SignInButton,
   UserButton,
-  useUser,
 } from "@clerk/nextjs";
 import React from "react";
-import { checkRoles } from "@/lib/auth-utils";
-import { Role } from "@/types/globals";
-import { ADMIN_ENABLED_ROLES } from "@/collections/lib/constants";
-import { AdminIcon } from "@/components/app/icons";
+import { SUPER_ADMIN_ROLES } from "@/collections/lib/constants";
+import { checkRoles } from "@/lib/payload/auth-utils";
+import { Settings } from 'lucide-react';
 
-export const ClerkUserButton: React.FC = () => {
-  const { isLoaded, user } = useUser();
-
-  if (!isLoaded) {
-    return null;
-  }
-
-  const isAdminEnabledRole =
-    !!user?.publicMetadata?.roles &&
-    checkRoles(ADMIN_ENABLED_ROLES, user.publicMetadata.roles as Array<Role>);
+export const ClerkUserButton: React.FC = async () => {
+  const isAdminEnabledRole = await checkRoles(SUPER_ADMIN_ROLES);
 
   return (
     <>
@@ -39,7 +29,7 @@ export const ClerkUserButton: React.FC = () => {
             <UserButton.MenuItems>
               <UserButton.Link
                 label="Admin panel"
-                labelIcon={<AdminIcon />}
+                labelIcon={<Settings />}
                 href="/admin"
               />
             </UserButton.MenuItems>

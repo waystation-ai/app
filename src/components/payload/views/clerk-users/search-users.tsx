@@ -10,7 +10,7 @@ export const SearchUsers = ({
   defaultSearchValue: string;
 }) => {
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = usePathname() || '';
   const [search, setSearch] = useState<string>(defaultSearchValue);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

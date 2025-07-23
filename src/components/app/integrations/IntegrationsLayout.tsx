@@ -1,8 +1,7 @@
 import { IntegrationsTabs } from '@/components/app/integrations/IntegrationsTabs';
-import { IntegrationTab } from '@/app/app/integrations/utils';
 
 interface IntegrationsLayoutProps {
-  currentTab: IntegrationTab;
+  currentTab: 'all' | 'official' | 'native' | 'none';
   children: React.ReactNode;
 }
 

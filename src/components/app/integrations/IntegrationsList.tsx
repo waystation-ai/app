@@ -49,11 +49,7 @@ function ProviderRow({ provider }: {
       
       {/* SETTINGS column */}
       <td className="py-4 px-6 text-right whitespace-nowrap">
-        <ProviderSettingsModal
-          providerData={provider}
-          isConnected={provider.isConnected}
-          connectionInfo={provider.connectionInfo}
-        />
+        <ProviderSettingsModal provider={provider}/>
       </td>
     </tr>
   );

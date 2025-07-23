@@ -84,7 +84,7 @@ export function Menu() {
         </NavigationMenuItem>
         <SignedIn>
         <NavigationMenuItem>
-          <NavigationMenuLink className={navigationMenuTriggerStyle()} href="/playground" target="_blank">
+          <NavigationMenuLink className={navigationMenuTriggerStyle()} href="/app/chat" target="_blank">
             Playground
           </NavigationMenuLink>
         </NavigationMenuItem>
@@ -182,7 +182,7 @@ export default function Navigation() {
           <div className="border-t border-gray-200 mt-2 pt-4">
             <Link href="/use-cases" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>AI Use Cases</Link>
             <Link href="/marketplace" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>Marketplace</Link>
-            <Link href="/playground" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>Playground</Link>
+            <Link href="/app/chat" className="app-link py-2" onClick={() => setMobileMenuOpen(false)}>Playground</Link>
           </div>
 
           {/* User Profile in Mobile Menu */}

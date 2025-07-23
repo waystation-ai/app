@@ -7,7 +7,7 @@ import {
   User,
 } from "payload";
 
-export async function getUser({ payload }: { payload: Payload;}): Promise<User | null> {
+export async function getUser({ payload }: { payload: Payload;}): Promise<(User & { collection: "users" }) | null> {
   const { userId }: { userId: string | null } = await auth();
   const user = await currentUser();
 
@@ -54,9 +54,9 @@ export async function getUser({ payload }: { payload: Payload;}): Promise<User |
   }
 
   return {
-    collection: "users",
     ...currentPayloadUser,
-  };
+    collection: "users" as const,
+  } as User & { collection: "users" };
 }
 
 async function authenticate({ payload }: AuthStrategyFunctionArgs): Promise<AuthStrategyResult> {
@@ -67,7 +67,8 @@ async function authenticate({ payload }: AuthStrategyFunctionArgs): Promise<Auth
   }
 
   return {
-    user,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    user: user as any, // Type assertion needed due to Payload CMS type complexities
   };
 }
 

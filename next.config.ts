@@ -60,7 +60,9 @@ const nextConfig: NextConfig = {
 
         return {
           hostname: url.hostname,
-          protocol: url.protocol.replace(':', ''),
+          protocol: url.protocol.replace(':', '') as 'http' | 'https',
+          port: '',
+          pathname: '/**',
         }
       }),
     ],

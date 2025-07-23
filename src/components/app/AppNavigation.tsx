@@ -16,7 +16,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import React from "react";
-import { LayoutDashboard, MessageSquareText, Plug } from "lucide-react";
+import { MessageSquareText, Plug } from "lucide-react";
 
 
 export function Menu() {

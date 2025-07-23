@@ -57,7 +57,7 @@ export async function getAllUseCases(): Promise<UseCase[]> {
     summary: doc.summary,
     call_to_action: doc.callToAction,
     integration_recipe: doc.integrationRecipe,
-    bullet_points: doc.bulletPoints?.map((item) => item.point),
+    bullet_points: doc.bulletPoints?.map((item) => item.point) || [],
   }))
 
   // Merge dbCases and useCases excluding those already in dbCases
