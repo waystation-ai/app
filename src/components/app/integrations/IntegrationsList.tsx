@@ -78,7 +78,7 @@ function ProviderRow({ providerData, isConnected, connectionInfo }: {
   );
 }
 
-export function IntegrationsContent({ providers, connectedProviderIds, connectionsMap }: IntegrationsContentProps) {
+export function IntegrationsList({ providers, connectedProviderIds, connectionsMap }: IntegrationsContentProps) {
   return (
     <>
       {/* Add MCP button 

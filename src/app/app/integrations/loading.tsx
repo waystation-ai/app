@@ -1,5 +1,5 @@
 import { Skeleton } from '@/components/ui/skeleton';
-import { IntegrationsLayout } from '@/components/app/IntegrationsLayout';
+import { IntegrationsLayout } from '@/components/app/integrations/IntegrationsLayout';
 
 export default function IntegrationsLoading() {
   return (

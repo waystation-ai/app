@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 
 import { getIntegrationsData } from './utils';
-import { IntegrationsLayout } from '@/components/app/IntegrationsLayout';
-import { IntegrationsContent } from '@/components/app/IntegrationsContent';
+import { IntegrationsLayout } from '@/components/app/integrations/IntegrationsLayout';
+import { IntegrationsList } from '@/components/app/integrations/IntegrationsList';
 
 export const metadata: Metadata = {
   title: 'Integrations',
@@ -19,7 +19,7 @@ export default async function IntegrationsPage() {
 
   return (
     <IntegrationsLayout currentTab="all">
-      <IntegrationsContent
+      <IntegrationsList
         providers={providers}
         connectedProviderIds={connectedProviderIds}
         connectionsMap={connectionsMap}

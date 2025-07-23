@@ -1,4 +1,4 @@
-import { IntegrationsTabNavigation } from '@/components/app/IntegrationsTabNavigation';
+import { IntegrationsTabs } from '@/components/app/integrations/IntegrationsTabs';
 import { IntegrationTab } from '@/app/app/integrations/utils';
 
 interface IntegrationsLayoutProps {
@@ -16,7 +16,7 @@ export function IntegrationsLayout({ currentTab, children }: IntegrationsLayoutP
         </h1>
         
         {/* Tab navigation */}
-        <IntegrationsTabNavigation currentTab={currentTab} />
+        <IntegrationsTabs currentTab={currentTab} />
       </div>
 
       {children}

@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 import { getIntegrationsData } from '../utils';
-import { IntegrationsLayout } from '@/components/app/IntegrationsLayout';
-import { IntegrationsContent } from '@/components/app/IntegrationsContent';
+import { IntegrationsLayout } from '@/components/app/integrations/IntegrationsLayout';
+import { IntegrationsList } from '@/components/app/integrations/IntegrationsList';
 
 export const metadata: Metadata = {
   title: 'Tools and Integrations',
@@ -33,7 +33,7 @@ export default async function IntegrationsTabPage({ params }: PageProps) {
 
   return (
     <IntegrationsLayout currentTab={tab as 'official' | 'native'}>
-      <IntegrationsContent
+      <IntegrationsList
         providers={providers}
         connectedProviderIds={connectedProviderIds}
         connectionsMap={connectionsMap}
