@@ -13,6 +13,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app/Sidebar";
 
 import BodyBackground from "@/components/app/BodyBackground";
+import AppNavigation from "@/components/app/AppNavigation";
 
 export { metadata } from "../metadata";
 
@@ -35,6 +36,7 @@ export default async function RootLayout({children}: Readonly<{ children: React.
           <PostHogProvider>
             <BodyBackground />
 
+            <AppNavigation/>
             <SidebarProvider defaultOpen={defaultOpen}>
               <AppSidebar />
               <main className="flex-1 h-full">                

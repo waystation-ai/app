@@ -16,7 +16,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-import { School, MessageSquareText, Plug } from "lucide-react";
+import { LayoutDashboard, MessageSquareText, Plug } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { SignedIn, UserButton } from "@clerk/nextjs";
@@ -25,7 +25,7 @@ const items = [
   {
     title: "Dashboard",
     url: "/app",
-    icon: School,
+    icon: LayoutDashboard,
   },
   {
     title: "Chat",

@@ -35,7 +35,7 @@ export default function Chat() {
 
   return (
     <AssistantRuntimeProvider runtime={runtime}>
-      <div className={`${isFullScreen ? 'fixed inset-0 z-50 rounded-none' : 'h-full relative rounded-2xl'} w-full flex flex-row gap-4 p-4 bg-background shadow-[0px_2px_16px_0px_rgba(0,0,0,0.08)] transition-all duration-300`}>
+      <div className={`${isFullScreen ? 'fixed inset-0 z-50 rounded-none' : 'h-[calc(100vh-6rem)] md:h-[calc(100vh-2rem)] relative rounded-2xl'} w-full flex flex-row gap-4 p-4 bg-background shadow-[0px_2px_16px_0px_rgba(0,0,0,0.08)] transition-all duration-300`}>
         <button onClick={() => setIsFullScreen(!isFullScreen)} className="absolute top-4 right-4 z-20 p-1.5 hover:bg-accent rounded-lg transition-colors">
           {isFullScreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
         </button>

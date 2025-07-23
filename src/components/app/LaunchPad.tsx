@@ -9,8 +9,8 @@ export function LaunchPad() {
   const trackEvent = useTrackEvent();
 
   return (
-    <div className="flex flex-wrap items-center gap-4 mt-8">
-      <Link href='/playground' onClick={() => trackEvent('launch', {'app': "playground"})} target='_blank' className="launch-btn px-4 py-2 font-bold hover:scale-105 transition-transform duration-300 w-auto text-center rounded-lg">
+    <div className="flex flex-wrap items-center gap-4 my-8">
+      <Link href='/app/chat' onClick={() => trackEvent('launch', {'app': "chat"})} target='_blank' className="launch-btn px-4 py-2 font-bold hover:scale-105 transition-transform duration-300 w-auto text-center rounded-lg">
         <span>Launch Playground</span>
       </Link>
       <span className="text-base font-medium text-gray-600">or connect</span>
