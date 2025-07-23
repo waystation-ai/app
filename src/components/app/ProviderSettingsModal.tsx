@@ -5,25 +5,10 @@ import { Settings, CheckCircle } from 'lucide-react';
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { ProviderIcon } from '@/components/app/ProviderIcon';
-
-interface ProviderTool {
-  id: string;
-  summary: string;
-  description?: string;
-}
-
-interface ProviderModalData {
-  id: string;
-  name: string;
-  description: string;
-  bullets?: string[];
-  tools: ProviderTool[];
-  hasAuth: boolean;
-  scopes?: string[];
-}
+import { ProviderWithConnectionStatus } from '@/app/app/integrations/utils';
 
 interface ProviderSettingsModalProps {
-  providerData: ProviderModalData;
+  providerData: ProviderWithConnectionStatus;
   isConnected: boolean;
   connectionInfo?: unknown;
 }
@@ -72,7 +57,7 @@ export function ProviderSettingsModal({ providerData, isConnected, connectionInf
               <h4 className="font-medium text-gray-900 mb-3">Available Actions</h4>
               {providerData.tools.length > 0 ? (
                 <div className="space-y-2">
-                  {providerData.tools.map((tool: ProviderTool) => (
+                  {providerData.tools.map((tool) => (
                     <div key={tool.id} className="text-sm text-gray-600 flex items-start">
                       <CheckCircle className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
                       <div>
@@ -106,7 +91,7 @@ export function ProviderSettingsModal({ providerData, isConnected, connectionInf
                 <p className="text-sm text-gray-600">
                   To use this tool you must connect and permission your {providerData.name} account.
                 </p>
-                {providerData.hasAuth ? (
+                {providerData.providerType !== 'base' ? (
                   <Link
                     href={`/api/auth/${providerData.id}/connect`}
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 hover:scale-105 transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"

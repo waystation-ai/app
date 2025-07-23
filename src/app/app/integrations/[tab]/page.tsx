@@ -23,21 +23,25 @@ export default async function IntegrationsTabPage({ params }: PageProps) {
     redirect('/app/integrations');
   }
 
-  const data = await getIntegrationsData(tab as 'official' | 'native');
+  const allProviders = await getIntegrationsData();
 
-  if (!data) {
+  if (!allProviders) {
     return null;
   }
 
-  const { providers, connectedProviderIds, connectionsMap } = data;
+  // Filter providers based on tab
+  const filteredProviders = allProviders.filter(provider => {
+    if (tab === 'official') {
+      return provider.providerType === 'remote';
+    } else if (tab === 'native') {
+      return provider.providerType === 'native';
+    }
+    return true;
+  });
 
   return (
     <IntegrationsLayout currentTab={tab as 'official' | 'native'}>
-      <IntegrationsList
-        providers={providers}
-        connectedProviderIds={connectedProviderIds}
-        connectionsMap={connectionsMap}
-      />
+      <IntegrationsList providers={filteredProviders} />
     </IntegrationsLayout>
   );
 }

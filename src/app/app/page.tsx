@@ -83,7 +83,7 @@ export default async function Page() {
   
 
   return (
-    <div className="mt-4 sm:mt-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
+    <div className="mt-4 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
       {/* Add the redirect handler */}
       <RedirectHandler />
       

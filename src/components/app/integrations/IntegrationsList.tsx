@@ -1,63 +1,44 @@
 import Link from 'next/link';
 import { ProviderIcon } from '@/components/app/ProviderIcon';
 import { ProviderSettingsModal } from '@/components/app/ProviderSettingsModal';
+import { ProviderWithConnectionStatus } from '@/app/app/integrations/utils';
 
-interface ProviderTool {
-  id: string;
-  summary: string;
-  description?: string;
+interface IntegrationsListProps {
+  providers: ProviderWithConnectionStatus[];
 }
 
-interface ProviderModalData {
-  id: string;
-  name: string;
-  description: string;
-  bullets?: string[];
-  tools: ProviderTool[];
-  hasAuth: boolean;
-  scopes?: string[];
-}
-
-interface IntegrationsContentProps {
-  providers: ProviderModalData[];
-  connectedProviderIds: Set<string>;
-  connectionsMap: Map<string, any>;
-}
-
-function ProviderRow({ providerData, isConnected, connectionInfo }: {
-  providerData: ProviderModalData;
-  isConnected: boolean;
-  connectionInfo?: any;
+function ProviderRow({ provider }: {
+  provider: ProviderWithConnectionStatus;
 }) {
-  const hasAuth = providerData.hasAuth;
+  const hasAuth = provider.providerType !== 'base';
   
   return (
     <tr className="border-b border-gray-100 hover:bg-gray-50">
       {/* TOOL column */}
       <td className="py-4 px-6 w-full">
         <div className="flex items-center space-x-3">
-          <ProviderIcon provider={providerData.id} width={24} height={24} />
-          <span className="font-medium text-gray-900">{providerData.name}</span>
+          <ProviderIcon provider={provider.id} width={24} height={24} />
+          <span className="font-medium text-gray-900">{provider.name}</span>
         </div>
       </td>
       
       {/* CONNECTED AS column */}
       <td className="py-4 px-6 text-left whitespace-nowrap">
-        {isConnected ? (
+        {provider.isConnected ? (
           <span className="inline-flex items-center px-3 py-1 text-sm font-medium rounded-md text-green-700 bg-green-50 border border-green-200">
-            {connectionInfo?.metadata?.email || connectionInfo?.metadata?.username || 'Connected'}
+            {provider.connectionInfo?.metadata?.email || provider.connectionInfo?.metadata?.username || 'Connected'}
           </span>
         ) : (
           hasAuth ? (
             <Link 
-              href={`/api/auth/${providerData.id}/connect`}
+              href={`/api/auth/${provider.id}/connect`}
               className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 hover:scale-105 transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Connect
             </Link>
           ) : (
             <Link 
-              href={`/waitlist/${providerData.id}`}
+              href={`/waitlist/${provider.id}`}
               className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 hover:scale-105 transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Connect
@@ -69,16 +50,16 @@ function ProviderRow({ providerData, isConnected, connectionInfo }: {
       {/* SETTINGS column */}
       <td className="py-4 px-6 text-right whitespace-nowrap">
         <ProviderSettingsModal
-          providerData={providerData}
-          isConnected={isConnected}
-          connectionInfo={connectionInfo}
+          providerData={provider}
+          isConnected={provider.isConnected}
+          connectionInfo={provider.connectionInfo}
         />
       </td>
     </tr>
   );
 }
 
-export function IntegrationsList({ providers, connectedProviderIds, connectionsMap }: IntegrationsContentProps) {
+export function IntegrationsList({ providers }: IntegrationsListProps) {
   return (
     <>
       {/* Add MCP button 
@@ -107,19 +88,12 @@ export function IntegrationsList({ providers, connectedProviderIds, connectionsM
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {providers.map(providerData => {
-              const isConnected = connectedProviderIds.has(providerData.id);
-              const connectionInfo = connectionsMap.get(providerData.id);
-              
-              return (
-                <ProviderRow
-                  key={providerData.id}
-                  providerData={providerData}
-                  isConnected={isConnected}
-                  connectionInfo={connectionInfo}
-                />
-              );
-            })}
+            {providers.map(provider => (
+              <ProviderRow
+                key={provider.id}
+                provider={provider}
+              />
+            ))}
           </tbody>
         </table>
       </div>

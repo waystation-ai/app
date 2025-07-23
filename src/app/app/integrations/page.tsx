@@ -9,21 +9,15 @@ export const metadata: Metadata = {
 };
 
 export default async function IntegrationsPage() {
-  const data = await getIntegrationsData();
+  const allProviders = await getIntegrationsData();
 
-  if (!data) {
+  if (!allProviders) {
     return null;
   }
 
-  const { providers, connectedProviderIds, connectionsMap } = data;
-
   return (
     <IntegrationsLayout currentTab="all">
-      <IntegrationsList
-        providers={providers}
-        connectedProviderIds={connectedProviderIds}
-        connectionsMap={connectionsMap}
-      />
+      <IntegrationsList providers={allProviders} />
     </IntegrationsLayout>
   );
 }

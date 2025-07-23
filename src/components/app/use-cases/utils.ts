@@ -89,7 +89,7 @@ export async function getUseCaseById(id: string): Promise<UseCase | null> {
       summary: result.docs[0].summary,
       call_to_action: result.docs[0].callToAction,
       integration_recipe: result.docs[0].integrationRecipe,
-      bullet_points: result.docs[0].bulletPoints?.map((item: any) => item.point) || [],
+      bullet_points: result.docs[0].bulletPoints?.map((item) => item.point) || [],
   }
 
   return useCases.find(useCase => useCase.id === id) || null;
