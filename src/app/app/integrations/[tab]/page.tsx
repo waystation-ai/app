@@ -9,14 +9,8 @@ export const metadata: Metadata = {
   title: 'Tools and Integrations',
 };
 
-interface PageProps {
-  params: {
-    tab: string;
-  };
-}
-
-export default async function IntegrationsTabPage({ params }: PageProps) {
-  const { tab } = params;
+export default async function IntegrationsTabPage({ params }: { params: Promise<{ tab: string }> }) {
+  const { tab } = await params;
 
   // Validate tab parameter
   if (tab !== 'official' && tab !== 'native') {
