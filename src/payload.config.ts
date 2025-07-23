@@ -4,7 +4,6 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
-import sharp from 'sharp'
 
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
@@ -58,7 +57,6 @@ export default buildConfig({
       connectionString: process.env.PAYLOAD_DB || '',
     },
   }),
-  sharp,
   cors: [getServerSideURL()].filter(Boolean),
   plugins: [
     ...plugins,
