@@ -4,7 +4,7 @@ import { ExternalLink, Info } from 'lucide-react';
 import Image from 'next/image';
 
 export const metadata: Metadata = {
-  title: 'Connect to ChatGPT - WayStation',
+  title: 'Connect ChatGPT to your apps',
 };
 
 export default function ChatGPTPage() {
@@ -13,7 +13,7 @@ export default function ChatGPTPage() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl lg:text-4xl text-gray-900 font-bold mb-4">
-          Connect WayStation to ChatGPT
+          Connect ChatGPT to your apps via WayStation
         </h1>
         <p className="text-lg text-gray-600">
           Access your WayStation tools directly within ChatGPT Plus using Custom Connectors

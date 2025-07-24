@@ -20,7 +20,7 @@ export default function CursorClient({ isSignedIn, nanoId }: CursorClientProps) 
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl lg:text-4xl text-gray-900 font-bold mb-4">
-          Connect WayStation to Cursor
+          Connect Cursor to your apps via WayStation
         </h1>
         <p className="text-lg text-gray-600">
           Add WayStation as an MCP server to access your tools directly within Cursor

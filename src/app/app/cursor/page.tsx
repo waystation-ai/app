@@ -4,7 +4,7 @@ import { generateNanoidForUser } from '@/lib/utils/generate-nanoid-for-user';
 import CursorClient from './cursor-client';
 
 export const metadata: Metadata = {
-  title: 'Connect to Cursor - WayStation',
+  title: 'Connect Cursor to your apps',
 };
 
 export default async function CursorPage() {

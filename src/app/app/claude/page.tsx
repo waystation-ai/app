@@ -4,7 +4,7 @@ import { ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 
 export const metadata: Metadata = {
-  title: 'Connect Claude',
+  title: 'Connect Claude to your apps',
 };
 
 export default function ClaudePage() {
