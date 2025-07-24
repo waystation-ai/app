@@ -4,7 +4,7 @@ import { ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 
 export const metadata: Metadata = {
-  title: 'Connect to Claude - WayStation',
+  title: 'Connect Claude',
 };
 
 export default function ClaudePage() {
@@ -13,10 +13,10 @@ export default function ClaudePage() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl lg:text-4xl text-gray-900 font-bold mb-4">
-          Connect WayStation to Claude
+          Connect Claude to your apps via WayStation
         </h1>
         <p className="text-lg text-gray-600">
-          Access your WayStation tools directly within Claude Pro using Custom Integrations
+          Access your WayStation tools directly within Claude Pro using custom Connectors
         </p>
       </div>
 
@@ -24,7 +24,7 @@ export default function ClaudePage() {
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 sm:p-6 mb-8">
         <h2 className="text-lg font-semibold text-blue-900 mb-2">Requirements</h2>
         <ul className="space-y-1 text-blue-800">
-          <li>Claude Pro subscription required</li>
+          <li>Claude Pro, Max, Team, or Enterprise subscription required</li>
         </ul>
       </div>
 
@@ -42,17 +42,17 @@ export default function ClaudePage() {
               <div className="sm:ml-4">
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Access Claude Menu</h3>
                 <p className="text-gray-600 mb-3">
-                  In Claude, look for the menu on the left side of your chat interface. Click on &quot;Connect apps&quot; or scroll down to find &quot;Add integrations&quot; at the bottom of the menu.
+                  In Claude, look for the menu on the left side of your chat interface. Click on &quot;Connect apps&quot; or scroll down to find &quot;Add connectors&quot; at the bottom of the menu.
                 </p>
                 <div className="mt-4">
                   <Image 
                     src="/images/apps/claude-integration-settings.png"
-                    alt="Claude menu showing Connect apps and Add integrations options"
+                    alt="Claude menu showing Connect apps and Add Connectors options"
                     width={800}
                     height={600}
                     className="w-full max-w-full sm:max-w-2xl rounded-lg border shadow-sm"
                   />
-                  <p className="text-sm text-gray-500 mt-2 italic">Claude menu with integration options visible</p>
+                  <p className="text-sm text-gray-500 mt-2 italic">Claude menu with connectors options visible</p>
                 </div>
               </div>
             </div>
@@ -63,19 +63,19 @@ export default function ClaudePage() {
                 2
               </div>
               <div className="sm:ml-4">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Open Integrations Page</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Open Connectors Page</h3>
                 <p className="text-gray-600 mb-3">
-                  Click on &quot;Add integrations&quot; from the menu. This will open the Integrations page where you can see existing connected services and add new ones.
+                  Click on &quot;Add connectors&quot; from the menu. This will open the Connectors page where you can see existing connected services and add new ones.
                 </p>
                 <div className="mt-4">
                   <Image 
                     src="/images/apps/claude-add-integration.png"
-                    alt="Claude Integrations page showing connected services and Add integration button"
+                    alt="Claude Connectors page showing connected services and Add integration button"
                     width={800}
                     height={600}
                     className="w-full max-w-full sm:max-w-2xl rounded-lg border shadow-sm"
                   />
-                  <p className="text-sm text-gray-500 mt-2 italic">Integrations page with existing connections and &quot;Add integration&quot; button</p>
+                  <p className="text-sm text-gray-500 mt-2 italic">Connectors page with existing connections and &quot;Add custom connector&quot; button</p>
                 </div>
               </div>
             </div>
@@ -86,9 +86,9 @@ export default function ClaudePage() {
                 3
               </div>
               <div className="sm:ml-4">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Add New Integration</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Add New Connector</h3>
                 <p className="text-gray-600 mb-3">
-                  Click the &quot;Add integration&quot; button at the bottom of the integrations list. This will open a form where you can configure a custom integration.
+                  Click the &quot;Add custom connector&quot; button at the bottom of the Connectors list. This will open a form where you can configure a custom integration.
                 </p>
                 <div className="mt-4">
                   <Image 
@@ -98,7 +98,7 @@ export default function ClaudePage() {
                     height={600}
                     className="w-full max-w-full sm:max-w-2xl rounded-lg border shadow-sm"
                   />
-                  <p className="text-sm text-gray-500 mt-2 italic">Add integration form with name and URL fields</p>
+                  <p className="text-sm text-gray-500 mt-2 italic">Add custom conenctor form with name and URL fields</p>
                 </div>
               </div>
             </div>
@@ -125,7 +125,7 @@ export default function ClaudePage() {
                   </div>
                 </div>
                 <p className="text-sm text-gray-600">
-                  After filling in the fields, click the &quot;Add&quot; button to create the integration.
+                  After filling in the fields, click the &quot;Add&quot; button to create the connector.
                 </p>
               </div>
             </div>
@@ -138,7 +138,7 @@ export default function ClaudePage() {
               <div className="sm:ml-4">
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Connect and Authenticate</h3>
                 <p className="text-gray-600 mb-3">
-                  After adding the integration, you&apos;ll see &quot;WayStation&quot; appear in your integrations list with a &quot;Connect&quot; button next to it. 
+                  After adding the integration, you&apos;ll see &quot;WayStation&quot; appear in your Connectors list with a &quot;Connect&quot; button next to it. 
                   Click the &quot;Connect&quot; button to authenticate your WayStation account and activate the integration.
                 </p>
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
@@ -157,8 +157,8 @@ export default function ClaudePage() {
               <div className="sm:ml-4">
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Start Using Your Tools</h3>
                 <p className="text-gray-600">
-                  Once authenticated, WayStation will show a &quot;Connected&quot; status in your integrations list. 
-                  You can now access all your WayStation integrations directly within Claude conversations!
+                  Once authenticated, WayStation will show a &quot;Connected&quot; status in your Connectors list. 
+                  You can now access all your WayStation Connectors directly within Claude conversations!
                 </p>
               </div>
             </div>
@@ -190,11 +190,11 @@ export default function ClaudePage() {
           </p>
           <div className="space-y-2">
             <Link 
-              href="/app/integrations"
+              href="/app/Connectors"
               className="inline-flex items-center text-blue-600 hover:text-blue-700"
             >
               <ExternalLink className="h-4 w-4 mr-2" />
-              Manage your integrations
+              Manage your Connectors
             </Link>
           </div>
         </div>
