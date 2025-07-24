@@ -16,11 +16,11 @@ export const createExecuteSqlQueryTool = ({
   name,
 }: ProviderInfo) =>
   defineTool({
-    id: `${id}_execute_sql_query`,
+    id: `execute${name}SqlQuery`,
     summary: `Execute a SQL query against your ${name} database.`,
     description: `Executes a read-only SQL query against your ${name} database and returns the results.`,
     method: 'POST',
-    path: `/sql/${id}/query`,
+    path: `/tools/${id}/execute_sql_query`,
     parameters: querySchema,
     responses: {
       '200': {
@@ -46,11 +46,11 @@ export const createFetchSchemaTool = ({
   name,
 }: ProviderInfo) =>
   defineTool({
-    id: `${id}_fetch_schema`,
+    id: `fetch${name}Schema`,
     summary: `Fetch the database schema for your ${name} database.`,
     description: `Fetches the schema of the connected ${name} database, showing tables and columns.`,
     method: 'GET',
-    path: `/sql/${id}/schema`,
+    path: `/tools/${id}/fetch_schema`,
     parameters: schemaParams,
     responses: {
       '200': {
