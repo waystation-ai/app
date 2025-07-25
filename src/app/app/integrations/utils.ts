@@ -34,6 +34,7 @@ export interface ProviderWithConnectionStatus extends SerializableProvider {
     };
   };
   tools: SerializableTool[];
+  isDatabaseProvider?: boolean;
 }
 
 // Data fetching
@@ -71,6 +72,8 @@ export async function getIntegrationsData(scope: 'all'|'vetoed'): Promise<Provid
         }
       }
 
+      const isDatabaseProvider = isNativeProvider(provider) && provider.auth?.type === 'connection_string';
+
       return {
         id: provider.id,
         name: provider.name,
@@ -81,7 +84,8 @@ export async function getIntegrationsData(scope: 'all'|'vetoed'): Promise<Provid
         providerType: isNativeProvider(provider) ? 'native' : isRemoteProvider(provider) ? 'remote' : 'base',
         isConnected,
         connectionInfo,
-        tools
+        tools,
+        isDatabaseProvider
       };
     })
   );
