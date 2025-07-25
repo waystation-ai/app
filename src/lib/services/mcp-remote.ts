@@ -1,6 +1,6 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js';
-
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { getRemoteProviderMetadata, storeRemoteProviderMetadata, RemoteProviderMetadata} from '@/lib/db';
 import { RemoteOAuthClientProvider } from './oauth-client';
 import { RemoteProvider } from '@/marketplace/core/types';
@@ -21,9 +21,14 @@ class RemoteProviderClient extends Client {
   }
 
   public async connect(){
-    await super.connect(new SSEClientTransport(new URL(this.provider.serverUrl), {
+    const transport = this.provider.serverUrl.endsWith('sse') ? new SSEClientTransport(new URL(this.provider.serverUrl), {
         authProvider: new RemoteOAuthClientProvider(this.provider, this.userId),
-    }));
+      }) :
+      new StreamableHTTPClientTransport(new URL(this.provider.serverUrl), {
+        authProvider: new RemoteOAuthClientProvider(this.provider, this.userId),
+      })
+    
+    await super.connect(transport);
   }
 }
 
