@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default async function IntegrationsPage() {
-  const allProviders = await getIntegrationsData();
+  const allProviders = await getIntegrationsData('all');
 
   if (!allProviders) {
     return null;

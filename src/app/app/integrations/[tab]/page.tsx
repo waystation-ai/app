@@ -17,7 +17,7 @@ export default async function IntegrationsTabPage({ params }: { params: Promise<
     redirect('/app/integrations');
   }
 
-  const allProviders = await getIntegrationsData();
+  const allProviders = await getIntegrationsData('all');
 
   if (!allProviders) {
     return null;

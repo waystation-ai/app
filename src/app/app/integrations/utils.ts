@@ -37,7 +37,7 @@ export interface ProviderWithConnectionStatus extends SerializableProvider {
 }
 
 // Data fetching
-export async function getIntegrationsData(): Promise<ProviderWithConnectionStatus[] | null> {
+export async function getIntegrationsData(scope: 'all'|'vetoed'): Promise<ProviderWithConnectionStatus[] | null> {
   const session = await auth();
 
   if (!session.userId) {
@@ -48,7 +48,7 @@ export async function getIntegrationsData(): Promise<ProviderWithConnectionStatu
   const connections = await getValidConnections(session.userId);
 
   // Get all providers from registry and sort alphabetically
-  const providers = registry.getVetoedProviders().sort((a, b) => a.name.localeCompare(b.name));
+  const providers = (scope === 'vetoed' ? registry.getVetoedProviders() : registry.getAllProviders()).sort((a, b) => a.name.localeCompare(b.name));
 
   // Create unified provider data with connection status and tools
   const providersWithStatus: ProviderWithConnectionStatus[] = await Promise.all(
