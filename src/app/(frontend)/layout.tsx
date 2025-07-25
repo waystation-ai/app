@@ -13,9 +13,8 @@ import BodyBackground from '@/components/app/BodyBackground';
 import Navigation from '@/components/app/Navigation';
 import Footer from '@/components/app/Footer';
 
-import { metadata } from '../metadata';
+import { metadata } from '@/app/metadata';
 export { metadata };
-
 
 export default function RootLayout({children}: Readonly<{children: React.ReactNode;}>) {
   return (

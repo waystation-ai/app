@@ -15,7 +15,8 @@ import { AppSidebar } from "@/components/app/Sidebar";
 import BodyBackground from "@/components/app/BodyBackground";
 import AppNavigation from "@/components/app/AppNavigation";
 
-export { metadata } from "../metadata";
+import { metadata } from '@/app/metadata';
+export { metadata };
 
 export default async function RootLayout({children}: Readonly<{ children: React.ReactNode }>) {
   const cookieStore = await cookies();

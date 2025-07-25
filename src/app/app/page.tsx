@@ -121,8 +121,8 @@ export default async function Page() {
         {connectedIds.length > 0 && (
 
         <div>  
-          <p className="text-xl lg:text-2xl text-gray-600 my-6">
-            ...let WayStation to plug them into your AI agents
+          <p className="text-xl lg:text-2xl text-gray-600 mt-6 mb-2">
+            ... and let WayStation to plug them into your AI agents
           </p>
           <LaunchPad />
         </div>  
