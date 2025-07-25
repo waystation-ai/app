@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
+import { storeDatabaseConnection } from '@/app/actions';
 import {
   Dialog,
   DialogContent,
@@ -24,43 +25,22 @@ export default function DatabaseConnectionModal({
   onOpenChange,
   provider,
 }: DatabaseConnectionModalProps) {
-  const [connectionString, setConnectionString] = useState('');
-  const [isPending, startTransition] = useTransition();
+  const [isPending, setIsPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (formData: FormData) => {
+    setIsPending(true);
+    setError(null);
     
-    startTransition(async () => {
-      try {
-        const formData = new FormData();
-        formData.append('connectionString', connectionString);
-        
-        // Call the server action via fetch
-        const response = await fetch('/api/database-connection', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            provider: provider.id,
-            name: `${provider.name} Connection`,
-            connectionString,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to store connection string');
-        }
-
-        onOpenChange(false);
-        setConnectionString('');
-        
-        // Refresh the page to update the connection status
-        window.location.reload();
-      } catch (error) {
-        console.error('Failed to store connection string:', error);
-      }
-    });
+    try {
+      await storeDatabaseConnection(provider.id, `${provider.name} Connection`, formData);
+      onOpenChange(false);
+    } catch (error) {
+      console.error('Failed to store connection string:', error);
+      setError(error instanceof Error ? error.message : 'Failed to store connection string');
+    } finally {
+      setIsPending(false);
+    }
   };
 
   return (
@@ -80,11 +60,11 @@ export default function DatabaseConnectionModal({
             Connect to {provider.name}
           </DialogTitle>
           <DialogDescription className="text-center">
-            Enter your {provider.name} connection string to connect your database.
+            Enter your {provider.name} connection string. We&apos;ll validate the connection and fetch your database schema before saving.
           </DialogDescription>
         </DialogHeader>
         
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form action={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="connection-string" className="sr-only">
               Connection String
@@ -94,13 +74,18 @@ export default function DatabaseConnectionModal({
               name="connectionString"
               type="text"
               required
-              value={connectionString}
-              onChange={(e) => setConnectionString(e.target.value)}
               className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
               placeholder="Enter your connection string"
               disabled={isPending}
             />
           </div>
+          
+          {error && (
+            <div className="text-red-600 text-sm text-center">
+              {error}
+            </div>
+          )}
+          
           <div className="flex space-x-2">
             <button
               type="button"
@@ -112,7 +97,7 @@ export default function DatabaseConnectionModal({
             </button>
             <button
               type="submit"
-              disabled={isPending || !connectionString.trim()}
+              disabled={isPending}
               className="flex-1 px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isPending ? 'Connecting...' : 'Connect'}

@@ -70,14 +70,7 @@ function ProviderRow({ provider }: {
     
     {/* Database Connection Modal */}
     {provider.isDatabaseProvider && (
-      <DatabaseConnectionModal
-        open={showDatabaseModal}
-        onOpenChange={setShowDatabaseModal}
-        provider={{
-          id: provider.id,
-          name: provider.name,
-        }}
-      />
+      <DatabaseConnectionModal open={showDatabaseModal} onOpenChange={setShowDatabaseModal} provider={provider} />
     )}
     </>
   );
@@ -113,10 +106,7 @@ export function IntegrationsList({ providers }: IntegrationsListProps) {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {providers.map(provider => (
-              <ProviderRow
-                key={provider.id}
-                provider={provider}
-              />
+              <ProviderRow key={provider.id} provider={provider} />
             ))}
           </tbody>
         </table>
