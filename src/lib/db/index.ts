@@ -4,6 +4,7 @@ import { and, eq, lt } from 'drizzle-orm';
 import * as schema from './schema';
 import { OAuthClientInformationFull, OAuthMetadata, OAuthTokens } from '@modelcontextprotocol/sdk/shared/auth.js';
 import { ListToolsResult, ListResourcesResult } from '@modelcontextprotocol/sdk/types.js';
+import { Connection, OAuthConnection, DatabaseConnection, hasValidConnectionStringMetadata } from './types';
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL environment variable is not set');
@@ -122,33 +123,56 @@ export async function addToWaitlist(userId: string, provider: string): Promise<v
 }
 
 // Helper function to get a valid connection for a specific user and provider
-export async function getValidConnection(userId: string, provider: string) {
-  const connections = await db.select().from(schema.oauthConnections)
+export async function getValidConnection(userId: string, provider: string): Promise<OAuthConnection | DatabaseConnection | null> {
+  const [oauthConn] = await db.select().from(schema.oauthConnections)
     .where(and(
       eq(schema.oauthConnections.userId, userId),
-      eq(schema.oauthConnections.provider, provider)
-    ));
+      eq(schema.oauthConnections.provider, provider),
+    )).limit(1);
 
-  if (!connections.length) {
-    return null;
+  if (oauthConn) {
+    return oauthConn as OAuthConnection;
   }
 
-  return connections[0];
+  const [conn] = await db.select().from(schema.connections)
+    .where(and(
+      eq(schema.connections.userId, userId),
+      eq(schema.connections.provider, provider),
+    )).limit(1);
+
+  if (conn && hasValidConnectionStringMetadata(conn.metadata)) {
+      return conn as DatabaseConnection;
+  }
+
+  return null;
 }
 
 // Helper function to get all valid connections for a specific user
-export async function getValidConnections(userId: string) {
-  const connections = await db.select().from(schema.oauthConnections)
+export async function getValidConnections(userId: string): Promise<Map<string, Connection>> {
+  // Get OAuth connections
+  const oauthConnections = await db.select().from(schema.oauthConnections)
     .where(eq(schema.oauthConnections.userId, userId));
 
-  // Create a map of provider -> connection for easy lookup
-  const connectionMap = new Map();
-  for (const connection of connections) {
-    connectionMap.set(connection.provider, connection);
-  }
+  // Get database connections
+  const connectionsResult = await db.select().from(schema.connections)
+    .where(eq(schema.connections.userId, userId));
 
+  // Combine all connections
+  const allConnections = [
+    ...oauthConnections.map(conn => conn as OAuthConnection),
+    ...connectionsResult
+      .filter(conn => hasValidConnectionStringMetadata(conn.metadata))
+      .map(conn => conn as DatabaseConnection)
+  ];
+
+  // Convert to Map for efficient provider-based lookup
+  const connectionMap = new Map<string, Connection>();
+  for (const conn of allConnections) {
+    connectionMap.set(conn.provider, conn);
+  }
   return connectionMap;
 }
+
 
 // Helper function to store or update OAuth tokens
 export async function storeOAuthTokens(
@@ -202,6 +226,56 @@ export async function removeOAuthConnection(userId: string, provider: string) {
       eq(schema.oauthConnections.provider, provider)
     ));
 }
+
+// Helper function to store or update a connection string
+export async function addConnection(userId: string, provider: string, name: string, metadata: object) {
+  // Validate that metadata contains connectionString
+  if (!hasValidConnectionStringMetadata(metadata)) {
+    throw new Error(`Invalid metadata: connectionString is required for database connections`);
+  }
+
+  const existing = await db.select().from(schema.connections)
+    .where(and(
+      eq(schema.connections.userId, userId),
+      eq(schema.connections.provider, provider)
+    ));
+
+  if (existing.length) {
+    console.log(`Updating connection for user "${userId}" for provider "${provider}"`);
+    
+    // Update existing connection
+    return db.update(schema.connections)
+      .set({
+        name,
+        metadata,
+        updatedAt: new Date()
+      })
+      .where(and(
+        eq(schema.connections.userId, userId),
+        eq(schema.connections.provider, provider)
+      ));
+  }
+
+  console.log(`Saving connection for user "${userId}" for provider "${provider}"`);
+
+  // Create new connection
+  return db.insert(schema.connections).values({
+    userId,
+    provider,
+    name,
+    metadata,
+  });
+}
+
+// Helper function to remove a database connection
+export async function removeConnection(userId: string, provider: string) {
+  return db.delete(schema.connections)
+    .where(and(
+      eq(schema.connections.userId, userId),
+      eq(schema.connections.provider, provider)
+    ));
+}
+
 
 // Helper function to update OAuth connection metadata
 export async function updateConnectionMetadata(userId: string, provider: string, metadata: Record<string, unknown>) {
@@ -392,4 +466,3 @@ export async function storeRemoteProviderMetadata(userId: string, provider: stri
     providerMetadata: mergedMetadata
   });
 }
-

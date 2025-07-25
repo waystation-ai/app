@@ -1,19 +1,23 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import clsx from 'clsx';
 import { useTrackEvent } from '@/lib/utils/track-event';
 import GDrivePickerButton from './provider-settings/GDrivePickerButton';
+import DatabaseConnectionModal from './DatabaseConnectionModal';
 
 interface ProviderCardProps {
   name: string;
   description: string;
   isConnected: boolean;
   provider: string;
+  isDatabaseProvider?: boolean;
 }
 
-export default function ProviderCard({ name, description, isConnected, provider }: ProviderCardProps) {
+export default function ProviderCard({ name, description, isConnected, provider, isDatabaseProvider = false }: ProviderCardProps) {
+  const [showDatabaseModal, setShowDatabaseModal] = useState(false);
   const trackEvent = useTrackEvent();
   
   function trackConnect() {
@@ -35,18 +39,30 @@ export default function ProviderCard({ name, description, isConnected, provider 
         
         {/* Connect/Disconnect button for all providers */}
         <div className="flex items-center space-x-2">
-          <Link
-            href={`/api/auth/${provider}/${isConnected ? 'disconnect' : 'connect'}`}
-            onClick={trackConnect}
-            prefetch={false}
-            className={clsx('connect-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 flex-grow text-center',
-              {
-                'bg-red-500 hover:bg-red-600 text-white' : isConnected,
-                'bg-blue-600 hover:bg-blue-700 text-white' : !isConnected
-              }
-            )}>
-            {isConnected ? 'Disconnect' : 'Connect'}
-          </Link>
+          {isDatabaseProvider && !isConnected ? (
+            <button
+              onClick={() => {
+                trackConnect();
+                setShowDatabaseModal(true);
+              }}
+              className="connect-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 flex-grow text-center bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              Connect
+            </button>
+          ) : (
+            <Link
+              href={`/api/auth/${provider}/${isConnected ? 'disconnect' : 'connect'}`}
+              onClick={trackConnect}
+              prefetch={false}
+              className={clsx('connect-btn px-4 py-2 text-sm font-medium rounded-lg hover:scale-105 transition-transform duration-300 flex-grow text-center',
+                {
+                  'bg-red-500 hover:bg-red-600 text-white' : isConnected,
+                  'bg-blue-600 hover:bg-blue-700 text-white' : !isConnected
+                }
+              )}>
+              {isConnected ? 'Disconnect' : 'Connect'}
+            </Link>
+          )}
           
           {/* Provider-specific settings buttons */}
           {isConnected && provider === 'gdrive' && (
@@ -58,6 +74,17 @@ export default function ProviderCard({ name, description, isConnected, provider 
         </div>
       </div>
       
+      {/* Database Connection Modal */}
+      {isDatabaseProvider && (
+        <DatabaseConnectionModal
+          open={showDatabaseModal}
+          onOpenChange={setShowDatabaseModal}
+          provider={{
+            id: provider,
+            name: name,
+          }}
+        />
+      )}
     </>
   );
 }

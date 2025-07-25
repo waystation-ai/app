@@ -2,6 +2,7 @@ import { auth } from '@clerk/nextjs/server';
 import { getValidConnections } from '@/lib/db';
 import { registry } from '@/marketplace';
 import { isNativeProvider, isRemoteProvider } from '@/marketplace/core/types';
+import { isOAuthConnection } from '@/lib/db/types';
 
 // Types
 export interface SerializableTool {
@@ -31,9 +32,10 @@ export interface ProviderWithConnectionStatus extends SerializableProvider {
     metadata?: {
       email?: string;
       username?: string;
-    };
+    } | null;
   };
   tools: SerializableTool[];
+  isDatabaseProvider?: boolean;
 }
 
 // Data fetching
@@ -71,17 +73,24 @@ export async function getIntegrationsData(scope: 'all'|'vetoed'): Promise<Provid
         }
       }
 
+      const isDatabaseProvider = isNativeProvider(provider) && provider.auth?.type === 'connection_string';
+
+      // Transform connection info to the expected format
+      const transformedConnectionInfo = connectionInfo && isOAuthConnection(connectionInfo) ? {
+        metadata: connectionInfo.metadata as { email?: string; username?: string } | null
+      } : undefined;
+
       return {
         id: provider.id,
         name: provider.name,
         description: provider.description,
         bullets: provider.bullets,
         chat: provider.chat,
-        scopes: isNativeProvider(provider) ? provider.scopes : undefined,
         providerType: isNativeProvider(provider) ? 'native' : isRemoteProvider(provider) ? 'remote' : 'base',
         isConnected,
-        connectionInfo,
-        tools
+        connectionInfo: transformedConnectionInfo,
+        tools,
+        isDatabaseProvider
       };
     })
   );

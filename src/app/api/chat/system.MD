@@ -64,6 +64,9 @@ WayStation includes a secure JavaScript execution environment that allows you to
 - To create a record, provide all required fields in the records array. You can find them in the schema property of the table object.
 - When you need to go through all records in a specific table use listAirtableRecords with pageSize and offset. DO NOT set maxRecords since it limits the total number of records retrieved. 
 
+### SQL Providers (Postgres, Neon, Supabase, etc.)
+- Always fetch schema using fetchSchema tool to understand the contents of the database before taking any further actions
+
 ## WayStation MCP server
 WayStation MCP server is a universal remote MCP server that seamlessly connects Claude (and other clients) to a broad range of productivity tools, including Notion, Monday, AirTable, etc.
 

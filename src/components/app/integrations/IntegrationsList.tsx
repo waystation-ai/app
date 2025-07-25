@@ -1,7 +1,11 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import { ProviderIcon } from '@/components/app/ProviderIcon';
 import { ProviderSettingsModal } from '@/components/app/ProviderSettingsModal';
 import { ProviderWithConnectionStatus } from '@/app/app/integrations/utils';
+import DatabaseConnectionModal from '@/components/app/DatabaseConnectionModal';
 
 interface IntegrationsListProps {
   providers: ProviderWithConnectionStatus[];
@@ -10,9 +14,11 @@ interface IntegrationsListProps {
 function ProviderRow({ provider }: {
   provider: ProviderWithConnectionStatus;
 }) {
+  const [showDatabaseModal, setShowDatabaseModal] = useState(false);
   const hasAuth = provider.providerType !== 'base';
   
   return (
+    <>
     <tr className="border-b border-gray-100 hover:bg-gray-50">
       {/* TOOL column */}
       <td className="py-4 px-6 w-full">
@@ -30,12 +36,21 @@ function ProviderRow({ provider }: {
           </span>
         ) : (
           hasAuth ? (
-            <Link 
-              href={`/api/auth/${provider.id}/connect`}
-              className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 hover:scale-105 transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              Connect
-            </Link>
+            provider.isDatabaseProvider ? (
+              <button
+                onClick={() => setShowDatabaseModal(true)}
+                className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 hover:scale-105 transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Connect
+              </button>
+            ) : (
+              <Link 
+                href={`/api/auth/${provider.id}/connect`}
+                className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 hover:scale-105 transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Connect
+              </Link>
+            )
           ) : (
             <Link 
               href={`/waitlist/${provider.id}`}
@@ -52,6 +67,12 @@ function ProviderRow({ provider }: {
         <ProviderSettingsModal provider={provider}/>
       </td>
     </tr>
+    
+    {/* Database Connection Modal */}
+    {provider.isDatabaseProvider && (
+      <DatabaseConnectionModal open={showDatabaseModal} onOpenChange={setShowDatabaseModal} provider={provider} />
+    )}
+    </>
   );
 }
 
@@ -85,10 +106,7 @@ export function IntegrationsList({ providers }: IntegrationsListProps) {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {providers.map(provider => (
-              <ProviderRow
-                key={provider.id}
-                provider={provider}
-              />
+              <ProviderRow key={provider.id} provider={provider} />
             ))}
           </tbody>
         </table>
