@@ -17,7 +17,4 @@ export const hubspotProvider = registerProvider({
     { role: 'user', content: "Filter by lead score, focus on high-value prospects" },
     { role: 'agent', content: "I found 12 high-scoring leads needing follow-up. I've created a smart list and drafted personalized email templates based on their recent interactions." }
   ],
-  
-  // Empty tools array for now
-  tools: []
 });

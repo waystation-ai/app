@@ -17,7 +17,5 @@ export const trelloProvider = registerProvider({
     { role: 'user', content: "Let's prioritize by customer impact" },
     { role: 'agent', content: "I've reorganized the backlog, tagged high-impact features, and created a new board for this month's sprint with estimated story points." }
   ],
-  
-  // Empty tools array for now
-  tools: []
+
 });

@@ -17,7 +17,5 @@ export const smartsheetProvider = registerProvider({
     { role: 'user', content: "Let's look at both to optimize the schedule" },
     { role: 'agent', content: "I've updated the timeline, rebalanced team workloads, and flagged potential bottlenecks. I've also created a summary of changes for stakeholders." }
   ],
-  
-  // Empty tools array for now
-  tools: []
+
 });

@@ -17,7 +17,4 @@ export const gmeetProvider = registerProvider({
     { role: 'user', content: "Let's find new times that work better for our remote team" },
     { role: 'agent', content: "I've analyzed everyone's calendars and time zones, found optimal slots, and scheduled the meetings with rotating discussion topics and prep materials." }
   ],
-  
-  // Empty tools array for now
-  tools: []
 });

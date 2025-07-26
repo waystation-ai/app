@@ -17,7 +17,4 @@ export const mailchimpProvider = registerProvider({
     { role: 'user', content: "Let's improve click-through rates" },
     { role: 'agent', content: "I've analyzed the data and drafted a new newsletter with optimized CTAs, personalized content blocks, and A/B test variants based on successful patterns." }
   ],
-  
-  // Empty tools array for now
-  tools: []
 });

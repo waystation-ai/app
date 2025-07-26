@@ -17,7 +17,5 @@ export const chromeProvider = registerProvider({
     { role: 'user', content: "Yes, just the enterprise plans" },
     { role: 'agent', content: "I've gathered pricing data for enterprise plans from 5 competitors, created a comparison spreadsheet, and highlighted key differentiators in our offering." }
   ],
-  
-  // Empty tools array for now
-  tools: []
+
 });

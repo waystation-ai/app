@@ -17,7 +17,4 @@ export const gsheetsProvider = registerProvider({
     { role: 'user', content: "Yes, and add a dashboard with charts" },
     { role: 'agent', content: "I've created your budget spreadsheet with income, expenses, and savings categories. The dashboard includes monthly comparison charts and a savings progress tracker." }
   ],
-  
-  // Empty tools array
-  tools: []
 });

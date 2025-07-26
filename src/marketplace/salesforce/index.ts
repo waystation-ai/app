@@ -17,7 +17,5 @@ export const salesforceProvider = registerProvider({
     { role: 'user', content: "Let's look at high-probability deals first" },
     { role: 'agent', content: "I've identified 8 high-probability opportunities worth $1.2M. I've created a detailed report and suggested next actions for each deal." }
   ],
-  
-  // Empty tools array for now
-  tools: []
+
 });

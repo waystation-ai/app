@@ -17,7 +17,4 @@ export const clickupProvider = registerProvider({
     { role: 'user', content: "Yes, and add a section for influencer outreach" },
     { role: 'agent', content: "I've set up the marketing campaign in ClickUp with all standard sections plus a new influencer outreach section. I've assigned initial due dates based on our typical campaign timeline." }
   ],
-  
-  // Empty tools array
-  tools: []
 });

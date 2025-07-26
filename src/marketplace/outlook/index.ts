@@ -17,7 +17,5 @@ export const outlookProvider = registerProvider({
     { role: 'user', content: "30-minute slots, and try to group them on the same days" },
     { role: 'agent', content: "I've scheduled all 1:1s for Tuesdays and Thursdays, found optimal times for each team member, and sent calendar invites with prep agenda templates." }
   ],
-  
-  // Empty tools array for now
-  tools: []
+
 });

@@ -17,7 +17,5 @@ export const zoomProvider = registerProvider({
     { role: 'user', content: "Yes, and make it a 2-hour slot" },
     { role: 'agent', content: "I've scheduled the quarterly review for next Tuesday at 10 AM, sent calendar invites, and included the Q3 report in the meeting details." }
   ],
-  
-  // Empty tools array for now
-  tools: []
+
 });
