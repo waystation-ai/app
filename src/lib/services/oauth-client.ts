@@ -146,10 +146,15 @@ export class OAuthClient {
       // Register a new client
       const registrationEndpoint = oauthMetadata?.registration_endpoint || 
                                   new URL('/token', provider.serverUrl).toString();
+
+      console.log(`Registering client for provider ${provider.id} at ${registrationEndpoint}`);
+
+      const oauthClientMetadata = this.getOAuthClientMetadata(provider);
+      console.log(`Using metadata:`, this.getOAuthClientMetadata(provider));
       
       const clientMetadata = await registerClient(registrationEndpoint, {
         metadata: oauthMetadata,
-        clientMetadata: this.getOAuthClientMetadata(provider)
+        clientMetadata: oauthClientMetadata,
       });
       
       // Store client registration info separately
