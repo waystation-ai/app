@@ -10,7 +10,6 @@ import './office';
 import './teams';
 import './miro';
 import './jira';
-import './wrike';
 import './clickup';
 import './linear';
 import './gmail';

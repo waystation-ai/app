@@ -4,6 +4,19 @@ export const wrikeProvider = registerProvider({
   id: 'wrike',
   name: 'Wrike',
   description: 'Manage projects, tasks, and workflows with Wrike project management.',
+
+  serverUrl: 'https://www.wrike.com/app/mcp/sse',
+
+  auth: {
+    type: 'oauth',
+    clientId: process.env.WRIKE_CLIENT_ID || '',
+    clientSecret: process.env.WRIKE_CLIENT_SECRET || '',
+    authorizationUrl: 'https://login.wrike.com/oauth2/authorize/v4',
+    tokenUrl: 'https://login.wrike.com/oauth2/token',
+    scopes: [
+      'Default',
+    ]
+  },
   
   // Marketing information
   bullets: [
@@ -18,6 +31,4 @@ export const wrikeProvider = registerProvider({
     { role: 'agent', content: "I've created the website redesign project with all tasks following our standard workflow. John and Sarah have been added as collaborators, and I've set up the initial milestones." }
   ],
   
-  // Empty tools array
-  tools: []
 });

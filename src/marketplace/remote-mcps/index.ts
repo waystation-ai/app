@@ -4,3 +4,5 @@ import './atlassian';
 import './intercom';
 import './paypal';
 import './notion';
+import './wrike';
+

@@ -84,9 +84,15 @@ export async function callToolFromRemoteProvider(provider: RemoteProvider, userI
       throw new Error(`Error calling tool "${toolName}": ${result}`);
     }
     
-    return JSON.parse(result);
+    try {
+      return JSON.parse(result);
+    } catch (parseError) {
+      console.error(`Error parsing result from tool "${toolName}" from provider "${provider.id}":`, parseError);
+      console.error(`Raw result:`, result);
+      return result; // Return raw result if parsing fails
+    }
   } catch (error) {
-    console.error(`Error fetching tools from provider "${provider.id}":`, error);
+    console.error(`Error calling tool from provider "${provider.id}":`, error);
     return [];
   }
 }

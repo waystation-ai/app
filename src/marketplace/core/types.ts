@@ -39,7 +39,9 @@ export interface BaseProvider {
   id: string;
   name: string;
   description: string;
-  
+
+  auth?: Authentication;  
+
   // Marketing fields
   bullets?: string[];
   chat?: Array<{
@@ -66,7 +68,6 @@ export type Authentication = OAuthCredentials | ConnectionStringCredentials;
 export interface NativeProvider extends BaseProvider {
   tools: Tool<any, any>[]; // eslint-disable-line @typescript-eslint/no-explicit-any
 
-  auth?: Authentication;
   group?: string;
   getResources?: (context: ToolContext) => Promise<Resource[]>;
   getResourceContent?: (context: ToolContext, resource: Resource) => Promise<ResourceContent>;
@@ -85,7 +86,7 @@ export type Provider = BaseProvider | NativeProvider | RemoteProvider;
 
 export type FullProvider = NativeProvider | RemoteProvider;
 
-export function isNativeProvider(provider: Provider): provider is NativeProvider { return 'auth' in provider } 
+export function isNativeProvider(provider: Provider): provider is NativeProvider { return 'tools' in provider } 
 
 export function isRemoteProvider(provider: Provider): provider is RemoteProvider { return 'serverUrl' in provider}
 

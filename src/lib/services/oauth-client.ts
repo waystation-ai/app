@@ -128,48 +128,60 @@ export class OAuthClient {
       throw new Error(`Server URL not configured for provider: ${provider}`);
     }
 
-    // Get OAuth metadata and client registration info separately
-    let oauthMetadata = await getOAuthMetadata(userId, provider.id, provider.serverUrl);
-    let clientInfo = await getClientRegistration(userId, provider.id, provider.serverUrl);
-    
-    if (!clientInfo) {
-      // Discover server metadata if not available
-      if (!oauthMetadata) {
-        oauthMetadata = await discoverOAuthMetadata(provider.serverUrl);
-        
-        // Store the OAuth metadata
-        if (oauthMetadata) {
-          await storeOAuthMetadata(userId, provider.id, provider.serverUrl, oauthMetadata);
-        }
-      }
-
-      // Register a new client
-      const registrationEndpoint = oauthMetadata?.registration_endpoint || 
-                                  new URL('/token', provider.serverUrl).toString();
-
-      console.log(`Registering client for provider ${provider.id} at ${registrationEndpoint}`);
-
-      const oauthClientMetadata = this.getOAuthClientMetadata(provider);
-      console.log(`Using metadata:`, this.getOAuthClientMetadata(provider));
-      
-      const clientMetadata = await registerClient(registrationEndpoint, {
-        metadata: oauthMetadata,
-        clientMetadata: oauthClientMetadata,
-      });
-      
-      // Store client registration info separately
-      await storeClientRegistration(userId, provider.id, provider.serverUrl, clientMetadata);
-      
-      // Retrieve the stored client info
-      clientInfo = await getClientRegistration(userId, provider.id, provider.serverUrl);
+    let auth = provider.auth;
+    if (!auth) {
+      // Get OAuth metadata and client registration info separately
+      let oauthMetadata = await getOAuthMetadata(userId, provider.id, provider.serverUrl);
+      let clientInfo = await getClientRegistration(userId, provider.id, provider.serverUrl);
       
       if (!clientInfo) {
-        throw new Error(`Failed to store client registration for provider: ${provider}`);
+        // Discover server metadata if not available
+        if (!oauthMetadata) {
+          oauthMetadata = await discoverOAuthMetadata(provider.serverUrl);
+          
+          // Store the OAuth metadata
+          if (oauthMetadata) {
+            await storeOAuthMetadata(userId, provider.id, provider.serverUrl, oauthMetadata);
+          }
+        }
+
+        // Register a new client
+        const registrationEndpoint = oauthMetadata?.registration_endpoint || 
+                                    new URL('/token', provider.serverUrl).toString();
+
+        console.log(`Registering client for provider ${provider.id} at ${registrationEndpoint}`);
+
+        const oauthClientMetadata = this.getOAuthClientMetadata(provider);
+        console.log(`Using metadata:`, this.getOAuthClientMetadata(provider));
+        
+        const clientMetadata = await registerClient(registrationEndpoint, {
+          metadata: oauthMetadata,
+          clientMetadata: oauthClientMetadata,
+        });
+        
+        // Store client registration info separately
+        await storeClientRegistration(userId, provider.id, provider.serverUrl, clientMetadata);
+        
+        // Retrieve the stored client info
+        clientInfo = await getClientRegistration(userId, provider.id, provider.serverUrl);
+        
+        if (!clientInfo) {
+          throw new Error(`Failed to store client registration for provider: ${provider}`);
+        }
       }
-    }
-    
-    if (!oauthMetadata) {
-      throw new Error(`Failed to get OAuth metadata for provider: ${provider}`);
+      
+      if (!oauthMetadata) {
+        throw new Error(`Failed to get OAuth metadata for provider: ${provider}`);
+      }
+
+      auth = {
+        type: 'oauth',
+        clientId: clientInfo.client_id,
+        clientSecret: clientInfo.client_secret,
+        authorizationUrl: oauthMetadata.authorization_endpoint,
+        tokenUrl: oauthMetadata.token_endpoint,
+        scopes: ['openid', 'profile', 'email'], // Default scopes, can be customized
+      }
     }
 
     // Create an enhanced provider config with the client registration data
@@ -178,14 +190,7 @@ export class OAuthClient {
       name: provider.name,
       description: provider.description,
       bullets: provider.bullets,
-      auth: {
-        type: 'oauth',
-        clientId: clientInfo.client_id,
-        clientSecret: clientInfo.client_secret,
-        authorizationUrl: oauthMetadata.authorization_endpoint,
-        tokenUrl: oauthMetadata.token_endpoint,
-        scopes: ['openid', 'profile', 'email'], // Default scopes, can be customized
-      },
+      auth,
       tools: [],
       getResources: provider.getResources,
       getResourceContent: provider.getResourceContent,
