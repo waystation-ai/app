@@ -88,16 +88,16 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem><SidebarMenuButton asChild>
-                <Link href='/app/claude'><Image src="/images/apps/claude.svg" width={20} height={20} alt="Claude"></Image>Claude</Link>
+                <Link href='/app/claude'><Image src="/images/apps/claude.svg" width={16} height={16} alt="Claude"></Image>Claude</Link>
               </SidebarMenuButton></SidebarMenuItem>
               <SidebarMenuItem><SidebarMenuButton asChild>
-                <Link href='/app/cursor'><Image src="/images/apps/cursor.svg" width={20} height={20} alt="Cursor"></Image>Cursor</Link>
+                <Link href='/app/cursor'><Image src="/images/apps/cursor.svg" width={16} height={16} alt="Cursor"></Image>Cursor</Link>
               </SidebarMenuButton></SidebarMenuItem>
               <SidebarMenuItem><SidebarMenuButton asChild>
-                <Link href='/app/chatgpt'><Image src="/images/apps/chatgpt.svg" width={20} height={20} alt="ChatGPT"></Image>ChatGPT</Link>
+                <Link href='/app/chatgpt'><Image src="/images/apps/chatgpt.svg" width={16} height={16} alt="ChatGPT"></Image>ChatGPT</Link>
               </SidebarMenuButton></SidebarMenuItem>
               <SidebarMenuItem><SidebarMenuButton asChild>
-                <Link href='/app/mcp'><Image src="/images/apps/mcp.svg" width={20} height={20} alt="Any MCP client"></Image>Any MCP client</Link>
+                <Link href='/app/mcp'><Image src="/images/apps/mcp.svg" width={16} height={16} alt="Any MCP client"></Image>Any MCP client</Link>
               </SidebarMenuButton></SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
