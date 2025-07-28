@@ -1,5 +1,7 @@
+import { notFound } from 'next/navigation';
 import ConnectPage from "@/components/app/connect/ConnectPage";
 import { generateConnectMetadata } from "@/components/app/connect/metadata";
+import { registry } from "@/marketplace";
 
 export async function generateMetadata({ params }: { params: Promise<{ provider: string }> }) {
   return generateConnectMetadata(params, "claude");
@@ -9,9 +11,12 @@ export default async function Page({ params, searchParams }: {
   params: Promise<{ provider: string }>;
   searchParams?: Promise<{ redirect_uri?: string }>;
 }) {
-  return <ConnectPage 
-    params={await params} 
-    appType="claude" 
-    redirectUri={(await searchParams)?.redirect_uri} 
-  />;
+  const { provider } = await params;
+  const config = registry.getProvider(provider);
+  
+  if (!config) {
+    notFound();
+  }
+  
+  return <ConnectPage provider={config} appType="claude" redirectUri={(await searchParams)?.redirect_uri} />;
 }

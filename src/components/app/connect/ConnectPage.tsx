@@ -1,8 +1,7 @@
 import Link from "next/link";
 import Image from 'next/image';
 
-import { isFullProvider } from "@/marketplace/core/types";
-import { getProviderConfig } from "@/lib/services/provider-config";
+import { isFullProvider, type Provider } from "@/marketplace/core/types";
 
 import { CopyBox } from "@/components/app/CopyBox";
 import ChatDemo from "@/components/app/ChatDemo";
@@ -50,19 +49,17 @@ const APP_INFO: Record<AppType, AppInfo> = {
 };
 
 interface ConnectPageProps {
-  params: { provider: string };
+  provider: Provider;
   appType: AppType;
   redirectUri?: string;
 }
 
-export default async function ConnectPage({ params, appType, redirectUri }: ConnectPageProps) {
-  const { provider } = params;
-  const config = getProviderConfig(provider);
+export default async function ConnectPage({ provider, appType, redirectUri }: ConnectPageProps) {
   const appInfo = APP_INFO[appType];
 
   const userId = await authUserId();
 
-  const connected = userId ?  (await getValidConnections(userId)).has(provider) : false;
+  const connected = userId ?  (await getValidConnections(userId)).has(provider.id) : false;
 
   const nanoId = userId ? await generateNanoidForUser(userId) : undefined;
 
@@ -81,14 +78,14 @@ export default async function ConnectPage({ params, appType, redirectUri }: Conn
           {/* Left Column - Branding */}
           <div className="flex flex-col justify-center text-left">
             <h1 className="text-3xl lg:text-4xl font-bold mb-4">
-              {appInfo.titlePrefix || "Connect"} {appInfo.displayName} to <span className="bg-yellow-100">{config.name}</span>
+              {appInfo.titlePrefix || "Connect"} {appInfo.displayName} to <span className="bg-yellow-100">{provider.name}</span>
             </h1>
             <h2 className="text-lg lg:text-xl mb-2 leading-snug">
-              {config.description}
+              {provider.description}
             </h2>
-            {config.bullets && (
+            {provider.bullets && (
               <ul className="my-2">
-                {config.bullets.map((bullet, index) => (
+                {provider.bullets.map((bullet, index) => (
                   <li key={index}>{bullet}</li>
                 ))}
               </ul>
@@ -102,11 +99,11 @@ export default async function ConnectPage({ params, appType, redirectUri }: Conn
             }
             { !(connected && (appType == "cursor")) && 
             <Link
-              href={isFullProvider(config) 
-                ? `/api/auth/${provider}/connect${redirectUri ? 
+              href={isFullProvider(provider) 
+                ? `/api/auth/${provider.id}/connect${redirectUri ? 
                     `?redirect_uri=${encodeURIComponent(redirectUri)}` 
-                    : (appType == "cursor"? `?redirect_uri=${encodeURIComponent('/connect/cursor/' + provider)}` : '')}`
-                : `/waitlist/${provider}` 
+                    : (appType == "cursor"? `?redirect_uri=${encodeURIComponent('/connect/cursor/' + provider.id)}` : '')}`
+                : `/waitlist/${provider.id}` 
               }
               className="getstarted-btn"
             >
@@ -114,7 +111,7 @@ export default async function ConnectPage({ params, appType, redirectUri }: Conn
             </Link>
         }
 
-            <AlternativeApps provider={provider} currentApp={appType} />
+            <AlternativeApps provider={provider.id} currentApp={appType} />
 
             <div className="sm:mt-4">
               <p>And make it even more powerful with other providers we support</p>
@@ -131,7 +128,7 @@ export default async function ConnectPage({ params, appType, redirectUri }: Conn
 
           {/* Right Column - Chat Demo */}
           <div className="flex items-center justify-center mt-4 lg:mt-0">
-            <ChatDemo messages={config.chat}  className={appType === "mcp-server" ? "h-[100vh] sm:h-[60vh] mt-0" : undefined}/>
+            <ChatDemo messages={provider.chat}  className={appType === "mcp-server" ? "h-[100vh] sm:h-[60vh] mt-0" : undefined}/>
           </div>
         </div>
       </main>

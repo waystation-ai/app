@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import { registry } from '@/marketplace';
 import Image from 'next/image';
 import { storeConnectionString } from '@/app/actions';
@@ -9,14 +10,14 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps) {
-  const { provider: providerId } = await params;
-  const provider = registry.getProvider(providerId);
+  const { provider } = await params;
+  const config = registry.getProvider(provider);
 
-  if (!provider) {
-    return <div>Provider not found</div>;
+  if (!config) {
+    notFound();
   }
 
-  const { id, name } = provider;
+  const { id, name } = config;
   const storeConnectionStringWithProvider = storeConnectionString.bind(null, id, `${name} Connection`);
 
   return (
@@ -24,14 +25,14 @@ export default async function Page({ params }: PageProps) {
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
         <div className="flex flex-col items-center">
           <Image
-            src={`/images/tools/${provider.id}.svg`}
-            alt={provider.name}
+            src={`/images/tools/${config.id}.svg`}
+            alt={config.name}
             width={64}
             height={64}
             className="object-contain"
           />
           <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
-            Connect to {provider.name}
+            Connect to {config.name}
           </h2>
         </div>
         <form className="mt-8 space-y-6" action={storeConnectionStringWithProvider}>
