@@ -14,12 +14,12 @@ jest.mock('@/lib/db', () => ({
   getValidConnections: jest.fn()
 }));
 
-jest.mock('@/lib/utils/auth-userid', () => ({
-  authUserId: jest.fn()
-}));
-
 jest.mock('@/lib/utils/generate-nanoid-for-user', () => ({
   generateNanoidForUser: jest.fn()
+}));
+
+jest.mock('@clerk/nextjs/server', () => ({
+  auth: jest.fn().mockResolvedValue({ userId: 'test-user-id' })
 }));
 
 jest.mock('next/link', () => {
@@ -60,18 +60,15 @@ jest.mock('@/components/app/connect/AlternativeApps', () => {
 
 // Import the component after mocking
 import ConnectPage from '@/components/app/connect/ConnectPage';
-import { authUserId } from '@/lib/utils/auth-userid';
 import { getValidConnections } from '@/lib/db';
 import { generateNanoidForUser } from '@/lib/utils/generate-nanoid-for-user';
 
-const mockAuthUserId = authUserId as jest.MockedFunction<typeof authUserId>;
 const mockGetValidConnections = getValidConnections as jest.MockedFunction<typeof getValidConnections>;
 const mockGenerateNanoidForUser = generateNanoidForUser as jest.MockedFunction<typeof generateNanoidForUser>;
 
 describe('ConnectPage Component - Refactored with Provider Object', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockAuthUserId.mockResolvedValue('test-user-id');
     mockGetValidConnections.mockResolvedValue(new Map());
     mockGenerateNanoidForUser.mockResolvedValue('test-nanoid');
   });

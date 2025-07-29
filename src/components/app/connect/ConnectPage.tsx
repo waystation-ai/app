@@ -9,9 +9,9 @@ import Providers from "@/components/app/Providers";
 import AlternativeApps from "./AlternativeApps";
 
 import { AppType } from "./metadata";
-import { authUserId } from "@/lib/utils/auth-userid";
 import { getValidConnections } from "@/lib/db";
 import { generateNanoidForUser } from "@/lib/utils/generate-nanoid-for-user";
+import { auth } from "@clerk/nextjs/server";
 
 interface AppInfo {
   type: AppType;
@@ -57,10 +57,10 @@ interface ConnectPageProps {
 export default async function ConnectPage({ provider, appType, redirectUri }: ConnectPageProps) {
   const appInfo = APP_INFO[appType];
 
-  const userId = await authUserId();
+  const session = await auth();
 
-  const connected = userId ?  (await getValidConnections(userId)).has(provider.id) : false;
-
+  const userId =  session.userId;
+  const connected = userId ? (await getValidConnections(userId)).has(provider.id) : false;
   const nanoId = userId ? await generateNanoidForUser(userId) : undefined;
 
   const cursorConfig = {

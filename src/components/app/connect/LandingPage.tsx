@@ -8,8 +8,8 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import AlternativeApps from "./AlternativeApps";
 import { AppType, getAppMetadata } from "./metadata";
 import { CopyBox } from "../CopyBox";
-import { authUserId } from "@/lib/utils/auth-userid";
 import { generateNanoidForUser } from "@/lib/utils/generate-nanoid-for-user";
+import { auth } from "@clerk/nextjs/server";
 
 interface LandingPageProps {
   appType: AppType;
@@ -28,8 +28,9 @@ export default async function LandingPage({ appType }: LandingPageProps) {
     { role: 'agent', content: "On it! We'll get back to you shortly." }
   ];
 
-  const userId = await authUserId();
+  const session = await auth();
 
+  const userId = session.userId;
   const nanoId = userId ? await generateNanoidForUser(userId) : undefined;
 
   const cursorConfig = {

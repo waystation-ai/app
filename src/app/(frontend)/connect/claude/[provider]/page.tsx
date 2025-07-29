@@ -7,6 +7,12 @@ export async function generateMetadata({ params }: { params: Promise<{ provider:
   return generateConnectMetadata(params, "claude");
 }
 
+export async function generateStaticParams() {
+  return registry.getVetoedProviders().map((provider) => ({
+    provider: provider.id,
+  }));
+}
+
 export default async function Page({ params, searchParams }: { 
   params: Promise<{ provider: string }>;
   searchParams?: Promise<{ redirect_uri?: string }>;
