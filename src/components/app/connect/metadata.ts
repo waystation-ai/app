@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { getProviderConfig } from "@/lib/services/provider-config";
+import { registry } from '@/marketplace';
 
 export type AppType = "chatgpt" | "claude" | "mcp-server" | "cursor" | "generic";
 
@@ -89,7 +89,11 @@ export function getLandingPageMetadata(appType: AppType): Metadata {
  */
 export async function generateConnectMetadata(params: Promise<{ provider: string }>, appType: AppType): Promise<Metadata> {
   const { provider } = await params;
-  const config = getProviderConfig(provider);
+  const config = registry.getProvider(provider);
+
+  if (!config) 
+    return {};
+
   const appInfo = getAppMetadata(appType);
 
   // For generic app type, use a different URL format
