@@ -9,6 +9,7 @@ import { isDatabaseConnection } from '@/lib/db/types';
 import { callToolFromRemoteProvider, readResourceContentFromRemoteProvider } from '@/lib/services/mcp-remote';
 import { generateText } from 'ai';
 import { azure } from '@ai-sdk/azure';
+import { captureException } from '@sentry/nextjs';
 
 export class ProviderRegistry {
   private providers: Map<string, Provider> = new Map();
@@ -152,8 +153,7 @@ export class ProviderRegistry {
       return result;
     } catch (error) {
       console.error(`Error executing tool ${tool.id}:`, error);
-      // Optionally log error details
-      // posthog.capture({ ... event: 'tool_called_error', tool_name: toolId, error_message: error.message, ... });
+      captureException(error);     
       throw error; // Re-throw the error
     } finally {
       if (posthog) { // Only shutdown if the client was successfully initialized
