@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "ai.waystation/supabase",
+  "description": "Connect to your Supabase database to query data and schemas.",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/waystation-ai/mcp",
+    "source": "github"
+  },
+  "version": "0.3.1",
+  "remotes": [
+    {
+      "url": "https://waystation.ai/supabase/mcp",
+      "type": "streamable-http"
+    },
+    {
+      "url": "https://waystation.ai/supabase/mcp/sse",
+      "type": "sse"
+    }
+  ]
+}

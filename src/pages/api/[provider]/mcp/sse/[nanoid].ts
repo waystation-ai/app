@@ -1,0 +1,26 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+
+import { sseHandler } from '@/pages/api/mcp/sse';
+import { getAuthUserId } from '@/lib/utils/auth-userid';
+import { generateWWWAuthenticateHeader } from '@/lib/utils/www-authenticate';
+
+// Add this at the top of the file
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const {nanoid} = req.query;
+
+  const userId = await getAuthUserId(req, Array.isArray(nanoid) ? nanoid[0] : nanoid);
+
+  if (!userId) {
+    res.setHeader('WWW-Authenticate', generateWWWAuthenticateHeader());
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  await sseHandler(req, res, userId);  
+}

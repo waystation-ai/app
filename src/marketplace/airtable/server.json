@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "ai.waystation/airtable",
+  "description": "Access and manage your Airtable bases, tables, and records seamlessly",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/waystation-ai/mcp",
+    "source": "github"
+  },
+  "version": "0.3.1",
+  "remotes": [
+    {
+      "url": "https://waystation.ai/airtable/mcp",
+      "type": "streamable-http"
+    },
+    {
+      "url": "https://waystation.ai/airtable/mcp/sse",
+      "type": "sse"
+    }
+  ]
+}
