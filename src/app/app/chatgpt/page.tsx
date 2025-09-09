@@ -124,7 +124,7 @@ export default function ChatGPTPage() {
                     </div>
                     <div>
                       <strong>URL:</strong> 
-                      <code className="ml-2 bg-white px-2 py-1 rounded border text-xs sm:text-sm break-all">https://waystation.app/mcp</code>
+                      <code className="ml-2 bg-white px-2 py-1 rounded border text-xs sm:text-sm break-all">https://waystation.ai/mcp</code>
                     </div>
                     <div>
                       <strong>Description (optional):</strong> Access your WayStation integrations

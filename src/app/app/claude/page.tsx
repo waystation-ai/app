@@ -120,7 +120,7 @@ export default function ClaudePage() {
                     </div>
                     <div>
                       <strong>Integration URL:</strong> 
-                      <code className="ml-2 bg-white px-2 py-1 rounded border text-xs sm:text-sm break-all">https://waystation.app/mcp</code>
+                      <code className="ml-2 bg-white px-2 py-1 rounded border text-xs sm:text-sm break-all">https://waystation.ai/mcp</code>
                     </div>
                   </div>
                 </div>
