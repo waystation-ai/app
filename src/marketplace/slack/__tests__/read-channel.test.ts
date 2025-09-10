@@ -12,6 +12,7 @@ describe('readSlackChannel', () => {
   beforeEach(() => {
     mockContext = {
       getAccessToken: jest.fn().mockResolvedValue('mock-token'),
+      getConnectionString: jest.fn().mockResolvedValue('mock-connection-string'),
     } as ToolContext;
     
     jest.clearAllMocks();

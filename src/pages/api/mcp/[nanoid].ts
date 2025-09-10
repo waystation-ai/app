@@ -12,17 +12,20 @@ export const config = {
   },
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   const {nanoid} = req.query;
 
-  if (req.method !== 'POST') 
-    return res.redirect(`/mcp/sse/${nanoid}`);
+  if (req.method !== 'POST') {
+    res.redirect(`/mcp/sse/${nanoid}`);
+    return;
+  }
   
   const userId = await getAuthUserId(req, Array.isArray(nanoid) ? nanoid[0] : nanoid);
 
   if (!userId) {
     res.setHeader('WWW-Authenticate', generateWWWAuthenticateHeader());
-    return res.status(401).json({ error: 'Unauthorized' });
+    res.status(401).json({ error: 'Unauthorized' });
+    return;
   }
 
   // Create MCP server

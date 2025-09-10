@@ -1,5 +1,5 @@
 import { azure } from '@ai-sdk/azure';
-import { jsonSchema, streamText, tool } from 'ai';
+import { convertToModelMessages, jsonSchema, stepCountIs, streamText, tool, UIMessage } from 'ai';
 import { auth } from '@clerk/nextjs/server';
 import { registry } from '@/marketplace';
 import { getValidConnections } from '@/lib/db';
@@ -20,8 +20,7 @@ async function getSystemPrompt() {
 }
 
 export async function POST(req: Request) {
-  const data = await req.json();
-  const { messages/*, id */} = data;
+  const { messages }: { messages: UIMessage[]; } = await req.json();
   
   // Get the current user
   const session = await auth();
@@ -64,7 +63,7 @@ export async function POST(req: Request) {
         for (const providerTool of await registry.getProviderTools(provider, userId)) {
           allTools[providerTool.id] = tool({    
             description: providerTool.description || providerTool.summary,
-            parameters: providerTool.inputSchema ? jsonSchema(patchSchema(providerTool.inputSchema)) : z.any(),
+            inputSchema: providerTool.inputSchema ? jsonSchema(patchSchema(providerTool.inputSchema)) : z.any(),
             execute: async (params) => {
               // Call the centralized executeTool method
               return registry.executeTool({provider, tool: providerTool}, userId, params);
@@ -81,7 +80,7 @@ export async function POST(req: Request) {
     for (const [toolId, builtInTool] of Object.entries(builtInTools)) {
       allTools[toolId] = tool({
         description: builtInTool.description,
-        parameters: builtInTool.parameters,
+        inputSchema: builtInTool.parameters,
         execute: async (params) => {
           return builtInTool.handler(params);
         }
@@ -90,12 +89,11 @@ export async function POST(req: Request) {
   }
 
   const result = streamText({
-    model: azure('gpt-4.1-mini', {
-      structuredOutputs: false
-    }),
+    model: azure('gpt-4.1-mini'),
     system: await getSystemPrompt(),
-    messages,
+    messages: convertToModelMessages(messages),
     tools: allTools,
+    stopWhen: stepCountIs(10),
     onError({ error }) {
       console.error(error); 
     },
@@ -122,13 +120,13 @@ export async function POST(req: Request) {
   // Consume stream to ensure it runs to completion even if client disconnects
   result.consumeStream();
 
-  const response = result.toDataStreamResponse({
-    getErrorMessage: (error) => {
+  const response = result.toUIMessageStreamResponse({
+    onError: (error) => {
       console.error('Error in streamText:', error);
       return "error";
     },
     sendReasoning: true,
-    sendUsage: false,
+//    sendUsage: false,
   });
 
   result.usage.then((usage) => {

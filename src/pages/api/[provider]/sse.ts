@@ -1,8 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 
-import { configureMcpServer } from '@/lib/services/mcp-server';
-import { createPubSub } from '@/lib/services/pubsub';
 import { getAuthUserId } from '@/lib/utils/auth-userid';
 import { generateWWWAuthenticateHeader } from '@/lib/utils/www-authenticate';
 import { sseHandler } from '@/pages/api/mcp/sse';

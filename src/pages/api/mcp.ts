@@ -12,15 +12,18 @@ export const config = {
   },
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') 
-    return res.redirect('/mcp/sse');
+export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
+  if (req.method !== 'POST') {
+    res.redirect('/mcp/sse');
+    return;
+  }
 
   const userId = await getAuthUserId(req);  
 
   if (!userId) {
     res.setHeader('WWW-Authenticate', generateWWWAuthenticateHeader());
-    return res.status(401).json({ error: 'Unauthorized' });
+    res.status(401).json({ error: 'Unauthorized' });
+    return;
   }
 
   // Create MCP server

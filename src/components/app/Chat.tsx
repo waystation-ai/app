@@ -1,7 +1,7 @@
 "use client";
 
 import { AssistantCloud, AssistantRuntimeProvider } from "@assistant-ui/react";
-import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
+import { AssistantChatTransport, useChatRuntime } from "@assistant-ui/react-ai-sdk";
 import { Thread } from "@/components/assistant-ui/thread";
 import { ThreadList } from "@/components/assistant-ui/thread-list";
 import { Menu, Maximize2, Minimize2 } from "lucide-react";
@@ -28,8 +28,9 @@ export default function Chat() {
   });
 
   const runtime = useChatRuntime({
-    api: "/api/chat",
-    maxSteps: 10,
+    transport: new AssistantChatTransport({
+        api: "/api/chat",
+      }),
     cloud: cloud,
   });
 
