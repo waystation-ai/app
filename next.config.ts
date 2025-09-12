@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: '/dashboard',
+        destination: '/app',
+        permanent: true,
+      },
+      {
         source: '/integrations/claude/:path*',
         destination: '/connect/claude/:path*',
         permanent: true,
