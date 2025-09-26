@@ -44,12 +44,12 @@ function ProviderRow({ provider }: {
                 Connect
               </button>
             ) : (
-              <Link 
-                href={`/api/auth/${provider.id}/connect`}
+              <a 
+                href={`/api/auth/${provider.id}/connect`} 
                 className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 hover:scale-105 transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 Connect
-              </Link>
+              </a>
             )
           ) : (
             <Link 
