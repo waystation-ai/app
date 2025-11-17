@@ -25,7 +25,7 @@ function formatDate(internalDate: string): string {
 // Helper function to extract essential headers
 function parseHeaders(headers: Array<{ name: string; value: string }>) {
   const essentialHeaders: Record<string, string> = {};
-  
+
   for (const header of headers) {
     const name = header.name.toLowerCase();
     switch (name) {
@@ -35,11 +35,14 @@ function parseHeaders(headers: Array<{ name: string; value: string }>) {
       case 'bcc':
       case 'subject':
       case 'date':
+      case 'message-id':
+      case 'in-reply-to':
+      case 'references':
         essentialHeaders[name] = header.value;
         break;
     }
   }
-  
+
   return essentialHeaders;
 }
 
@@ -158,6 +161,9 @@ export const readGmailThread = defineTool({
           cc: z.string().optional().describe('CC email address(es)'),
           bcc: z.string().optional().describe('BCC email address(es)'),
           subject: z.string().optional().describe('Email subject line'),
+          'message-id': z.string().optional().describe('Unique Message-ID header for threading'),
+          'in-reply-to': z.string().optional().describe('Message-ID this message is replying to'),
+          references: z.string().optional().describe('References header containing all related message IDs'),
           textContent: z.string().optional().describe('Plain text content of the message'),
           htmlContent: z.string().optional().describe('HTML content of the message'),
           snippet: z.string().describe('Short preview of the message content'),

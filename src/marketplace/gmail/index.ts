@@ -3,6 +3,8 @@ import { listGmailThreads } from './list-threads';
 import { readGmailThread } from './read-thread';
 import { saveGmailDraft } from './save-draft';
 import { sendGmailEmail } from './send-email';
+import { listGmailLabels } from './list-labels';
+import { applyGmailMessageLabels } from './apply-message-labels';
 
 export const gmailProvider = registerProvider({
   id: 'gmail',
@@ -19,7 +21,8 @@ export const gmailProvider = registerProvider({
       'https://www.googleapis.com/auth/gmail.readonly',
       'https://www.googleapis.com/auth/gmail.send',
       'https://www.googleapis.com/auth/gmail.compose',
-      'https://www.googleapis.com/auth/gmail.labels'
+      'https://www.googleapis.com/auth/gmail.labels',
+      'https://www.googleapis.com/auth/gmail.modify'
     ]
   },
   group: 'google',
@@ -41,6 +44,8 @@ export const gmailProvider = registerProvider({
     listGmailThreads,
     readGmailThread,
     saveGmailDraft,
-    sendGmailEmail
+    sendGmailEmail,
+    listGmailLabels,
+    applyGmailMessageLabels
   ]
 });

@@ -47,6 +47,8 @@ export function createEmailMessage(params: {
   cc?: string;
   bcc?: string;
   threadId?: string;
+  inReplyTo?: string;
+  references?: string;
 }) {
   const headers = [
     `To: ${params.to}`,
@@ -59,6 +61,14 @@ export function createEmailMessage(params: {
 
   if (params.bcc) {
     headers.push(`Bcc: ${params.bcc}`);
+  }
+
+  if (params.inReplyTo) {
+    headers.push(`In-Reply-To: ${params.inReplyTo}`);
+  }
+
+  if (params.references) {
+    headers.push(`References: ${params.references}`);
   }
 
   headers.push('Content-Type: text/html; charset=utf-8');
