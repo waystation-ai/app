@@ -26,7 +26,7 @@ export const applyGmailMessageLabels = defineTool({
   handler: async ({ context, params }) => {
     try {
       // Build the request payload with only the provided labels
-      const modifyData: any = {};
+      const modifyData: Record<string, string[]> = {};
 
       if (params.addLabelIds && params.addLabelIds.length > 0) {
         modifyData.addLabelIds = params.addLabelIds;

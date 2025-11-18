@@ -1,39 +1,6 @@
 import { z } from 'zod';
 import { defineTool } from '../core/types';
-import { queryGmailApi, formatEmailAddress, createEmailMessage } from './utils';
-
-// Helper function to extract headers from Gmail message payload
-function extractMessageHeaders(payload: any): Record<string, string> {
-  const headers: Record<string, string> = {};
-  const headerList = payload?.headers || [];
-
-  for (const header of headerList) {
-    const name = header.name.toLowerCase();
-    if (name === 'message-id' || name === 'in-reply-to' || name === 'references') {
-      headers[name] = header.value;
-    }
-  }
-
-  return headers;
-}
-
-// Helper function to get the last message's Message-ID from a thread
-async function getThreadLastMessageId(context: any, threadId: string): Promise<string | null> {
-  try {
-    const endpoint = `users/me/threads/${threadId}?format=full`;
-    const threadData = await queryGmailApi(context, endpoint);
-
-    if (threadData.messages && threadData.messages.length > 0) {
-      const lastMessage = threadData.messages[threadData.messages.length - 1];
-      const headers = extractMessageHeaders(lastMessage.payload);
-      return headers['message-id'] || null;
-    }
-
-    return null;
-  } catch {
-    return null; // If we fail to fetch thread, continue without In-Reply-To
-  }
-}
+import { queryGmailApi, formatEmailAddress, createEmailMessage, getThreadLastMessageId } from './utils';
 
 export const sendGmailEmail = defineTool({
   id: 'sendGmailEmail',

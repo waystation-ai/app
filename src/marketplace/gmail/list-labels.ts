@@ -2,6 +2,18 @@ import { z } from 'zod';
 import { defineTool } from '../core/types';
 import { queryGmailApi } from './utils';
 
+interface GmailLabel {
+  id: string;
+  name: string;
+  type: 'system' | 'user';
+  messageListVisibility?: 'show' | 'hide';
+  labelListVisibility?: 'labelShow' | 'labelShowIfUnread' | 'labelHide';
+  messagesTotal?: number;
+  messagesUnread?: number;
+  threadsTotal?: number;
+  threadsUnread?: number;
+}
+
 export const listGmailLabels = defineTool({
   id: 'listGmailLabels',
   summary: 'List Gmail labels',
@@ -33,7 +45,7 @@ export const listGmailLabels = defineTool({
       const result = await queryGmailApi(context, endpoint);
 
       return {
-        labels: (result.labels || []).map((label: any) => ({
+        labels: (result.labels || []).map((label: GmailLabel) => ({
           id: label.id,
           name: label.name,
           type: label.type,

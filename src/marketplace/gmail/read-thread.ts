@@ -1,74 +1,6 @@
 import { z } from 'zod';
 import { defineTool } from '../core/types';
-import { queryGmailApi } from './utils';
-
-// Helper function to decode base64url content
-function decodeBase64Url(data: string): string {
-  try {
-    const base64 = data.replace(/-/g, '+').replace(/_/g, '/');
-    return Buffer.from(base64, 'base64').toString('utf-8');
-  } catch {
-    return data; // Return original if decoding fails
-  }
-}
-
-// Helper function to format date from internal timestamp
-function formatDate(internalDate: string): string {
-  try {
-    const date = new Date(parseInt(internalDate));
-    return date.toISOString();
-  } catch {
-    return internalDate;
-  }
-}
-
-// Helper function to extract essential headers
-function parseHeaders(headers: Array<{ name: string; value: string }>) {
-  const essentialHeaders: Record<string, string> = {};
-
-  for (const header of headers) {
-    const name = header.name.toLowerCase();
-    switch (name) {
-      case 'from':
-      case 'to':
-      case 'cc':
-      case 'bcc':
-      case 'subject':
-      case 'date':
-      case 'message-id':
-      case 'in-reply-to':
-      case 'references':
-        essentialHeaders[name] = header.value;
-        break;
-    }
-  }
-
-  return essentialHeaders;
-}
-
-// Type definitions for Gmail API structures
-interface GmailHeader {
-  name: string;
-  value: string;
-}
-
-interface GmailMessageBody {
-  size?: number;
-  data?: string;
-  attachmentId?: string;
-}
-
-interface GmailMessagePart {
-  partId?: string;
-  mimeType?: string;
-  filename?: string;
-  headers?: GmailHeader[];
-  body?: GmailMessageBody;
-  parts?: GmailMessagePart[];
-}
-
-// Payload is essentially a MessagePart at the root level
-type GmailPayload = GmailMessagePart;
+import { queryGmailApi, decodeBase64Url, formatDate, parseHeaders, GmailHeader, GmailMessagePart, GmailPayload } from './utils';
 
 // Helper function to extract content from message parts
 function extractMessageContent(payload: GmailPayload): {
@@ -146,7 +78,7 @@ export const readGmailThread = defineTool({
   path: '/tools/gmail/read_thread',
   parameters: z.object({
     threadId: z.string().describe('The unique identifier of the thread to read'),
-    includeAttachments: z.boolean().default(true).describe('Whether to include attachment information in the response')
+    includeAttachments: z.boolean().default(false).describe('Whether to include attachment information in the response')
   }),
   responses: {
     '200': {
@@ -207,14 +139,16 @@ export const readGmailThread = defineTool({
           processedMessage.textContent = content.textContent;
         }
         
+        /*
         if (content.htmlContent) {
           processedMessage.htmlContent = content.htmlContent;
-        }
+        */
 
         // Add attachments if requested and available
+        /*
         if (params.includeAttachments && content.attachments.length > 0) {
           processedMessage.attachments = content.attachments;
-        }
+        */
 
         // If no content was extracted, try to use the snippet or indicate empty message
         if (!content.textContent && !content.htmlContent) {
