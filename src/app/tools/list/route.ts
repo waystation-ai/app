@@ -7,10 +7,10 @@ export async function GET() {
   
   for (const {tool} of await registry.getAllTools()) {
     const schema = tool.inputSchema;
-    const schemaObj = schema as Record<string, unknown>;
+    const schemaObj = schema as Record<string, object>;
     
     // Ensure we have a valid properties object that satisfies { [x: string]: unknown }
-    const properties = schemaObj.properties as Record<string, unknown> || {};
+    const properties = schemaObj.properties as Record<string, object> || {};
     
     tools.push({
       name: tool.id,
