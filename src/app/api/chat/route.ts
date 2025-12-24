@@ -91,7 +91,7 @@ export async function POST(req: Request) {
   const result = streamText({
     model: azure('gpt-4.1-mini'),
     system: await getSystemPrompt(),
-    messages: convertToModelMessages(messages),
+    messages: await convertToModelMessages(messages),
     tools: allTools,
     stopWhen: stepCountIs(10),
     onError({ error }) {
