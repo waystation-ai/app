@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import { sseHandler } from '../sse';
 import { getAuthUserId } from '@/lib/utils/auth-userid';
+import { isSSEEnabled, handleDeprecatedSSE } from '@/lib/utils/sse-deprecation';
 import { generateWWWAuthenticateHeader } from '@/lib/utils/www-authenticate';
 
 // Add this at the top of the file
@@ -13,6 +14,10 @@ export const config = {
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (!isSSEEnabled()) {
+    return handleDeprecatedSSE(res, '/api/mcp/sse/[nanoid]');
+  }
+
   const {nanoid} = req.query;
 
   const userId = await getAuthUserId(req, Array.isArray(nanoid) ? nanoid[0] : nanoid);
@@ -22,5 +27,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  await sseHandler(req, res, userId);  
+  await sseHandler(req, res, userId);
 }

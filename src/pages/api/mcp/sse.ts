@@ -4,6 +4,7 @@ import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { configureMcpServer } from '@/lib/services/mcp-server';
 import { createPubSub } from '@/lib/services/pubsub';
 import { getAuthUserId } from '@/lib/utils/auth-userid';
+import { isSSEEnabled, handleDeprecatedSSE } from '@/lib/utils/sse-deprecation';
 import { generateWWWAuthenticateHeader } from '@/lib/utils/www-authenticate';
 
 // Add this at the top of the file
@@ -49,7 +50,11 @@ export async function sseHandler(req: NextApiRequest, res: NextApiResponse, user
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const userId = await getAuthUserId(req);  
+  if (!isSSEEnabled()) {
+    return handleDeprecatedSSE(res, '/api/mcp/sse');
+  }
+
+  const userId = await getAuthUserId(req);
 
   if (!userId) {
     res.setHeader('WWW-Authenticate', generateWWWAuthenticateHeader());

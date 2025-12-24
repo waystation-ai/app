@@ -3,6 +3,7 @@ import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/
 
 import { configureMcpServer } from '@/lib/services/mcp-server';
 import { getAuthUserId } from '@/lib/utils/auth-userid';
+import { handleNonPostRequest } from '@/lib/utils/sse-deprecation';
 import { generateWWWAuthenticateHeader } from '@/lib/utils/www-authenticate';
 import { registry } from '@/marketplace';
 
@@ -24,8 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   if (req.method !== 'POST') {
-    res.redirect(`/mcp/sse/${nanoid}?provider=${provider}`);
-    return;
+    return handleNonPostRequest(res, req.method || 'unknown');
   }
   
   const userId = await getAuthUserId(req, Array.isArray(nanoid) ? nanoid[0] : nanoid);

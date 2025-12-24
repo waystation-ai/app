@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { publishToSession } from '@/lib/services/pubsub';
+import { isSSEEnabled, handleDeprecatedSSE } from '@/lib/utils/sse-deprecation';
 
 // Add this at the top of the file
 /*
@@ -12,6 +13,10 @@ export const config = {
 */
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (!isSSEEnabled()) {
+    return handleDeprecatedSSE(res, '/api/mcp/messages');
+  }
+
   console.log('Received POST request to /messages');
 
   // Extract session ID from URL query parameter
