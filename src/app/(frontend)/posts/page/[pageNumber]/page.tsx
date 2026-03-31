@@ -8,7 +8,7 @@ import { getPayload } from 'payload'
 import React from 'react'
 import { notFound } from 'next/navigation'
 
-export const revalidate = 600
+export const dynamic = 'force-static'
 
 type Args = {
   params: Promise<{
@@ -29,7 +29,7 @@ export default async function Page({ params: paramsPromise }: Args) {
     depth: 1,
     limit: 12,
     page: sanitizedPageNumber,
-    overrideAccess: false,
+    overrideAccess: true,
   })
 
   return (
@@ -71,7 +71,7 @@ export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
   const { totalDocs } = await payload.count({
     collection: 'posts',
-    overrideAccess: false,
+    overrideAccess: true,
   })
 
   const totalPages = Math.ceil(totalDocs / 10)

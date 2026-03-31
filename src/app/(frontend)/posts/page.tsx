@@ -8,7 +8,6 @@ import { getPayload } from 'payload'
 import React from 'react'
 
 export const dynamic = 'force-static'
-export const revalidate = 600
 
 export default async function Page() {
   const payload = await getPayload({ config: configPromise })
@@ -17,7 +16,7 @@ export default async function Page() {
     collection: 'posts',
     depth: 1,
     limit: 12,
-    overrideAccess: false,
+    overrideAccess: true,
     select: {
       title: true,
       slug: true,

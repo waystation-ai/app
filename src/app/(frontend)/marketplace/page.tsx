@@ -3,11 +3,6 @@ import { registry } from '@/marketplace';
 import { isFullProvider, isNativeProvider, isRemoteProvider, Provider } from '@/marketplace/core/types';
 import MarketplaceProviderCard from '@/components/app/MarketplaceProviderCard';
 
-import config from '@/payload.config';
-import { getPayload } from 'payload';
-import { headers } from 'next/headers';
-import { auth } from '@clerk/nextjs/server';
-
 // Provider section component to avoid code duplication
 function ProviderSection({ title, providers }: { 
   title: string; 
@@ -36,18 +31,9 @@ export const metadata: Metadata = {
   title: 'Integrations Marketplace',
 };
 
+export const dynamic = 'force-static';
+
 export default async function MarketplacePage() {
-  const { sessionClaims } = await auth();
-  console.log('Session claims:', sessionClaims);
-
-  const payloadConfig = await config;
-  const payload = await getPayload({ config: payloadConfig });
-
-  const { user } = await payload.auth({ headers: await headers() });
-  console.log('Payload user:', user);
-
-
-
   // Get all remote providers from registry
   const remoteProviders = registry.getAllProviders().filter(provider => isRemoteProvider(provider));
   const nativeProviders = registry.getAllProviders().filter(provider => isNativeProvider(provider));
